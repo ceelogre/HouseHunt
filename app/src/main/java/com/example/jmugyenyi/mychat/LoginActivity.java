@@ -69,11 +69,11 @@ public class LoginActivity extends AppCompatActivity {
         String password = userPassword.getText().toString();
 
         // getting the status and sending it to the main activity
-        String status = dh.getUserStatus(email,password);
-        Log.d("userStatus", status);
-        Intent sendStatus = new Intent(this, MainActivity.class);
-        sendStatus.putExtra("status", status);
-        startActivity(sendStatus);
+//        String status = dh.getUserStatus(email,password);
+//        Log.d("userStatus", status);
+//        Intent sendStatus = new Intent(this, MainActivity.class);
+//        sendStatus.putExtra("status", status);
+//        startActivity(sendStatus);
 
         if (TextUtils.isEmpty(email))
         {
