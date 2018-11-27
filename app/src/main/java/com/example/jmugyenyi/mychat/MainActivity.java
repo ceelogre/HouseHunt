@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference databaseReference;
     private SeekerTabsAdapter seekers;
+    DatabaseHelperClass dh ;
 
 
 
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+       dh = new DatabaseHelperClass(this);
         mFirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mFirebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -54,11 +57,25 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("HouseHunt");
 
         myViewPager = findViewById(R.id.main_tabs_pager);
-       // myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
-        seekers = new SeekerTabsAdapter(getSupportFragmentManager());
 
-        //myViewPager.setAdapter(myTabsAccessorAdapter);
-        myViewPager.setAdapter(seekers);
+
+        //retreiving the status from the login activity
+        String status = "House head";//getIntent().getExtras().getString("status");
+        Log.d("userStatus",  status);
+        if(status == "seeker")
+        {
+            seekers = new SeekerTabsAdapter(getSupportFragmentManager());
+            //myViewPager.setAdapter(myTabsAccessorAdapter);
+            myViewPager.setAdapter(seekers);
+        }
+        else if (status == "House head")
+        {
+             myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
+            myViewPager.setAdapter(myTabsAccessorAdapter);
+        }
+
+
+
 
 
         myTabLayout = findViewById(R.id.main_tabs);

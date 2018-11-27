@@ -44,12 +44,16 @@ public class SettingsActivity extends AppCompatActivity {
     private  static  final int galleryPic =1;
     private  StorageReference userProfileImageRef;
     private ProgressDialog loadingBar;
+    private String setUserName;
+    private String setStatus;
+    DatabaseHelperClass dh ;
 
     private android.support.v7.widget.Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dh = new DatabaseHelperClass(this);
         setContentView(R.layout.activity_settings);
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
@@ -67,6 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UpdateSettings();
+                insertUserToSQLdb();
             }
         });
 
@@ -195,11 +200,17 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+    public void insertUserToSQLdb(){
+        String password = getIntent().getExtras().getString("arg");
+
+        dh.insertUsers(setUserName,password,setStatus);
+    }
+
 
     private void UpdateSettings() {
 
-        String setUserName = username.getText().toString();
-        String setStatus = status.getText().toString();
+        setUserName = username.getText().toString();
+        setStatus = status.getText().toString();
 
         if (TextUtils.isEmpty(setUserName)){
             Toast.makeText(this, "Enter username!",Toast.LENGTH_SHORT).show();

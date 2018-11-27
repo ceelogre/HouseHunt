@@ -56,6 +56,11 @@ public class RegisterActivity extends AppCompatActivity {
         String email = userEmail.getText().toString();
         String password = userPassword.getText().toString();
 
+        //sending the passWord to the setting activity
+        Intent intent = new Intent(this, SettingsActivity.class);
+        intent.putExtra("password", password);
+        startActivity(intent);
+
         if (TextUtils.isEmpty(email))
         {
             Toast.makeText(this, "Please enter email...",Toast.LENGTH_SHORT).show();

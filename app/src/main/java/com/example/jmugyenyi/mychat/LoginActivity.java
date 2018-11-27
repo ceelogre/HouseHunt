@@ -26,12 +26,16 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton, phoneLoginButton;
     private EditText userEmail, userPassword;
     private TextView needNewAccountLink, forgotPasswordLink;
+    DatabaseHelperClass dh ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mFirebaseAuth = FirebaseAuth.getInstance();
+        dh = new DatabaseHelperClass(this);
+
 
 
         initialiseFields();
@@ -62,6 +66,12 @@ public class LoginActivity extends AppCompatActivity {
 
         String email = userEmail.getText().toString();
         String password = userPassword.getText().toString();
+
+        // getting the status and sending it to the main activity
+        String status = dh.getUserStatus(email,password);
+        Intent sendStatus = new Intent(this, MainActivity.class);
+        sendStatus.putExtra("status", status);
+        startActivity(sendStatus);
 
         if (TextUtils.isEmpty(email))
         {
