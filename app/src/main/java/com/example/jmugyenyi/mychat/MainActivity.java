@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference databaseReference;
+    private SeekerTabsAdapter seekers;
 
 
 
@@ -50,11 +51,14 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("HouseHunt Chat");
+        getSupportActionBar().setTitle("HouseHunt");
 
         myViewPager = findViewById(R.id.main_tabs_pager);
-        myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
-        myViewPager.setAdapter(myTabsAccessorAdapter);
+       // myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
+        seekers = new SeekerTabsAdapter(getSupportFragmentManager());
+
+        //myViewPager.setAdapter(myTabsAccessorAdapter);
+        myViewPager.setAdapter(seekers);
 
 
         myTabLayout = findViewById(R.id.main_tabs);

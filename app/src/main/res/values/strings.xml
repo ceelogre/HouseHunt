@@ -20,4 +20,9 @@
     <string name="enterVerificationCode">Enter Verification Code</string>
     <string name="sendVerCode">Send Code</string>
     <string name="verify">Verify</string>
+    <string name="myHouses">My Houses</string>
+    <string name="availableHouses">Available Houses</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
