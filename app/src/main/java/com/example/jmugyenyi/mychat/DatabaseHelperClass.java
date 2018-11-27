@@ -76,7 +76,7 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
     {
         String status  = "no_status";
         Cursor cursor = db.rawQuery("SELECT *  FROM users",null);
-        if (!cursor.getString(3).equals(null))
+        if (!(cursor.getString(3).equals(null)))
         {
             status = cursor.getString(3);
         }

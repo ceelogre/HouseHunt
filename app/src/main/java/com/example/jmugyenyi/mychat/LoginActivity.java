@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // getting the status and sending it to the main activity
         String status = dh.getUserStatus(email,password);
+        Log.d("userStatus", status);
         Intent sendStatus = new Intent(this, MainActivity.class);
         sendStatus.putExtra("status", status);
         startActivity(sendStatus);

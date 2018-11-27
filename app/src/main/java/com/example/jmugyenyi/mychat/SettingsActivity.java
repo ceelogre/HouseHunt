@@ -201,7 +201,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
     public void insertUserToSQLdb(){
-        String password = getIntent().getExtras().getString("arg");
+        String password = getIntent().getExtras().getString("password2");
 
         dh.insertUsers(setUserName,password,setStatus);
     }

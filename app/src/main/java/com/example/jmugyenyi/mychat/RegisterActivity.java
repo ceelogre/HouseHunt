@@ -56,10 +56,6 @@ public class RegisterActivity extends AppCompatActivity {
         String email = userEmail.getText().toString();
         String password = userPassword.getText().toString();
 
-        //sending the passWord to the setting activity
-        Intent intent = new Intent(this, SettingsActivity.class);
-        intent.putExtra("password", password);
-        startActivity(intent);
 
         if (TextUtils.isEmpty(email))
         {
@@ -116,6 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mainIntent.putExtra("password1", userPassword.getText().toString());
         startActivity(mainIntent);
         finish();
     }

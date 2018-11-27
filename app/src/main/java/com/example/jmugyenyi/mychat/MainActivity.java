@@ -208,8 +208,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SendUserToSettingsActivity() {
+        String password = getIntent().getExtras().getString("password1");
+
         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
         settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        settingsIntent.putExtra("password2", password);
         startActivity(settingsIntent);
         finish();
     }
