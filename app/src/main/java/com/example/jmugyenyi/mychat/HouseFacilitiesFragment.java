@@ -27,7 +27,7 @@ import java.util.Set;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HouseFragment extends Fragment {
+public class HouseFacilitiesFragment extends Fragment {
 
     private View groupFragmentView;
     private ListView listView;
@@ -35,7 +35,7 @@ public class HouseFragment extends Fragment {
     private ArrayList<String> listOfGroups = new ArrayList<>();
     private DatabaseReference databaseReference;
 
-    public HouseFragment() {
+    public HouseFacilitiesFragment() {
 
     }
 
