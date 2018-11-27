@@ -45,12 +45,17 @@ public class SettingsActivity extends AppCompatActivity {
     private  StorageReference userProfileImageRef;
     private ProgressDialog loadingBar;
 
+    private String setUserName;
+    private String setStatus;
+    DatabaseHelperClass dh ;
+
     private android.support.v7.widget.Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        dh = new DatabaseHelperClass(this);
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -67,6 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UpdateSettings();
+                insertUserToSQLdb();
             }
         });
 
@@ -196,10 +202,15 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    public void insertUserToSQLdb(){
+        String password = getIntent().getExtras().getString("password2");
+
+        dh.insertUsers(setUserName,password,setStatus);
+    }
     private void UpdateSettings() {
 
-        String setUserName = username.getText().toString();
-        String setStatus = status.getText().toString();
+         setUserName = username.getText().toString();
+         setStatus = status.getText().toString();
 
         if (TextUtils.isEmpty(setUserName)){
             Toast.makeText(this, "Enter username!",Toast.LENGTH_SHORT).show();
@@ -241,6 +252,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void SendUserToMainActivity() {
 
         Intent mainIntent = new Intent(SettingsActivity.this, MainActivity.class);mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mainIntent.putExtra("status", status.getText().toString());
         startActivity(mainIntent);
         finish();
     }

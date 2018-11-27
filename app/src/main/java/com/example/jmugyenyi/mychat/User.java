@@ -12,37 +12,46 @@ public class User {
 
 
     // fields
-    private int userID;
+    //private int userID;
     private String userName;
     private String userStatus;
 
 
-    public static final String TABLE_NAME = "USER";
-    public static final String COLUMN_ID = "UserID";
-    public static final String COLUMN_NAME = "UserName";
-    public static final String COLUMN_STATUS = "UserStatus";
+//    public static final String TABLE_NAME = "USER";
+//    public static final String COLUMN_ID = "UserID";
+//    public static final String COLUMN_NAME = "UserName";
+//    public static final String COLUMN_STATUS = "UserStatus";
+//
+//    public static final String CREATE_TABLE =
+//            "CREATE TABLE " + TABLE_NAME + "("
+//                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+//                    + COLUMN_NAME + " TEXT, "
+//                    + COLUMN_STATUS+ " TEXT "
+//                    + ")";
 
-    public static final String CREATE_TABLE =
-            "CREATE TABLE " + TABLE_NAME + "("
-                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + COLUMN_NAME + " TEXT, "
-                    + COLUMN_STATUS+ " TEXT "
-                    + ")";
+
+   // private static final User  instance = new User();
 
     // constructors
     public User() {}
-    public User(int id, String username, String userstatus) {
-        this.userID = id;
+
+
+
+//    public  static  User getInstance(){
+//        return  instance;
+//    }
+    public User( String username, String userstatus) {
+       // this.userID = id;
         this.userName = username;
         this.userStatus=userstatus;
     }
     // properties
-    public void setID(int id) {
-        this.userID = id;
-    }
-    public int getID() {
-        return this.userID;
-    }
+//    public void setID(int id) {
+//        this.userID = id;
+//    }
+//    public int getID() {
+//        return this.userID;
+//    }
     public void setUserName(String username) {
         this.userName = username;
     }
@@ -50,7 +59,7 @@ public class User {
         return this.userName;
     }
     public void setUserStatus(String userstatus) {
-        this.userName = userstatus;
+        this.userStatus = userstatus;
     }
     public String getUserStatus() {
         return this.userStatus;
