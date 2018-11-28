@@ -89,17 +89,16 @@ public class MainActivity extends AppCompatActivity {
         {
             seekers = new SeekerTabsAdapter(getSupportFragmentManager());
             //myViewPager.setAdapter(myTabsAccessorAdapter);
-            myViewPager.setAdapter(seekers);
+
         }
         else if (myStatus == "House head")
         {
             myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
-            myViewPager.setAdapter(myTabsAccessorAdapter);
+
         }
 
 
-        myTabLayout = findViewById(R.id.main_tabs);
-        myTabLayout.setupWithViewPager(myViewPager);
+
     }
 
     @Override
@@ -293,17 +292,20 @@ public class MainActivity extends AppCompatActivity {
                         seekers = new SeekerTabsAdapter(getSupportFragmentManager());
                         //myViewPager.setAdapter(myTabsAccessorAdapter);
                         myViewPager.setAdapter(seekers);
+                        myTabLayout = findViewById(R.id.main_tabs);
+                        myTabLayout.setupWithViewPager(myViewPager);
 
                     }else{
 
                     myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
                     myViewPager.setAdapter(myTabsAccessorAdapter);
+                        myTabLayout = findViewById(R.id.main_tabs);
+                        myTabLayout.setupWithViewPager(myViewPager);
                     }
 
 
 
-                    myTabLayout = findViewById(R.id.main_tabs);
-                    myTabLayout.setupWithViewPager(myViewPager);
+
 
 
 
