@@ -10,13 +10,14 @@ package com.example.jmugyenyi.mychat;
  */
 public class Contacts {
 
-    public String name, status, image;
+    public String name, status;// image;
+    public int image;
 
     public Contacts()
     {
 
     }
-    public Contacts(String name, String status, String image) {
+    public Contacts(String name, String status, int image) {
         this.name = name;
         this.status = status;
         this.image = image;
@@ -38,11 +39,11 @@ public class Contacts {
         this.status = status;
     }
 
-    public String getImage() {
+    public int getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(int image) {
         this.image = image;
     }
 }

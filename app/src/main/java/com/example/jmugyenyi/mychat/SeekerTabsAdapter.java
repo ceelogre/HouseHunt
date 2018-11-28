@@ -30,6 +30,7 @@ public class SeekerTabsAdapter extends FragmentPagerAdapter {
             case 1:
                 AvailableHouseFragment availHouseFragment = new AvailableHouseFragment();
                 return availHouseFragment;
+
             default:
                 return null;
         }
