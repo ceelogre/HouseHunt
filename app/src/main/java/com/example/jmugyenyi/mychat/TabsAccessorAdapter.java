@@ -29,7 +29,7 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
                 ChatFragment chatFragment = new ChatFragment();
                 return chatFragment;
             case 1:
-                HouseFragment houseFragment = new HouseFragment();
+                HouseFacilitiesFragment houseFragment = new HouseFacilitiesFragment();
                 return houseFragment;
             case 2:
                 HouseMatesFragment houseMatesFragment = new HouseMatesFragment();
