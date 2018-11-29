@@ -1,4 +1,4 @@
-package model;
+package com.example.jmugyenyi.mychat.model;
 
 public class Room {
 

@@ -56,7 +56,6 @@ public class User {
         this.userName = username;
         this.userStatus=userstatus;
     }
-
     public void setUserName(String username) {
         this.userName = username;
     }

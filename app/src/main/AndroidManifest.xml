@@ -27,10 +27,13 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity" ></activity>
-        <activity android:name=".FindMatesActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".FindMatesActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".ViewHouseActivity"></activity>
     </application>
 
 </manifest>

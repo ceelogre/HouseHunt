@@ -30,8 +30,9 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-
     protected static final String TAG = "MainActivity";
+
+
 
     private Toolbar mToolbar;
     private ViewPager myViewPager;
@@ -42,19 +43,16 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference databaseReference;
     private SeekerTabsAdapter seekers;
-
-    DatabaseHelperClass dh ;
+    private HouseHeadTabsAdapter head;
 
     final User myUser = new User();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dh = new DatabaseHelperClass(this);
+
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mFirebaseAuth.getCurrentUser();
@@ -68,47 +66,23 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("HouseHunt");
 
         myViewPager = findViewById(R.id.main_tabs_pager);
-       // myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
 
+         String myStatus = "House head";//user.getUserStatus();
 
-
-
-
-        // user.setUserStatus("seeker");
-        //String stats = getIntent().getExtras().getString("status");
-         String myStatus = "seeker";//user.getUserStatus();
-
-//        if (getIntent().getExtras().getString("status")== null)
-//        {
-//            myStatus ="House head";
-//        }else
-//            myStatus = getIntent().getExtras().getString("status");
-
-        //Log.d(TAG, "onCreate stats: "+stats);
-        //Log.d("userStatus",  myStatus);
         if(myStatus == "seeker")
         {
             seekers = new SeekerTabsAdapter(getSupportFragmentManager());
-            //myViewPager.setAdapter(myTabsAccessorAdapter);
-            myViewPager.setAdapter(seekers);
         }
         else if (myStatus == "House head")
         {
             myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
-            myViewPager.setAdapter(myTabsAccessorAdapter);
         }
-
-
-        myTabLayout = findViewById(R.id.main_tabs);
-        myTabLayout.setupWithViewPager(myViewPager);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-
          super.onCreateOptionsMenu(menu);
-
 
         getMenuInflater().inflate(R.menu.options_menu,menu);
 
@@ -147,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Enter group name: ");
 
         final EditText groupnameField = new EditText(MainActivity.this);
-        //groupnameField.setHint("e.g The fuck?");
         builder.setView(groupnameField);
 
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
@@ -225,13 +198,6 @@ public class MainActivity extends AppCompatActivity {
         User user = RetrieveUserInfo();
 
         Log.d(TAG, "VerifyUser: Status: "+user.getUserStatus());
-//        myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
-//        myViewPager.setAdapter(myTabsAccessorAdapter);
-//
-//
-//
-//        myTabLayout = findViewById(R.id.main_tabs);
-//        myTabLayout.setupWithViewPager(myViewPager);
     }
 
     private void SendUserToLoginActivity() {
@@ -259,9 +225,6 @@ public class MainActivity extends AppCompatActivity {
 
     private User  RetrieveUserInfo( ) {
 
-        String status="";
-        //final User myUser = new User();
-        //currentUserID = mFirebaseAuth.getCurrentUser().getUid();
         Log.d(TAG, "RetrieveUserInfo: "+ currentUserId);
         databaseReference.child("Users").child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -270,12 +233,8 @@ public class MainActivity extends AppCompatActivity {
                     String retrieveUsername = dataSnapshot.child("name").getValue().toString();
                     String retrieveStatus = dataSnapshot.child("status").getValue().toString();
                     String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
-
-
                     myUser.setUserName(retrieveUsername);
                     myUser.setUserStatus("my turn");
-
-
 
                 } else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))) {
 
@@ -287,32 +246,32 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, "retrieveUser: "+ myUser.getUserStatus());
 
-                    if(myUser.getUserStatus().trim().equalsIgnoreCase("seeker"))
-                    {
+                    if(myUser.getUserStatus().trim().equalsIgnoreCase("seeker")) {
 
-                        Log.d(TAG, "onDataChange: "+ "We made it");
                         seekers = new SeekerTabsAdapter(getSupportFragmentManager());
-                        //myViewPager.setAdapter(myTabsAccessorAdapter);
                         myViewPager.setAdapter(seekers);
+                        myTabLayout = findViewById(R.id.main_tabs);
+                        myTabLayout.setupWithViewPager(myViewPager);
+
+                    }
+                    else if(myUser.getUserStatus().trim().equalsIgnoreCase("house head")){
+
+                        head = new HouseHeadTabsAdapter(getSupportFragmentManager());
+                        myViewPager.setAdapter(head);
+                        myTabLayout = findViewById(R.id.main_tabs);
+                        myTabLayout.setupWithViewPager(myViewPager);
 
                     }else{
 
-                    myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
-                    myViewPager.setAdapter(myTabsAccessorAdapter);
+                        myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
+                        myViewPager.setAdapter(myTabsAccessorAdapter);
+                        myTabLayout = findViewById(R.id.main_tabs);
+                        myTabLayout.setupWithViewPager(myViewPager);
+
                     }
-
-
-
-                    myTabLayout = findViewById(R.id.main_tabs);
-                    myTabLayout.setupWithViewPager(myViewPager);
-
-
-
                 } else {
                     Toast.makeText(MainActivity.this, "Update Profile", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
 
             @Override
@@ -321,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //myUser.setUserStatus("my beats");
         Log.d(TAG, "myUser: "+myUser.getUserStatus());
         return myUser;
     }
