@@ -9,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -37,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Button updateSettings;
     private EditText username, status;
+    private Spinner spinner;
     private CircleImageView userProfileImage;
     private String currentUserID;
     private FirebaseAuth mfirebaseAuth;
@@ -44,10 +48,12 @@ public class SettingsActivity extends AppCompatActivity {
     private  static  final int galleryPic =1;
     private  StorageReference userProfileImageRef;
     private ProgressDialog loadingBar;
+    private ArrayAdapter<String> arrayAdapter;
 
     private String setUserName;
     private String setStatus;
-    DatabaseHelperClass dh ;
+    private String myStatusStringArray [] = {"choose status","seeker","house head","house mate"};
+
 
     private android.support.v7.widget.Toolbar mToolbar;
 
@@ -55,7 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        dh = new DatabaseHelperClass(this);
+
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -68,15 +74,22 @@ public class SettingsActivity extends AppCompatActivity {
        // getActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Settings");
 
-        updateSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UpdateSettings();
-                insertUserToSQLdb();
-            }
-        });
+
 
         RetrieveUserInfo();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                setStatus = myStatusStringArray[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         userProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +98,13 @@ public class SettingsActivity extends AppCompatActivity {
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent,galleryPic);
+            }
+        });
+
+        updateSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdateSettings();
             }
         });
     }
@@ -113,8 +133,6 @@ public class SettingsActivity extends AppCompatActivity {
                 loadingBar.setTitle("Set Profile Image");
                 loadingBar.setMessage("Please wait!");
                 loadingBar.show();
-
-
 
                 final StorageReference filePath = userProfileImageRef.child(currentUserID+" .jpg");
 
@@ -202,21 +220,19 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    public void insertUserToSQLdb(){
-        String password = getIntent().getExtras().getString("password2");
-
-        dh.insertUsers(setUserName,password,setStatus);
-    }
     private void UpdateSettings() {
 
          setUserName = username.getText().toString();
-         setStatus = status.getText().toString();
+        // setStatus = status.getText().toString();
 
         if (TextUtils.isEmpty(setUserName)){
             Toast.makeText(this, "Enter username!",Toast.LENGTH_SHORT).show();
         }
         if (TextUtils.isEmpty(setStatus)){
             Toast.makeText(this, "Enter status!",Toast.LENGTH_SHORT).show();
+        }
+        if (setStatus.equalsIgnoreCase("choose status")){
+            Toast.makeText(this, "Choose status!",Toast.LENGTH_SHORT).show();
         }
         HashMap<String,String> profileMap = new HashMap<>();
             profileMap.put("uid",currentUserID);
@@ -233,20 +249,21 @@ public class SettingsActivity extends AppCompatActivity {
                     {
                         String message = task.getException().toString();
                         Toast.makeText(SettingsActivity.this,"Error: "+message,Toast.LENGTH_SHORT).show();
-
                     }
             }
         });
     }
 
     private void initialiseFields() {
-
         updateSettings = findViewById(R.id.update_settings_button);
         username = findViewById(R.id.set_user_name);
-        status = findViewById(R.id.set_profile_status);
+       // status = findViewById(R.id.set_profile_status);
         userProfileImage = findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
         mToolbar = findViewById(R.id.settings_toolbar);
+        spinner = findViewById(R.id.spinner);
+        arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,myStatusStringArray);
+        spinner.setAdapter(arrayAdapter);
     }
 
     private void SendUserToMainActivity() {

@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference databaseReference;
     private SeekerTabsAdapter seekers;
-
+    private HouseHeadTabsAdapter head;
 
     final User myUser = new User();
 
@@ -77,9 +77,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-
          super.onCreateOptionsMenu(menu);
-
 
         getMenuInflater().inflate(R.menu.options_menu,menu);
 
@@ -244,10 +242,18 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, "retrieveUser: "+ myUser.getUserStatus());
 
-                    if(myUser.getUserStatus().trim().equalsIgnoreCase("seeker"))
-                    {
+                    if(myUser.getUserStatus().trim().equalsIgnoreCase("seeker")) {
+
                         seekers = new SeekerTabsAdapter(getSupportFragmentManager());
                         myViewPager.setAdapter(seekers);
+                        myTabLayout = findViewById(R.id.main_tabs);
+                        myTabLayout.setupWithViewPager(myViewPager);
+
+                    }
+                    else if(myUser.getUserStatus().trim().equalsIgnoreCase("house head")){
+
+                        head = new HouseHeadTabsAdapter(getSupportFragmentManager());
+                        myViewPager.setAdapter(head);
                         myTabLayout = findViewById(R.id.main_tabs);
                         myTabLayout.setupWithViewPager(myViewPager);
 
@@ -257,8 +263,8 @@ public class MainActivity extends AppCompatActivity {
                         myViewPager.setAdapter(myTabsAccessorAdapter);
                         myTabLayout = findViewById(R.id.main_tabs);
                         myTabLayout.setupWithViewPager(myViewPager);
-                    }
 
+                    }
                 } else {
                     Toast.makeText(MainActivity.this, "Update Profile", Toast.LENGTH_SHORT).show();
                 }
