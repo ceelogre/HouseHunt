@@ -14,8 +14,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import model.House;
-import model.Room;
+import com.example.jmugyenyi.mychat.model.House;
+import com.example.jmugyenyi.mychat.model.Room;
 
 import static android.support.constraint.Constraints.TAG;
 import static com.google.firebase.storage.FirebaseStorage.getInstance;

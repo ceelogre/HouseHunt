@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected static final String TAG = "MainActivity";
 
-    protected static final String TAG = "MainActivity";
+
 
     private Toolbar mToolbar;
     private ViewPager myViewPager;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dh = new DatabaseHelperClass(this);
+
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mFirebaseAuth.getCurrentUser();

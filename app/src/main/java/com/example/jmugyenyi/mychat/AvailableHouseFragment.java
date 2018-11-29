@@ -1,6 +1,7 @@
 package com.example.jmugyenyi.mychat;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.jmugyenyi.mychat.model.House;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -57,7 +59,7 @@ public class AvailableHouseFragment extends Fragment {
         availableHouseFragmentView=  inflater.inflate(R.layout.fragment_available_house, container, false);
 
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("House");
 
         myRecyclerView = availableHouseFragmentView.findViewById(R.id.available_houses_recycler_list);
         //RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(),listContact);
@@ -70,17 +72,32 @@ public class AvailableHouseFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseRecyclerOptions<Contacts> options =
-                new FirebaseRecyclerOptions.Builder<Contacts>()
-                        .setQuery(databaseReference,Contacts.class).build();
+        FirebaseRecyclerOptions<House> options =
+                new FirebaseRecyclerOptions.Builder<House>()
+                        .setQuery(databaseReference,House.class).build();
 
-        FirebaseRecyclerAdapter<Contacts,FindMatesViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Contacts, FindMatesViewHolder>(options) {
+        FirebaseRecyclerAdapter<House,FindMatesViewHolder> adapter =
+                new FirebaseRecyclerAdapter<House, FindMatesViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull FindMatesViewHolder holder, int position, @NonNull Contacts model) {
-                        holder.username.setText(model.getName());
-                        holder.status.setText(model.getStatus());
-                     //   Picasso.get().load(model.getImage()).into(holder.profileImage);
+                    protected void onBindViewHolder(@NonNull FindMatesViewHolder holder, final int position, @NonNull House model) {
+
+                        holder.username.setText(model.getHouseId());
+                        holder.status.setText(model.getStreet());
+//                        holder.username.setText(model.getName());
+//                        holder.status.setText(model.getStatus());
+                     //   Picasso.get().load(com.example.jmugyenyi.mychat.model.getImage()).into(holder.profileImage);
+
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String visit_house_id= getRef(position).getKey();
+
+                                Intent viewHouseIntent = new Intent(getActivity(),ViewHouseActivity.class);
+                                viewHouseIntent.putExtra("visit_house_id",visit_house_id);
+                                startActivity(viewHouseIntent);
+
+                            }
+                        });
                     }
 
                     @NonNull
