@@ -9,8 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -29,6 +31,7 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -47,7 +50,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private String setUserName;
     private String setStatus;
-    DatabaseHelperClass dh ;
+    ArrayList<String> users;
+    Spinner userstatus;
+
 
     private android.support.v7.widget.Toolbar mToolbar;
 
@@ -55,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        dh = new DatabaseHelperClass(this);
+
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -67,6 +72,19 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
        // getActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Settings");
+
+        // adding the users
+        userstatus = (Spinner)findViewById(R.id.set_profile_status);
+        users.add("seeker");
+        users.add("house head");
+        users.add("House mate");
+        users.add("Driver");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, users);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userstatus.setAdapter(adapter);
+        setStatus = userstatus.getSelectedItem().toString();
 
         updateSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,12 +223,12 @@ public class SettingsActivity extends AppCompatActivity {
     public void insertUserToSQLdb(){
         String password = getIntent().getExtras().getString("password2");
 
-        dh.insertUsers(setUserName,password,setStatus);
+
     }
     private void UpdateSettings() {
 
          setUserName = username.getText().toString();
-         setStatus = status.getText().toString();
+//         setStatus = status.getText().toString();
 
         if (TextUtils.isEmpty(setUserName)){
             Toast.makeText(this, "Enter username!",Toast.LENGTH_SHORT).show();
@@ -243,7 +261,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         updateSettings = findViewById(R.id.update_settings_button);
         username = findViewById(R.id.set_user_name);
-        status = findViewById(R.id.set_profile_status);
+//        status = findViewById(R.id.set_profile_status);
         userProfileImage = findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
         mToolbar = findViewById(R.id.settings_toolbar);
