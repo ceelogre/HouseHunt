@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+
 
 
         initialiseFields();
@@ -82,6 +85,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful())
                 {
                    SendUserToMainActivity();
+
+                   //If status is househead, send to post a house activity
+                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
+                    p.createHouseCollection();
+                    p.addRoomToHouse();
+
+
                     Toast.makeText(LoginActivity.this, "Login Successful ",Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }else

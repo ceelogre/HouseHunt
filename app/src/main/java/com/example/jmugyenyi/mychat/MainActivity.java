@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    protected static final String TAG = "MainActivity";
 
     protected static final String TAG = "MainActivity";
 
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dh = new DatabaseHelperClass(this);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mFirebaseAuth.getCurrentUser();
@@ -193,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
         User user = RetrieveUserInfo();
 
         Log.d(TAG, "VerifyUser: Status: "+user.getUserStatus());
-
     }
 
     private void SendUserToLoginActivity() {

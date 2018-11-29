@@ -15,29 +15,40 @@ public class User {
     //private int userID;
     private String userName;
     private String userStatus;
+    private String uid;
+    private String houseid;
 
+    public String getUid() {
+        return uid;
+    }
 
-//    public static final String TABLE_NAME = "USER";
-//    public static final String COLUMN_ID = "UserID";
-//    public static final String COLUMN_NAME = "UserName";
-//    public static final String COLUMN_STATUS = "UserStatus";
-//
-//    public static final String CREATE_TABLE =
-//            "CREATE TABLE " + TABLE_NAME + "("
-//                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-//                    + COLUMN_NAME + " TEXT, "
-//                    + COLUMN_STATUS+ " TEXT "
-//                    + ")";
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
+    public String getHouseid() {
+        return houseid;
+    }
 
-   // private static final User  instance = new User();
+    public void setHouseid(String houseid) {
+        this.houseid = houseid;
+    }
 
     // constructors
     public User() {}
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("User{");
+        sb.append("userName='").append(userName).append('\'');
+        sb.append(", userStatus='").append(userStatus).append('\'');
+        sb.append(", uid='").append(uid).append('\'');
+        sb.append(", houseid='").append(houseid).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 
-
-//    public  static  User getInstance(){
+    //    public  static  User getInstance(){
 //        return  instance;
 //    }
     public User( String username, String userstatus) {
@@ -45,13 +56,6 @@ public class User {
         this.userName = username;
         this.userStatus=userstatus;
     }
-    // properties
-//    public void setID(int id) {
-//        this.userID = id;
-//    }
-//    public int getID() {
-//        return this.userID;
-//    }
     public void setUserName(String username) {
         this.userName = username;
     }

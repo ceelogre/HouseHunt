@@ -55,13 +55,16 @@ public class SettingsActivity extends AppCompatActivity {
     private String myStatusStringArray [] = {"choose status","seeker","house head","house mate"};
 
 
+    private String setUserName;
+    private String setStatus;
+    DatabaseHelperClass dh ;
+
     private android.support.v7.widget.Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -78,6 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UpdateSettings();
+                insertUserToSQLdb();
             }
         });
 
@@ -218,6 +222,11 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    public void insertUserToSQLdb(){
+        String password = getIntent().getExtras().getString("password2");
+
+        dh.insertUsers(setUserName,password,setStatus);
+    }
     private void UpdateSettings() {
 
          setUserName = username.getText().toString();
