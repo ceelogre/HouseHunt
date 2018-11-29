@@ -23,7 +23,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:weightSum="3"
+            android:weightSum="7"
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -51,8 +51,101 @@
                        android:layout_marginTop="27dp"
                        android:ems="10"
                        android:inputType="textPersonName"
-                       android:text="Enter the number o rooms " />
+                       android:text="Enter the number of rooms " />
                </RelativeLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/housemates"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="27dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text="Enter the number of house mates" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/neighbourHood"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="27dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text="Neighbourhood (eg: kacyiru SOS)" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/rent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="27dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text="The general rooms's month rent " />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+
+                <Spinner
+                    android:id="@+id/house_mate_preferences"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   />
 
 
             </LinearLayout>
@@ -66,7 +159,7 @@
                 <Button
                     android:id="@+id/locate"
                     style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginTop="16dp"
@@ -85,7 +178,7 @@
                 <Button
                     android:id="@+id/postHouse"
                     style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginTop="16dp"
