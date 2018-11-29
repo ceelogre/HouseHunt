@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -75,6 +76,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (task.isSuccessful())
                 {
+                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
+                    p.getAvailableHouses();
                     String currentUserID = mFirebaseAuth.getCurrentUser().getUid();
                     databaseReference.child("Users").child(currentUserID).setValue("");
                     SendUserToMainActivity();
@@ -110,6 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void SendUserToMainActivity() {
 
         Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+        mainIntent.putExtra("status", userPassword.getText().toString());
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();

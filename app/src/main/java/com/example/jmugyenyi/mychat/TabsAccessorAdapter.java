@@ -29,11 +29,8 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
                 ChatFragment chatFragment = new ChatFragment();
                 return chatFragment;
             case 1:
-                HouseFragment houseFragment = new HouseFragment();
+                HouseFacilitiesFragment houseFragment = new HouseFacilitiesFragment();
                 return houseFragment;
-            case 2:
-                HouseMatesFragment houseMatesFragment = new HouseMatesFragment();
-                return houseMatesFragment;
 
                 default:
                     return null;
@@ -43,7 +40,7 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Nullable
@@ -56,11 +53,7 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
                 return "Chat";
             case 1:
 
-                return "House";
-            case 2:
-
-                return "HouseMates";
-
+                return "House Facilities";
             default:
                 return null;
         }

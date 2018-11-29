@@ -9,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -37,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Button updateSettings;
     private EditText username, status;
+    private Spinner spinner;
     private CircleImageView userProfileImage;
     private String currentUserID;
     private FirebaseAuth mfirebaseAuth;
@@ -44,6 +48,14 @@ public class SettingsActivity extends AppCompatActivity {
     private  static  final int galleryPic =1;
     private  StorageReference userProfileImageRef;
     private ProgressDialog loadingBar;
+    private ArrayAdapter<String> arrayAdapter;
+
+    private String setUserName;
+    private String setStatus;
+    private String myStatusStringArray [] = {"choose status","seeker","house head","house mate"};
+
+
+
 
     private android.support.v7.widget.Toolbar mToolbar;
 
@@ -67,10 +79,24 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UpdateSettings();
+
             }
         });
 
         RetrieveUserInfo();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                setStatus = myStatusStringArray[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         userProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,8 +133,6 @@ public class SettingsActivity extends AppCompatActivity {
                 loadingBar.setTitle("Set Profile Image");
                 loadingBar.setMessage("Please wait!");
                 loadingBar.show();
-
-
 
                 final StorageReference filePath = userProfileImageRef.child(currentUserID+" .jpg");
 
@@ -196,10 +220,11 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+
     private void UpdateSettings() {
 
-        String setUserName = username.getText().toString();
-        String setStatus = status.getText().toString();
+         setUserName = username.getText().toString();
+        // setStatus = status.getText().toString();
 
         if (TextUtils.isEmpty(setUserName)){
             Toast.makeText(this, "Enter username!",Toast.LENGTH_SHORT).show();
@@ -222,25 +247,27 @@ public class SettingsActivity extends AppCompatActivity {
                     {
                         String message = task.getException().toString();
                         Toast.makeText(SettingsActivity.this,"Error: "+message,Toast.LENGTH_SHORT).show();
-
                     }
             }
         });
     }
 
     private void initialiseFields() {
-
         updateSettings = findViewById(R.id.update_settings_button);
         username = findViewById(R.id.set_user_name);
-        status = findViewById(R.id.set_profile_status);
+       // status = findViewById(R.id.set_profile_status);
         userProfileImage = findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
         mToolbar = findViewById(R.id.settings_toolbar);
+        spinner = findViewById(R.id.spinner);
+        arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,myStatusStringArray);
+        spinner.setAdapter(arrayAdapter);
     }
 
     private void SendUserToMainActivity() {
 
         Intent mainIntent = new Intent(SettingsActivity.this, MainActivity.class);mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mainIntent.putExtra("status", status.getText().toString());
         startActivity(mainIntent);
         finish();
     }

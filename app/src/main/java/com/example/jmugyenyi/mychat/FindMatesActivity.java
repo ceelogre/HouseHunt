@@ -33,6 +33,7 @@ public class FindMatesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_mates);
 
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
         FindFriendsRecyclerList = findViewById(R.id.find_mates_recycler_list);
