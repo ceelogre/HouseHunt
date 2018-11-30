@@ -1,40 +1,44 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.TabsAdapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.jmugyenyi.mychat.Fragments.ChatFragment;
+import com.example.jmugyenyi.mychat.Fragments.HouseFacilitiesFragment;
+
 /**
  * * @author Joel Mugyenyi
- *
+ * <p>
  * Andrew ID: jmugyeny
- *
+ * <p>
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class HouseHeadTabsAdapter extends FragmentPagerAdapter {
+public class TabsAccessorAdapter extends FragmentPagerAdapter {
 
 
-
-    public HouseHeadTabsAdapter(FragmentManager fm) {
+    public TabsAccessorAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
     public Fragment getItem(int i) {
+
         switch (i)
         {
             case 0:
-                ChatFragment chat = new ChatFragment();
-                return chat;
+                ChatFragment chatFragment = new ChatFragment();
+                return chatFragment;
             case 1:
-                PostAHouseFragment postedHouse = new PostAHouseFragment();
-                return postedHouse;
+                HouseFacilitiesFragment houseFragment = new HouseFacilitiesFragment();
+                return houseFragment;
 
-            default:
-                return null;
+                default:
+                    return null;
         }
+
     }
 
     @Override
@@ -52,7 +56,7 @@ public class HouseHeadTabsAdapter extends FragmentPagerAdapter {
                 return "Chat";
             case 1:
 
-                return "Post a house";
+                return "House Facilities";
             default:
                 return null;
         }

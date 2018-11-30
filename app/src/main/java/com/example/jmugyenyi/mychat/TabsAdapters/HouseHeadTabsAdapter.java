@@ -1,22 +1,26 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.TabsAdapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.jmugyenyi.mychat.Fragments.ChatFragment;
+import com.example.jmugyenyi.mychat.Fragments.PostAHouseFragment;
+
 /**
  * * @author Joel Mugyenyi
- * <p>
+ *
  * Andrew ID: jmugyeny
- * <p>
+ *
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class SeekerTabsAdapter extends FragmentPagerAdapter {
+public class HouseHeadTabsAdapter extends FragmentPagerAdapter {
 
 
-    public SeekerTabsAdapter(FragmentManager fm) {
+
+    public HouseHeadTabsAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -25,11 +29,11 @@ public class SeekerTabsAdapter extends FragmentPagerAdapter {
         switch (i)
         {
             case 0:
-                MyHousesFragment myFragment = new MyHousesFragment();
-                return myFragment;
+                ChatFragment chat = new ChatFragment();
+                return chat;
             case 1:
-                AvailableHouseFragment availHouseFragment = new AvailableHouseFragment();
-                return availHouseFragment;
+                PostAHouseFragment postedHouse = new PostAHouseFragment();
+                return postedHouse;
 
             default:
                 return null;
@@ -48,10 +52,10 @@ public class SeekerTabsAdapter extends FragmentPagerAdapter {
         {
             case 0:
 
-                return "My Houses";
+                return "Chat";
             case 1:
 
-                return "Available Houses";
+                return "Post a house";
             default:
                 return null;
         }
