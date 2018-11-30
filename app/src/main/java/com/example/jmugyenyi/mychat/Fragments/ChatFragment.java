@@ -1,19 +1,22 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.Fragments;
 
+
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.example.jmugyenyi.mychat.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -28,13 +31,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 
-public class HouseChatActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class ChatFragment extends Fragment {
 
-    private Toolbar mToolbar;
+    private View chatView;
+
     private ImageButton sendImageButton;
     private EditText userMsgInput;
     private ScrollView scrollView;
-    private TextView  displayMessage;
+    private TextView displayMessage;
 
     private String currentGroupName,currentUserID, currentUserName, currentDate, currentTime;
 
@@ -42,24 +49,25 @@ public class HouseChatActivity extends AppCompatActivity {
     private DatabaseReference databaseReference, groupNameref, groupMessageKeyRef;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_house_chat);
+    public ChatFragment() {
+        // Required empty public constructor
+    }
 
-        currentGroupName = getIntent().getExtras().get("groupName").toString();
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        chatView = inflater.inflate(R.layout.fragment_chat, container, false);
+
+        currentGroupName = "My House";
 
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserID = firebaseAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
         groupNameref = FirebaseDatabase.getInstance().getReference().child("Groups").child(currentGroupName);
 
-
-
-
-        InitialiseFields();
-
-
+        InitializeFields();
         GetUserInfo();
 
         sendImageButton.setOnClickListener(new View.OnClickListener() {
@@ -70,13 +78,13 @@ public class HouseChatActivity extends AppCompatActivity {
                 scrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
+
+        return chatView;
     }
 
-
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
-
         groupNameref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -129,37 +137,14 @@ public class HouseChatActivity extends AppCompatActivity {
         }
     }
 
-    private void SaveMessageInfoToDataBase() {
-        String message = userMsgInput.getText().toString();
-        String messageKey = groupNameref.push().getKey();
+    private void InitializeFields() {
 
-        if (TextUtils.isEmpty(message))
-        {
-            Toast.makeText(this, "Write Message!", Toast.LENGTH_SHORT).show();
-        }else{
-            Calendar dateStamp = Calendar.getInstance();
-            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-            currentDate = currentDateFormat.format(dateStamp.getTime());
-
-
-            Calendar timeStamp = Calendar.getInstance();
-            SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
-            currentTime = currentTimeFormat.format(timeStamp.getTime());
-
-            HashMap <String, Object> groupMessageKey = new HashMap<>();
-            groupNameref.updateChildren(groupMessageKey);
-            groupMessageKeyRef = groupNameref.child(messageKey);
-
-
-            HashMap<String,Object> messageInfoMap = new HashMap<>();
-                messageInfoMap.put("name",currentUserName);
-                messageInfoMap.put("message",message);
-                messageInfoMap.put("date",currentDate);
-                messageInfoMap.put("time",currentTime);
-
-            groupMessageKeyRef.updateChildren(messageInfoMap);
-        }
+        sendImageButton = chatView.findViewById(R.id.send_message_button);
+        userMsgInput = chatView.findViewById(R.id.input_group_message);
+        scrollView = chatView.findViewById(R.id.myChatScrollView);
+        displayMessage = chatView.findViewById(R.id.group_chat_text_display);
     }
+
 
     private void GetUserInfo() {
         databaseReference.child(currentUserID).addValueEventListener(new ValueEventListener() {
@@ -177,15 +162,36 @@ public class HouseChatActivity extends AppCompatActivity {
         });
     }
 
-    private void InitialiseFields() {
+    private void SaveMessageInfoToDataBase() {
+        String message = userMsgInput.getText().toString();
+        String messageKey = groupNameref.push().getKey();
 
-        mToolbar = findViewById(R.id.group_chat_bar_layout);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(currentGroupName);
+        if (TextUtils.isEmpty(message))
+        {
+            Toast.makeText(getActivity(), "Write Message!", Toast.LENGTH_SHORT).show();
+        }else{
+            Calendar dateStamp = Calendar.getInstance();
+            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+            currentDate = currentDateFormat.format(dateStamp.getTime());
 
-        sendImageButton = findViewById(R.id.send_message_button);
-        userMsgInput = findViewById(R.id.input_group_message);
-        scrollView = findViewById(R.id.myScrollView);
-        displayMessage = findViewById(R.id.group_chat_text_display);
+
+            Calendar timeStamp = Calendar.getInstance();
+            SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
+            currentTime = currentTimeFormat.format(timeStamp.getTime());
+
+            HashMap<String, Object> groupMessageKey = new HashMap<>();
+            groupNameref.updateChildren(groupMessageKey);
+            groupMessageKeyRef = groupNameref.child(messageKey);
+
+
+            HashMap<String,Object> messageInfoMap = new HashMap<>();
+            messageInfoMap.put("name",currentUserName);
+            messageInfoMap.put("message",message);
+            messageInfoMap.put("date",currentDate);
+            messageInfoMap.put("time",currentTime);
+
+            groupMessageKeyRef.updateChildren(messageInfoMap);
+        }
+
     }
 }

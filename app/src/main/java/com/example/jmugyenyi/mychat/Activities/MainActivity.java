@@ -1,4 +1,4 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,7 +16,11 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.jmugyenyi.mychat.utils.HouseCRUD;
+import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.TabsAdapters.HouseHeadTabsAdapter;
+import com.example.jmugyenyi.mychat.TabsAdapters.SeekerTabsAdapter;
+import com.example.jmugyenyi.mychat.TabsAdapters.TabsAccessorAdapter;
+import com.example.jmugyenyi.mychat.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("HouseHunt");
+        //getSupportActionBar().setTitle("HouseHunt");
 
         myViewPager = findViewById(R.id.main_tabs_pager);
 
@@ -72,10 +76,12 @@ public class MainActivity extends AppCompatActivity {
         if(myStatus == "seeker")
         {
             seekers = new SeekerTabsAdapter(getSupportFragmentManager());
+            getSupportActionBar().setTitle("Seeker");
         }
         else if (myStatus == "House head")
         {
             myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
+            getSupportActionBar().setTitle("House Head");
         }
     }
 
@@ -95,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
          if (item.getItemId()== R.id.main_housemates_option)
          {
-             SendUserToFindMatesActivity();
+            // SendUserToFindMatesActivity();
          }
         if (item.getItemId()== R.id.main_settings_option)
         {
@@ -217,13 +223,14 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void SendUserToFindMatesActivity() {
-        Intent findMatesIntent = new Intent(MainActivity.this, FindMatesActivity.class);
-        startActivity(findMatesIntent);
+//    private void SendUserToFindMatesActivity() {
+//        Intent findMatesIntent = new Intent(MainActivity.this, FindMatesActivity.class);
+//        startActivity(findMatesIntent);
+//
+//    }
 
-    }
+    private User RetrieveUserInfo( ) {
 
-    private User  RetrieveUserInfo( ) {
 
         Log.d(TAG, "RetrieveUserInfo: "+ currentUserId);
         databaseReference.child("Users").child(currentUserId).addValueEventListener(new ValueEventListener() {
@@ -234,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
                     String retrieveStatus = dataSnapshot.child("status").getValue().toString();
                     String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
                     myUser.setUserName(retrieveUsername);
+
                     myUser.setUserStatus("my turn");
 
                 } else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))) {

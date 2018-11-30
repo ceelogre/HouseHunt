@@ -1,4 +1,4 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

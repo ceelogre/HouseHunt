@@ -1,4 +1,4 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.model;
 
 /**
  * * @author Joel Mugyenyi
@@ -8,7 +8,7 @@ package com.example.jmugyenyi.mychat;
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class User {
+public  class User {
 
 
     // fields
@@ -49,10 +49,10 @@ public class User {
     }
 
     //    public  static  User getInstance(){
-//        return  instance;
-//    }
+    //        return  instance;
+    //    }
     public User( String username, String userstatus) {
-       // this.userID = id;
+        // this.userID = id;
         this.userName = username;
         this.userStatus=userstatus;
     }

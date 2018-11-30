@@ -1,9 +1,12 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.TabsAdapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.jmugyenyi.mychat.Fragments.AvailableHouseFragment;
+import com.example.jmugyenyi.mychat.Fragments.MyHousesFragment;
 
 /**
  * * @author Joel Mugyenyi
@@ -13,29 +16,27 @@ import android.support.v4.app.FragmentPagerAdapter;
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class TabsAccessorAdapter extends FragmentPagerAdapter {
+public class SeekerTabsAdapter extends FragmentPagerAdapter {
 
 
-    public TabsAccessorAdapter(FragmentManager fm) {
+    public SeekerTabsAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
     public Fragment getItem(int i) {
-
         switch (i)
         {
             case 0:
-                ChatFragment chatFragment = new ChatFragment();
-                return chatFragment;
+                MyHousesFragment myFragment = new MyHousesFragment();
+                return myFragment;
             case 1:
-                HouseFacilitiesFragment houseFragment = new HouseFacilitiesFragment();
-                return houseFragment;
+                AvailableHouseFragment availHouseFragment = new AvailableHouseFragment();
+                return availHouseFragment;
 
-                default:
-                    return null;
+            default:
+                return null;
         }
-
     }
 
     @Override
@@ -50,10 +51,10 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
         {
             case 0:
 
-                return "Chat";
+                return "My Houses";
             case 1:
 
-                return "House Facilities";
+                return "Available Houses";
             default:
                 return null;
         }

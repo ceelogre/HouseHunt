@@ -17,6 +17,7 @@ public class House {
     private String street;
 
     private String houseId;
+    private String houseName;
 
     public String getAuthenticatedUserId() {
         return authenticatedUserId;
@@ -35,7 +36,7 @@ public class House {
     }
 
     public House(Double latitude, Double longitude, Double wholeHouseRent, int numberOfRooms, int numberOfHousemates, String housePicLocation, String city, String country, String street,
-                 String authenticatedUserId, String houseId) {
+                 String authenticatedUserId, String houseId, String houseName) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.wholeHouseRent = wholeHouseRent;
@@ -47,6 +48,7 @@ public class House {
         this.street = street;
         this.houseId = houseId;
         this.authenticatedUserId = authenticatedUserId;
+        this.houseName = houseName;
     }
 
     public Map<String, Boolean> getHouseRoomMap() {
@@ -89,8 +91,16 @@ public class House {
         return houseId;
     }
 
+    public String getHouseName() {
+        return houseName;
+    }
+
     public void setHouseId(String houseId) {
         this.houseId = houseId;
+    }
+
+    public void setHouseName(String houseName) {
+        this.houseName = houseName;
     }
 
     public String getCountry() {

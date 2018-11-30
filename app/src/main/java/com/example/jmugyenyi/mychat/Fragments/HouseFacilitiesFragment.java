@@ -1,4 +1,4 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.Fragments;
 
 
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.jmugyenyi.mychat.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,16 +54,16 @@ public class HouseFacilitiesFragment extends Fragment {
 
         RetrieveAndDisplayGroups();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String currentGroupName = parent.getItemAtPosition(position).toString();
-
-                Intent groupChatIntent = new Intent (getContext(),HouseChatActivity.class);
-                groupChatIntent.putExtra("groupName",currentGroupName);
-                startActivity(groupChatIntent);
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String currentGroupName = parent.getItemAtPosition(position).toString();
+//
+//                Intent groupChatIntent = new Intent (getContext(),HouseChatActivity.class);
+//                groupChatIntent.putExtra("groupName",currentGroupName);
+//                startActivity(groupChatIntent);
+//            }
+//        });
 
         return  groupFragmentView;
     }

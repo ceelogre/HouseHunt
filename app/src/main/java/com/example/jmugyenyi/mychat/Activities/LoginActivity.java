@@ -1,4 +1,4 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.jmugyenyi.mychat.utils.HouseCRUD;
+import com.example.jmugyenyi.mychat.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -87,9 +87,9 @@ public class LoginActivity extends AppCompatActivity {
                    SendUserToMainActivity();
 
                    //If status is househead, send to post a house activity
-                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
-                    p.createHouseCollection();
-                    p.addRoomToHouse();
+//                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
+//                    p.createHouseCollection();
+//                    p.addRoomToHouse();
 
 
                     Toast.makeText(LoginActivity.this, "Login Successful ",Toast.LENGTH_SHORT).show();
