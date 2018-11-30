@@ -1,4 +1,4 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.Fragments;
 
 
 import android.content.Intent;
@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.Activities.ViewHouseActivity;
 import com.example.jmugyenyi.mychat.model.House;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -21,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -39,7 +40,7 @@ public class AvailableHouseFragment extends Fragment {
     private android.support.v7.widget.Toolbar mToolbar;
     private RecyclerView recyclerView;
     private RecyclerView myRecyclerView;
-    private List<Contacts> listContact;
+   // private List<Contacts> listContact;
 
 
     public AvailableHouseFragment() {

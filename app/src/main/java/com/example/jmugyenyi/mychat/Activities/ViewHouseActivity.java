@@ -1,8 +1,10 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.example.jmugyenyi.mychat.R;
 
 public class ViewHouseActivity extends AppCompatActivity {
 

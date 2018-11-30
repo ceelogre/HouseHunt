@@ -4,7 +4,7 @@ package com.example.jmugyenyi.mychat.utils;
 
 import android.util.Log;
 
-import com.example.jmugyenyi.mychat.User;
+import com.example.jmugyenyi.mychat.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

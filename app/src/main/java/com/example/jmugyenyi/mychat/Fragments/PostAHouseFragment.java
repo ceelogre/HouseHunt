@@ -1,4 +1,4 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.Fragments;
 
 
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.firebase.auth.FirebaseAuth;
 
