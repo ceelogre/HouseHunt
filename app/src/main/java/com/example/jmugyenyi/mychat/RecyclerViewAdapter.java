@@ -35,7 +35,7 @@ public class RecyclerViewAdapter  extends RecyclerView.Adapter<RecyclerViewAdapt
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         View v;
-        v= LayoutInflater.from(context).inflate(R.layout.housemates_display_layout,viewGroup,false);
+        v= LayoutInflater.from(context).inflate(R.layout.house_display_layout,viewGroup,false);
 
         MyViewHolder holder = new MyViewHolder(v);
 

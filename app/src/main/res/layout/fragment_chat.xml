@@ -5,13 +5,51 @@
     android:layout_height="match_parent"
     tools:context=".ChatFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:id="@+id/myChatScrollView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/chats"
-        android:layout_centerInParent="true"
-        android:textSize="26sp"
-        android:textStyle="bold"/>
+
+        android:layout_above="@+id/myChat_linear_layout">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/group_chat_text_display"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:textColor="@android:color/background_dark"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="50dp"
+                android:layout_marginEnd="2dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/myChat_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+        <EditText
+            android:id="@+id/input_group_message"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/writeMessage"
+            android:padding="17dp"/>
+        <ImageButton
+            android:id="@+id/send_message_button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/send_message"/>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -87,9 +87,9 @@ public class LoginActivity extends AppCompatActivity {
                    SendUserToMainActivity();
 
                    //If status is househead, send to post a house activity
-                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
-                    p.createHouseCollection();
-                    p.addRoomToHouse();
+//                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
+//                    p.createHouseCollection();
+//                    p.addRoomToHouse();
 
 
                     Toast.makeText(LoginActivity.this, "Login Successful ",Toast.LENGTH_SHORT).show();

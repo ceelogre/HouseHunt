@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -68,7 +67,7 @@ public class FindMatesActivity extends AppCompatActivity {
             @Override
             public FindMatesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 View view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.housemates_display_layout,viewGroup,false);
+                        .inflate(R.layout.house_display_layout,viewGroup,false);
 
                 FindMatesViewHolder viewHolder = new FindMatesViewHolder(view);
                 return viewHolder;

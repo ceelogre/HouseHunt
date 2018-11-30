@@ -43,26 +43,30 @@ public class HouseCRUD {
         //houseId = databaseReference.child("latitude").toString();
     }
 
-    public void createHouseCollection(){
+    public void createHouseCollection(String houseName,String houseStreet,String houseCity,
+                                      String houseCountry,String houseNumberOfRooms,
+                                      String houseNumberOfMates,String houseRent){
+
+
          Double latitude = -1.94993;
          Double longitude = 32.343;
-         Double wholeHouseRent = 140000.0;
+         Double wholeHouseRent = Double.parseDouble(houseRent) ;
 
-         int numberOfRooms = 5;
-         int numberOfHousemates = 3;
+         int numberOfRooms = Integer.parseInt(houseNumberOfRooms);
+         int numberOfHousemates = Integer.parseInt(houseNumberOfMates);
 
          String housePicLocation = "/files/pictures/house44";
-         String city = "Iceland";
-         String country = "Wyoming";
-         String street = "100th Avenue";
-         String housename = "The palace";
+         String city = houseCity;
+         String country = houseCountry;
+         String street = houseStreet;
+         String name = houseName;
 
         //Userid
         String authenticatedUserId =    authenticatedUser.getCurrentUser().getUid();
 
         //Create a house id
         houseId = databaseReference.push().getKey();
-        house = new House(latitude, longitude, wholeHouseRent, numberOfRooms, numberOfHousemates, housePicLocation, city, country, street, authenticatedUserId, houseId,housename);
+        house = new House(latitude, longitude, wholeHouseRent, numberOfRooms, numberOfHousemates, housePicLocation, city, country, street, authenticatedUserId, houseId,name);
 
         databaseReference.push().setValue(house);
 

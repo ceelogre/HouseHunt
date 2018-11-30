@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".HouseChatActivity">
 
-
+<!--
     <include
         android:id="@+id/group_chat_bar_layout"
         layout="@layout/app_bar_layout"
@@ -58,5 +58,5 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:src="@drawable/send_message"/>
-    </LinearLayout>
+    </LinearLayout>-->
 </RelativeLayout>
