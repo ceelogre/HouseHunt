@@ -55,13 +55,14 @@ public class HouseCRUD {
          String city = "Iceland";
          String country = "Wyoming";
          String street = "100th Avenue";
+         String housename = "The palace";
 
         //Userid
         String authenticatedUserId =    authenticatedUser.getCurrentUser().getUid();
 
         //Create a house id
         houseId = databaseReference.push().getKey();
-        house = new House(latitude, longitude, wholeHouseRent, numberOfRooms, numberOfHousemates, housePicLocation, city, country, street, authenticatedUserId, houseId);
+        house = new House(latitude, longitude, wholeHouseRent, numberOfRooms, numberOfHousemates, housePicLocation, city, country, street, authenticatedUserId, houseId,housename);
 
         databaseReference.push().setValue(house);
 
