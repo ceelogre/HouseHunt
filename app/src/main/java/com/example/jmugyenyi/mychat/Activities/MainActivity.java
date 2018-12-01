@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.TabsAdapters.HouseHeadTabsAdapter;
 import com.example.jmugyenyi.mychat.TabsAdapters.SeekerTabsAdapter;
-import com.example.jmugyenyi.mychat.TabsAdapters.TabsAccessorAdapter;
+import com.example.jmugyenyi.mychat.TabsAdapters.HouseMateTabsAdapter;
 import com.example.jmugyenyi.mychat.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private ViewPager myViewPager;
     private TabLayout myTabLayout;
-    private TabsAccessorAdapter myTabsAccessorAdapter;
+    private HouseMateTabsAdapter myHouseMateTabsAdapter;
     private FirebaseUser currentUser;
     private String currentUserId;
     private FirebaseAuth mFirebaseAuth;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
-        //getSupportActionBar().setTitle("HouseHunt");
+        getSupportActionBar().setTitle("HouseHunt");
 
         myViewPager = findViewById(R.id.main_tabs_pager);
 
@@ -76,12 +76,12 @@ public class MainActivity extends AppCompatActivity {
         if(myStatus == "seeker")
         {
             seekers = new SeekerTabsAdapter(getSupportFragmentManager());
-            getSupportActionBar().setTitle("Seeker");
+           // getSupportActionBar().setTitle("Seeker");
         }
         else if (myStatus == "House head")
         {
-            myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
-            getSupportActionBar().setTitle("House Head");
+            myHouseMateTabsAdapter = new HouseMateTabsAdapter(getSupportFragmentManager());
+            //getSupportActionBar().setTitle("House Head");
         }
     }
 
@@ -257,22 +257,24 @@ public class MainActivity extends AppCompatActivity {
                     if(myUser.getUserStatus().trim().equalsIgnoreCase("seeker")) {
 
                         seekers = new SeekerTabsAdapter(getSupportFragmentManager());
+                        getSupportActionBar().setTitle("Seeker");
                         myViewPager.setAdapter(seekers);
                         myTabLayout = findViewById(R.id.main_tabs);
                         myTabLayout.setupWithViewPager(myViewPager);
 
                     }
                     else if(myUser.getUserStatus().trim().equalsIgnoreCase("house head")){
-
+                        getSupportActionBar().setTitle("House-Head");
                         head = new HouseHeadTabsAdapter(getSupportFragmentManager());
                         myViewPager.setAdapter(head);
                         myTabLayout = findViewById(R.id.main_tabs);
                         myTabLayout.setupWithViewPager(myViewPager);
 
-                    }else{
+                    }else if(myUser.getUserStatus().trim().equalsIgnoreCase("house mate")){
 
-                        myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
-                        myViewPager.setAdapter(myTabsAccessorAdapter);
+                        getSupportActionBar().setTitle("House-Mate");
+                        myHouseMateTabsAdapter = new HouseMateTabsAdapter(getSupportFragmentManager());
+                        myViewPager.setAdapter(myHouseMateTabsAdapter);
                         myTabLayout = findViewById(R.id.main_tabs);
                         myTabLayout.setupWithViewPager(myViewPager);
 

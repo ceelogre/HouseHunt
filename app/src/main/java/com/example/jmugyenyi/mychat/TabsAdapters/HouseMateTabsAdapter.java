@@ -16,10 +16,10 @@ import com.example.jmugyenyi.mychat.Fragments.HouseFacilitiesFragment;
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class TabsAccessorAdapter extends FragmentPagerAdapter {
+public class HouseMateTabsAdapter extends FragmentPagerAdapter {
 
 
-    public TabsAccessorAdapter(FragmentManager fm) {
+    public HouseMateTabsAdapter(FragmentManager fm) {
         super(fm);
     }
 
