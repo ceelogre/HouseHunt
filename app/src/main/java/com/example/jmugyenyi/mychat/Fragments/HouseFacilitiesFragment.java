@@ -1,14 +1,12 @@
 package com.example.jmugyenyi.mychat.Fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -45,14 +43,14 @@ public class HouseFacilitiesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        groupFragmentView = inflater.inflate(R.layout.fragment_groups, container, false);
+        groupFragmentView = inflater.inflate(R.layout.fragment_house_facilities, container, false);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Groups");
 
 
-        IntialiseFields();
+       // IntialiseFields();
 
-        RetrieveAndDisplayGroups();
+      //  RetrieveAndDisplayGroups();
 
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -93,9 +91,9 @@ public class HouseFacilitiesFragment extends Fragment {
 
     private void IntialiseFields() {
 
-        listView = groupFragmentView.findViewById(R.id.list_view);
-        arrayAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,listOfGroups);
-        listView.setAdapter(arrayAdapter);
+//        listView = groupFragmentView.findViewById(R.id.list_view);
+//        arrayAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,listOfGroups);
+//        listView.setAdapter(arrayAdapter);
     }
 
 }
