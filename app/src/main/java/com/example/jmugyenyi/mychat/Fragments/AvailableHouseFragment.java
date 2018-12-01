@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class AvailableHouseFragment extends Fragment {
+
+    private static final String TAG= "AvailableHouseFragment";
+
 
     private View availableHouseFragmentView;
     private ListView listView;
@@ -87,6 +91,9 @@ public class AvailableHouseFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 String visit_house_id= getRef(position).getKey();
+                                String str= getRef(position).getRoot().child("House").child(visit_house_id).toString();
+
+                                Log.d(TAG, "onClick: "+str);
 
                                 Intent viewHouseIntent = new Intent(getActivity(),ViewHouseActivity.class);
                                 viewHouseIntent.putExtra("visit_house_id",visit_house_id);

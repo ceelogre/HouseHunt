@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.jmugyenyi.mychat.Fragments.ChatFragment;
 import com.example.jmugyenyi.mychat.Fragments.PostAHouseFragment;
+import com.example.jmugyenyi.mychat.model.ParentUser;
 
 /**
  * * @author Joel Mugyenyi
@@ -16,7 +17,7 @@ import com.example.jmugyenyi.mychat.Fragments.PostAHouseFragment;
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class HouseHeadTabsAdapter extends FragmentPagerAdapter {
+public class HouseHeadTabsAdapter extends ParentUser {
 
 
 

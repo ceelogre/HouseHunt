@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.jmugyenyi.mychat.Fragments.AvailableHouseFragment;
 import com.example.jmugyenyi.mychat.Fragments.MyHousesFragment;
+import com.example.jmugyenyi.mychat.model.ParentUser;
 
 /**
  * * @author Joel Mugyenyi
@@ -16,7 +17,7 @@ import com.example.jmugyenyi.mychat.Fragments.MyHousesFragment;
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class SeekerTabsAdapter extends FragmentPagerAdapter {
+public class SeekerTabsAdapter extends ParentUser {
 
 
     public SeekerTabsAdapter(FragmentManager fm) {

@@ -27,7 +27,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText userEmail, userPassword;
     private TextView alreadyHaveAccountLink;
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference databaseReference;
     private ProgressDialog loadingBar;
 
@@ -107,14 +106,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
     private void SendUserToLoginActivity() {
-
         Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(loginIntent);
     }
     private void SendUserToMainActivity() {
 
         Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-        mainIntent.putExtra("status", userPassword.getText().toString());
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();
