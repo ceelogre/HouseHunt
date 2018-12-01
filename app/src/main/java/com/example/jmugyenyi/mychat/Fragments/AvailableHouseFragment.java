@@ -76,12 +76,12 @@ public class AvailableHouseFragment extends Fragment {
                 new FirebaseRecyclerOptions.Builder<House>()
                         .setQuery(databaseReference,House.class).build();
 
-        FirebaseRecyclerAdapter<House,FindMatesViewHolder> adapter =
-                new FirebaseRecyclerAdapter<House, FindMatesViewHolder>(options) {
+        FirebaseRecyclerAdapter<House,FindAvailableHousesViewHolder> adapter =
+                new FirebaseRecyclerAdapter<House, FindAvailableHousesViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull FindMatesViewHolder holder, final int position, @NonNull House model) {
+                    protected void onBindViewHolder(@NonNull FindAvailableHousesViewHolder holder, final int position, @NonNull House model) {
 
-                        holder.username.setText(model.getHouseId());
+                        holder.username.setText(model.getHouseName());
                         holder.status.setText(model.getStreet());
 //                        holder.username.setText(model.getName());
 //                        holder.status.setText(model.getStatus());
@@ -105,21 +105,21 @@ public class AvailableHouseFragment extends Fragment {
 
                     @NonNull
                     @Override
-                    public FindMatesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                    public FindAvailableHousesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                         View view = LayoutInflater.from(viewGroup.getContext())
                                 .inflate(R.layout.house_display_layout,viewGroup,false);
 
-                        FindMatesViewHolder viewHolder = new FindMatesViewHolder(view);
+                        FindAvailableHousesViewHolder viewHolder = new FindAvailableHousesViewHolder(view);
                         return viewHolder;
                     }
                 };
         myRecyclerView.setAdapter(adapter);
         adapter.startListening();
     }
-    public static class FindMatesViewHolder extends RecyclerView.ViewHolder{
+    public static class FindAvailableHousesViewHolder extends RecyclerView.ViewHolder{
         TextView username , status;
         CircleImageView profileImage;
-        public FindMatesViewHolder(@NonNull View itemView) {
+        public FindAvailableHousesViewHolder(@NonNull View itemView) {
             super(itemView);
 
             username = itemView.findViewById(R.id.user_profile_name);

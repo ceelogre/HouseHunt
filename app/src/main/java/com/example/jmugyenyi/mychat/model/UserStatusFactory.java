@@ -28,7 +28,6 @@ public class UserStatusFactory extends AppCompatActivity{
 
     public  ParentUser createUser(String type,FragmentManager fm)
     {
-
         if (type.equalsIgnoreCase(ParentUser.seeker)) {
             return new SeekerTabsAdapter(fm);
         }
