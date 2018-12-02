@@ -255,10 +255,10 @@ public class PostAHouseFragment extends Fragment {
             Toast.makeText(getActivity(), "Enter Missing Input!",Toast.LENGTH_SHORT).show();
         }else
         {
-            HouseCRUD houseCRUD = new HouseCRUD(mfirebaseAuth);
-            houseCRUD.createHouseCollection(saveHousename,saveHouseStreet,saveHouseCity,
-                    saveHouseCountry,saveHouseNumberOrooms,saveHouseNumberOmates,saveHouseRent);
-            houseCRUD.addRoomToHouse();
+//            HouseCRUD houseCRUD = new HouseCRUD(mfirebaseAuth);
+//            houseCRUD.createHouseCollection(saveHousename,saveHouseStreet,saveHouseCity,
+//                    saveHouseCountry,saveHouseNumberOrooms,saveHouseNumberOmates,saveHouseRent);
+//            houseCRUD.addRoomToHouse();
         }
     }
 

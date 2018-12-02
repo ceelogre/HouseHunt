@@ -51,7 +51,6 @@ public class HouseCRUD {
     }
 
 
-
     public HouseCRUD(FirebaseAuth authenticatedUser){
         this.authenticatedUser = authenticatedUser;
         databaseReference =FirebaseDatabase.getInstance().getReference("House");

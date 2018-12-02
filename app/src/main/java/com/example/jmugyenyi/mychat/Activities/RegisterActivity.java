@@ -80,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //p.getAvailableHouses();
 
                     String currentUserID = mFirebaseAuth.getCurrentUser().getUid();
-                    databaseReference.child("Users").child(currentUserID).setValue("");
+                    //databaseReference.child("Users").child(currentUserID).setValue("");
                     SendUserToMainActivity();
                     Toast.makeText(RegisterActivity.this, "Account created successfully",Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();

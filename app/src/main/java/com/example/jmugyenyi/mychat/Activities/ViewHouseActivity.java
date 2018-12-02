@@ -1,3 +1,4 @@
+
 package com.example.jmugyenyi.mychat.Activities;
 
 import android.support.annotation.NonNull;
@@ -28,11 +29,11 @@ public class ViewHouseActivity extends AppCompatActivity {
     private TextView hseName, hseStreet, rentAmount,hseCity,hseCountry, hseMates,hseRooms;
     private CircleImageView hseImage;
     private Button join;
-    
+
     private String receiverHouseID,currentUserID;
     private DatabaseReference databaseReference;
     private FirebaseAuth mfirebaseAuth;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +47,8 @@ public class ViewHouseActivity extends AppCompatActivity {
 
 
 
-        
-        
+
+
 
 
         RetrieveHouseInfo(receiverHouseID);
