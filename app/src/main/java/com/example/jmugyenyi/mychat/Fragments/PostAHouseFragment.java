@@ -1,34 +1,53 @@
 package com.example.jmugyenyi.mychat.Fragments;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.telephony.SmsManager;
 
+import com.example.jmugyenyi.mychat.Activities.SettingsActivity;
 import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.model.User;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -36,13 +55,18 @@ import com.theartofdev.edmodo.cropper.CropImageView;
  */
 public class PostAHouseFragment extends Fragment {
 
+    protected static final String TAG = "PostAHouseFragment";
+
     private FirebaseAuth mfirebaseAuth;
 
     private View postHouse;
     private Button uploadPicButton, cameraButton, getLocationButton, saveButton;
     private EditText housename, houseStreet, houseCity, houseCountry, houseNumberOrooms, houseNumberOmates, houseRent;
+    private CircleImageView circleImageView;
     private String saveHousename, saveHouseStreet, saveHouseCity, saveHouseCountry,
             saveHouseNumberOrooms, saveHouseNumberOmates, saveHouseRent;
+
+
 
     private  static  final int galleryPicture = 1;
 
@@ -51,6 +75,8 @@ public class PostAHouseFragment extends Fragment {
     private DatabaseReference databaseReference;
 
     private ProgressDialog loadingBar;
+
+    //User userID = new User();
 
     public PostAHouseFragment() {
         // Required empty public constructor
@@ -88,6 +114,15 @@ public class PostAHouseFragment extends Fragment {
             }
         });
 
+
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent,0);
+            }
+        });
+
         return  postHouse;
     }
 
@@ -96,23 +131,38 @@ public class PostAHouseFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.d(TAG, "onActivityResult: Got Here 1");
+
+
+        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        circleImageView.setImageBitmap(bitmap);
+
+
         if (requestCode==galleryPicture && resultCode== Activity.RESULT_OK)
         {
+            Log.d(TAG, "onActivityResult: Got Here 2");
+            Log.d(TAG, "onActivityResult: Code   "+requestCode);
             Uri picUri = data.getData();
 
-            CropImage.activity()
+            Intent intent = CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1,1)
-                    .start(getActivity());
+                    .getIntent(getContext());
+
+            startActivityForResult(intent,CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                   // .start(getActivity());
         }
 
 
+        Log.d(TAG, "onActivityResult: Code2   "+CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
         {
+            Log.d(TAG, "onActivityResult: Got Here 3");
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode== Activity.RESULT_OK){
 
+                Log.d(TAG, "onActivityResult: Got Here 4");
                 loadingBar.setTitle("Set House Image");
                 loadingBar.setMessage("Please wait!");
                 loadingBar.show();
@@ -136,23 +186,102 @@ public class PostAHouseFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
-                            Uri downloadUri = task.getResult();
-                            //System.out.println("Upload " + downloadUri);
-                            //Toast.makeText(SettingsActivity.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
+                            final Uri downloadUri = task.getResult();
 
-                            databaseReference.child("Users").child(currentUserID).child("image").setValue(downloadUri.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+
+
+
+
+
+                            databaseReference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(getActivity(), "Image saved in DB!", Toast.LENGTH_SHORT).show();
-                                        loadingBar.dismiss();
-                                    }else{
-                                        String message = task.getException().toString();
-                                        Toast.makeText(getActivity(), "Error: "+message, Toast.LENGTH_SHORT).show();
-                                        loadingBar.dismiss();
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    //semaphore.release();
+                                    if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name")) && (dataSnapshot.hasChild("image")))
+                                    {
+                                        String houseID = dataSnapshot.child("house").getValue()
+                                                .toString().replace("=true","")
+                                                .replaceAll("\\{","")
+                                                .replaceAll("\\}","")
+                                                .replaceAll("\\-","");
+
+                                        Log.d(TAG, "onDataChange 2: "+houseID.replaceAll("\\{",""));
+
+
+                                        databaseReference.child("House").child(houseID).child("image").setValue(downloadUri.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    Toast.makeText(getActivity(), "Image saved in Database!", Toast.LENGTH_SHORT).show();
+                                                    loadingBar.dismiss();
+                                                }else{
+                                                    String message = task.getException().toString();
+                                                    Toast.makeText(getActivity(), "Error: "+message, Toast.LENGTH_SHORT).show();
+                                                    loadingBar.dismiss();
+                                                }
+                                            }
+                                        });
+
+                                    }else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name")))
+                                    {
+                                        Log.d(TAG, "Finally: ");
+                                        Log.d(TAG, "Asynchronous: "+dataSnapshot.child("house").getValue()
+                                                .toString());
+                                        String houseID = dataSnapshot.child("house").getValue()
+                                                .toString().replace("=true","")
+                                                .replaceAll("\\{","")
+                                                .replaceAll("\\}","")
+                                                .replaceAll("\\-","");
+
+                                        Log.d(TAG, "onDataChange 2: "+houseID.replaceAll("\\{",""));
+
+
+                                        databaseReference.child("House").child(houseID).child("image").setValue(downloadUri.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    Toast.makeText(getActivity(), "Image saved in Database!", Toast.LENGTH_SHORT).show();
+                                                    loadingBar.dismiss();
+                                                }else{
+                                                    String message = task.getException().toString();
+                                                    Toast.makeText(getActivity(), "Error: "+message, Toast.LENGTH_SHORT).show();
+                                                    loadingBar.dismiss();
+                                                }
+                                            }
+                                        });
+
+
+                                    }else
+                                    {
+                                        // Toast.makeText(SettingsActivity.this,"Update Profile",Toast.LENGTH_SHORT).show();
                                     }
                                 }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
                             });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                         } else {
                             String message = task.getException().toString();
@@ -174,6 +303,7 @@ public class PostAHouseFragment extends Fragment {
 
     private void initializeFields() {
 
+        circleImageView = postHouse.findViewById(R.id.post_house_image);
         uploadPicButton = postHouse.findViewById(R.id.post_house_uploadButton);
         cameraButton = postHouse.findViewById(R.id.post_house_cameraButton);
         getLocationButton = postHouse.findViewById(R.id.post_house_locationButton);
@@ -185,6 +315,7 @@ public class PostAHouseFragment extends Fragment {
         houseNumberOrooms = postHouse.findViewById(R.id.post_house_rooms);
         houseNumberOmates = postHouse.findViewById(R.id.post_house_housemates);
         houseRent = postHouse.findViewById(R.id.post_house_rent);
+        loadingBar = new ProgressDialog(getActivity());
     }
 
     private void saveHouseInfo() {
