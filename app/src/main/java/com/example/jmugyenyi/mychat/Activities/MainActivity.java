@@ -223,9 +223,21 @@ public class MainActivity extends AppCompatActivity {
                     String retrieveUsername = dataSnapshot.child("name").getValue().toString();
                     String retrieveStatus = dataSnapshot.child("status").getValue().toString();
                     String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
-                    myUser.setUserName(retrieveUsername);
 
-                    myUser.setUserStatus("my turn");
+
+                    myUser.setUserName(retrieveUsername);
+                    myUser.setUserStatus(retrieveStatus);
+
+                   // Log.d(TAG, "retrieveUser: "+ myUser.getUserStatus());
+
+                    String setUser = myUser.getUserStatus().trim();
+
+                    // Call Factory to create User based of status which was selected
+                    userStatus = new UserStatusFactory().createUser(setUser,getSupportFragmentManager());
+                    getSupportActionBar().setTitle(setUser);
+                    myViewPager.setAdapter(userStatus);
+                    myTabLayout = findViewById(R.id.main_tabs);
+                    myTabLayout.setupWithViewPager(myViewPager);
 
                 } else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))) {
 

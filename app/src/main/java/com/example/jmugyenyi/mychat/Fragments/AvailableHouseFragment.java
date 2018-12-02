@@ -22,6 +22,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -81,11 +82,11 @@ public class AvailableHouseFragment extends Fragment {
                     @Override
                     protected void onBindViewHolder(@NonNull FindAvailableHousesViewHolder holder, final int position, @NonNull House model) {
 
-                        holder.username.setText(model.getHouseName());
-                        holder.status.setText(model.getStreet());
-//                        holder.username.setText(model.getName());
-//                        holder.status.setText(model.getStatus());
-                     //   Picasso.get().load(com.example.jmugyenyi.mychat.model.getImage()).into(holder.profileImage);
+                        holder.housename.setText(model.getHouseName());
+                        holder.street.setText(model.getStreet());
+                        Picasso.get().load(model.getImage()).placeholder(R.drawable.house4).into(holder.houseImage);
+
+                        Log.d(TAG, "onClick: "+model.getImage());
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -93,7 +94,7 @@ public class AvailableHouseFragment extends Fragment {
                                 String visit_house_id= getRef(position).getKey();
                                 String str= getRef(position).getRoot().child("House").child(visit_house_id).toString();
 
-                                Log.d(TAG, "onClick: "+str);
+
 
                                 Intent viewHouseIntent = new Intent(getActivity(),ViewHouseActivity.class);
                                 viewHouseIntent.putExtra("visit_house_id",visit_house_id);
@@ -117,14 +118,14 @@ public class AvailableHouseFragment extends Fragment {
         adapter.startListening();
     }
     public static class FindAvailableHousesViewHolder extends RecyclerView.ViewHolder{
-        TextView username , status;
-        CircleImageView profileImage;
+        TextView housename , street;
+        CircleImageView houseImage;
         public FindAvailableHousesViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            username = itemView.findViewById(R.id.user_profile_name);
-            status = itemView.findViewById(R.id.user_profile_status);
-            profileImage = itemView.findViewById(R.id.housemates_profile_image);
+            housename = itemView.findViewById(R.id.user_profile_name);
+            street = itemView.findViewById(R.id.user_profile_status);
+            houseImage = itemView.findViewById(R.id.housemates_profile_image);
         }
     }
 }
