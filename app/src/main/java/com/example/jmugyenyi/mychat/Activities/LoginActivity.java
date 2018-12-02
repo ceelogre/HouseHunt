@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -70,8 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "Please enter email...",Toast.LENGTH_SHORT).show();
         }
-        if (TextUtils.isEmpty(password))
-        {
+        if (TextUtils.isEmpty(password)){
             Toast.makeText(this, "Please enter password...",Toast.LENGTH_SHORT).show();
         }
 
@@ -87,9 +87,10 @@ public class LoginActivity extends AppCompatActivity {
                    SendUserToMainActivity();
 
                    //If status is househead, send to post a house activity
-//                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
-//                    p.createHouseCollection();
-//                    p.addRoomToHouse();
+                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
+                    p.createHouseCollection("Mc batou", "KK 8 Av 77", "Lake Kivu", "UG",
+                            "1", "1", "100000.0");
+                    p.addRoomToHouse();
 
 
                     Toast.makeText(LoginActivity.this, "Login Successful ",Toast.LENGTH_SHORT).show();
