@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.jmugyenyi.mychat.R;
@@ -24,8 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -36,16 +32,9 @@ public class AvailableHouseFragment extends Fragment {
 
     private static final String TAG= "AvailableHouseFragment";
 
-
     private View availableHouseFragmentView;
-    private ListView listView;
-    private ArrayAdapter<String> arrayAdapter;
-    private ArrayList<String> listOfGroups = new ArrayList<>();
     private DatabaseReference databaseReference;
-    private android.support.v7.widget.Toolbar mToolbar;
-    private RecyclerView recyclerView;
     private RecyclerView myRecyclerView;
-   // private List<Contacts> listContact;
 
 
     public AvailableHouseFragment() {
@@ -59,13 +48,10 @@ public class AvailableHouseFragment extends Fragment {
         // Inflate the layout for this fragment
         availableHouseFragmentView=  inflater.inflate(R.layout.fragment_available_house, container, false);
 
-
         databaseReference = FirebaseDatabase.getInstance().getReference().child("House");
 
         myRecyclerView = availableHouseFragmentView.findViewById(R.id.available_houses_recycler_list);
-        //RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(),listContact);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        myRecyclerView.setAdapter(recyclerViewAdapter);
 
         return  availableHouseFragmentView;
     }
@@ -93,8 +79,6 @@ public class AvailableHouseFragment extends Fragment {
                             public void onClick(View v) {
                                 String visit_house_id= getRef(position).getKey();
                                 String str= getRef(position).getRoot().child("House").child(visit_house_id).toString();
-
-
 
                                 Intent viewHouseIntent = new Intent(getActivity(),ViewHouseActivity.class);
                                 viewHouseIntent.putExtra("visit_house_id",visit_house_id);
