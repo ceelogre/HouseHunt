@@ -28,17 +28,19 @@ public class HouseCRUD {
 
     private House house;
     private FirebaseAuth authenticatedUser;
+    private String houseId;
+    private String houseName;
+
+
+
+
 
     public String getHouseId() {
         return houseId;
     }
-
     public void setHouseId(String houseId) {
         this.houseId = houseId;
     }
-
-    private String houseId;
-
     public void setHouseName(String houseName) {
         this.houseName = houseName;
     }
@@ -48,7 +50,7 @@ public class HouseCRUD {
         return houseName;
     }
 
-    private String houseName;
+
 
     public HouseCRUD(FirebaseAuth authenticatedUser){
         this.authenticatedUser = authenticatedUser;
@@ -74,7 +76,7 @@ public class HouseCRUD {
         String street = houseStreet;
         String name = givenHouseName;
 
-        setHouseName(name);
+        //setHouseName(name);
 
         //Userid
         String authenticatedUserId =    authenticatedUser.getCurrentUser().getUid();
@@ -92,21 +94,6 @@ public class HouseCRUD {
         databaseReference =FirebaseDatabase.getInstance().getReference("Users");
         databaseReference.child(authenticatedUserId).child("house").child(houseId).setValue(true);
 
-//        databaseReference.orderByChild("city").equalTo("Lake Kivu").limitToFirst(1).addValueEventListener(
-//                new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                      if(dataSnapshot.exists()){
-//                          Log.d("city names....", dataSnapshot.getValue().toString());
-//                      }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//                }
-//        );
     }
 
     public House getSpecificHouse(String houseid){

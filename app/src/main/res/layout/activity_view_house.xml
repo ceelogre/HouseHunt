@@ -14,9 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-
         android:src="@drawable/house4"/>
-
 
     <TextView
         android:id="@+id/visit_house_name"
@@ -44,7 +42,27 @@
         android:textSize="18sp"
         android:textAlignment="center"
         android:textStyle="bold"/>
-
+    <TextView
+        android:id="@+id/join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join?"
+        android:layout_marginTop="280dp"
+        android:layout_marginLeft="290dp"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textStyle="bold"/>
+    <ToggleButton
+        android:id="@+id/flashlightButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:layout_marginLeft="230dp"
+        android:background="@drawable/switch_button"
+        android:textOn=""
+        android:textOff=""
+        />
     <ScrollView
         android:id="@+id/view_house_scrollview"
         android:layout_width="match_parent"
@@ -57,6 +75,7 @@
             android:layout_height="match_parent">
 
             <TableLayout
+                android:id="@+id/tableLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -347,6 +366,16 @@
                 </TableRow>
 
             </TableLayout>
+
+            <Button
+                android:id="@+id/join_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tableLayout"
+                android:text="JOIN"
+                android:paddingTop="15dp"
+                android:layout_marginLeft="30dp"
+                />
 
         </RelativeLayout>
     </ScrollView>

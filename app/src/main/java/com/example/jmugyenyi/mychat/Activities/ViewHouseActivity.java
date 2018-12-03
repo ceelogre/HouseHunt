@@ -4,10 +4,15 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.utils.HouseCRUD;
+import com.example.jmugyenyi.mychat.utils.InterestCRUD;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,27 +27,41 @@ public class ViewHouseActivity extends AppCompatActivity {
     protected static final String TAG = "ViewHouseActivity";
     private TextView hseName, hseStreet, rentAmount,hseCity,hseCountry, hseMates,hseRooms;
     private CircleImageView hseImage;
+    private Button join;
     
-    private String receiverHouseID;
+    private String receiverHouseID,currentUserID;
     private DatabaseReference databaseReference;
+    private FirebaseAuth mfirebaseAuth;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_house);
+        initializeFields();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
-
-        initializeFields();
-        
-        
+        mfirebaseAuth = FirebaseAuth.getInstance();
+        currentUserID = mfirebaseAuth.getCurrentUser().getUid();
         receiverHouseID = getIntent().getExtras().get("visit_house_id").toString();
+
+
+
+        
+        
+
 
         RetrieveHouseInfo(receiverHouseID);
 
-        Toast.makeText(this, "House ID: "+ receiverHouseID, Toast.LENGTH_SHORT).show();
+        join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                joinHouse();
+            }
+        });
+
+        //Toast.makeText(this, "House ID: "+ receiverHouseID, Toast.LENGTH_SHORT).show();
     }
+
 
     private void initializeFields() {
 
@@ -54,6 +73,14 @@ public class ViewHouseActivity extends AppCompatActivity {
         hseCountry = findViewById(R.id.view_country_name);
         hseRooms = findViewById(R.id.view_room_number);
         hseMates = findViewById(R.id.view_mates_number);
+        join = findViewById(R.id.join_button);
+    }
+
+    private void joinHouse() {
+
+        InterestCRUD interestCRUD = new InterestCRUD(mfirebaseAuth);
+        interestCRUD.createInterestTable(currentUserID,receiverHouseID);
+        //houseCRUD.addRoomToHouse();
     }
 
     private void RetrieveHouseInfo(String retrieveInfo) {

@@ -169,8 +169,8 @@ public class HouseFacilitiesFragment extends Fragment {
         smsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //String phoneNumber = "+250739832241";
-                String phoneNumber = "+250788231926";
+                String phoneNumber = "+250739832241";
+                //String phoneNumber = "+250788231926";
 
                 if (phoneNumber == null || phoneNumber.length() == 0 || message== null || message.length() == 0)
                 {
