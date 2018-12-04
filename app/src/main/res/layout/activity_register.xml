@@ -73,7 +73,7 @@
                 android:textSize="24sp"
                 android:textAllCaps="false"
                 android:textColor="@android:color/background_light"
-                android:background="@drawable/buttons"/>
+                android:background="@drawable/button_green"/>
             <TextView
                 android:id="@+id/already_have_account_link"
                 android:layout_width="match_parent"

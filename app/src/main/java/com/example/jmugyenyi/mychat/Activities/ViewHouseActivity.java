@@ -50,18 +50,8 @@ public class ViewHouseActivity extends AppCompatActivity {
         ownerhouseID = getIntent().getExtras().get("ownerID").toString();
 
 
-        Toast.makeText(this, ownerhouseID, Toast.LENGTH_SHORT).show();
-
         // Method to retrieve House Details
         RetrieveHouseInfo(joiningHouseID);
-
-        // Button for seeker to express interest in house
-//        joinHouseButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                joinHouse();
-//            }
-//        });
 
     }
 
@@ -85,48 +75,36 @@ public class ViewHouseActivity extends AppCompatActivity {
         InterestCRUD interestCRUD = new InterestCRUD(mfirebaseAuth);
         interestCRUD.createInterestTable(currentUserID,joiningHouseID,ownerhouseID);
 
+
     }
 
     private void RetrieveHouseInfo(String retrieveInfo) {
 
+
+
+
         databaseReference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if((dataSnapshot.exists())&&(dataSnapshot.hasChild("interest"))) {
-                     interestID = dataSnapshot.child("interest").getValue().toString()
-                            .replace("=true","")
-                            .replaceAll("\\{","")
-                            .replaceAll("\\}","");
-                    Log.d(TAG, "Interest ID: "+interestID);
+                if((dataSnapshot.exists())&&(dataSnapshot.hasChild("houses"))) {
 
 
-                    databaseReference.child("Interest").child(interestID).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                           // if((dataSnapshot.exists())&&(dataSnapshot.hasChild("interest")))
+                    String houseid = dataSnapshot.child(currentUserID).child(joiningHouseID).getKey();
+
+                   // Log.d(TAG, "Getting to the end 2: "+joiningHouseID);
+
+                    for (DataSnapshot test :dataSnapshot.getChildren()) {
+
+                        if (test.getValue().toString().contains(joiningHouseID))
+                        {
+                            Log.d(TAG, "Getting : " + test.getValue());
+
                             {
-                                String houseid = dataSnapshot.child("houseID").getValue().toString()
-                                        .replace("=true","")
-                                        .replaceAll("\\{","")
-                                        .replaceAll("\\}","");
-                                Log.d(TAG, "Getting to the end 1: "+houseid);
-                                Log.d(TAG, "Getting to the end 2: "+joiningHouseID);
-                                if(joiningHouseID.equalsIgnoreCase(houseid))
-                                {
-                                    joinHouseButton.setText("Cancel Join Request");
-                                    current_State ="Request_Sent";
-                                }
-                               
-
+                                joinHouseButton.setText("Cancel Join Request");
+                                current_State ="Request_Sent";
                             }
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
+                    }
                 }
             }
 
@@ -136,7 +114,7 @@ public class ViewHouseActivity extends AppCompatActivity {
             }
         });
 
-        Log.d(TAG, "RetrieveHouseInfo: "+retrieveInfo);
+       // Log.d(TAG, "RetrieveHouseInfo: "+retrieveInfo);
         databaseReference.child("House").child(retrieveInfo).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -206,14 +184,17 @@ public class ViewHouseActivity extends AppCompatActivity {
 
                 if (current_State.equalsIgnoreCase("Request_Not_Sent"))
                 {
-                    Log.d(TAG, "Join request worked!: ");
+                   // Log.d(TAG, "Join request worked!: ");
                     joinHouse();
-                    joinHouseButton.setText("Cancel Join Request");
+//                    joinHouseButton.setText("Cancel Join Request");
+//                    current_State = "Request_Sent";
                 }
                 if (current_State.equalsIgnoreCase("Request_Sent"))
                 {
-                    Log.d(TAG, "Cancel request worked: ");
+                    //Log.d(TAG, "Cancel request worked: ");
                     CancelJoinHouseRequest();
+                    joinHouseButton.setText("Join House");
+                    current_State = "Request_Not_Sent";
                 }
 
             }
@@ -223,23 +204,7 @@ public class ViewHouseActivity extends AppCompatActivity {
 
     private void CancelJoinHouseRequest() {
 
-
-        databaseReference.child("Interest").child(interestID)
-                .removeValue()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.d(TAG, "Is task successful!: ");
-                if (task.isSuccessful())
-                {
-
-                }
-
-            }
-        });
-
-        Log.d(TAG, "Cancel Request: "+interestID);
-        databaseReference.child("Users").child(currentUserID).child("interest").child(interestID).removeValue()
+        databaseReference.child("Users").child(currentUserID).child("houses").child(joiningHouseID).removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -253,5 +218,22 @@ public class ViewHouseActivity extends AppCompatActivity {
                         }
                     }
                 });
+        databaseReference.child("Users").child(ownerhouseID).child("seekers").child(currentUserID).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        Log.d(TAG, "Finally entered the loop: ");
+                        if(task.isSuccessful())
+                        {
+                            Log.d(TAG, "Total success!!!!: ");
+                            joinHouseButton.setText("Join House");
+                            current_State="Request_Not_Sent";
+                        }
+
+                    }
+                });
+
+
     }
 }

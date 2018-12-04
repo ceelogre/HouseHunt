@@ -13,18 +13,12 @@ import com.google.firebase.database.FirebaseDatabase;
  * received unauthorized assistance on this work.!
  */
 public class Interest {
-    private String interestID;
-    private String seekerID;
+   // private String interestID;
     private String houseID;
-    private String status;
-    private String authenticatedUserId;
     private String ownerID;
-
-
-
-
-
-
+    private String seekerID;
+    private String status;
+   // private String authenticatedUserId;
 
 
 
@@ -32,7 +26,7 @@ public class Interest {
 
     }
 
-    public Interest(String _seekerID, String _houseID, String _status, String _ownerID)
+    public Interest(String _houseID,String _seekerID,String _ownerID,  String _status)
     {
 
         this.seekerID = _seekerID;
@@ -41,13 +35,13 @@ public class Interest {
         this.ownerID = _ownerID;
     }
 
-    public String getInterestID() {
-        return interestID;
-    }
-
-    public void setInterestID(String interestID) {
-        this.interestID = interestID;
-    }
+//    public String getInterestID() {
+//        return interestID;
+//    }
+//
+//    public void setInterestID(String interestID) {
+//        this.interestID = interestID;
+//    }
 
     public String getSeekerID() {
         return seekerID;
@@ -76,16 +70,16 @@ public class Interest {
         this.ownerID = ownerID;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    public String getAuthenticatedUserId() {
-        return authenticatedUserId;
-    }
-
-    public void setAuthenticatedUserId(String authenticatedUserId) {
-        this.authenticatedUserId = authenticatedUserId;
-    }
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
+//    public String getAuthenticatedUserId() {
+//        return authenticatedUserId;
+//    }
+//
+//    public void setAuthenticatedUserId(String authenticatedUserId) {
+//        this.authenticatedUserId = authenticatedUserId;
+   // }
 
 
 
