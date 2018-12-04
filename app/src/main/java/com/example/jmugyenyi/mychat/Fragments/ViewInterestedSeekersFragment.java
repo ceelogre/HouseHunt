@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.model.Interest;
 import com.example.jmugyenyi.mychat.model.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -38,7 +39,7 @@ public class ViewInterestedSeekersFragment extends Fragment {
     private View viewInterestedSeekersFragment;
     private RecyclerView myRecyclerView;
 
-    private DatabaseReference userRef;
+    private DatabaseReference userRef, seekersRef;
     private FirebaseAuth mfirebaseAuth;
 
     private String currentUserID;
@@ -49,36 +50,51 @@ public class ViewInterestedSeekersFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         viewInterestedSeekersFragment= inflater.inflate(R.layout.fragment_view_interested_seekers, container, false);
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
 
-        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        //userRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID).child("seekers");
+        seekersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         myRecyclerView = viewInterestedSeekersFragment.findViewById(R.id.view_interested_recycler_list);
-        myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
        // Log.d(TAG, "Log is working: ");
 
-        Query query = FirebaseDatabase.getInstance().getReference().child("Interest").orderByChild("ownerID").equalTo(currentUserID);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Log.d(TAG, "onDataChange: "+dataSnapshot.getValue().toString());
-
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        Query query = FirebaseDatabase.getInstance().getReference().child("Interest").orderByChild("ownerID").equalTo(currentUserID);
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                // dataSnapshot.getChildren();
+//                for (DataSnapshot snap:dataSnapshot.getChildren()) {
+//
+//                    String str1 = snap.getValue().toString().replace("=true","")
+//                            .replaceAll("\\{","")
+//                            .replaceAll("\\}","")
+//                            .replace("houseID=","")
+//                            .replace("seekerID=","")
+//                            .replace("ownerID=","")
+//                            .replace("status=","");
+//                    //Log.d(TAG, "onDataChange: "+str1);
+//                    String str2 []= str1.split(",");
+//                    Interest interest = new Interest(str2[0],str2[1],str2[2],str2[3]);
+//
+//                   // Log.d(TAG, "Interest Test: "+ interest.getSeekerID());
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
         return viewInterestedSeekersFragment;
@@ -98,12 +114,51 @@ public class ViewInterestedSeekersFragment extends Fragment {
 
         FirebaseRecyclerAdapter<User,FindUsersViewHolder> adapter = new FirebaseRecyclerAdapter<User, FindUsersViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull FindUsersViewHolder holder, int position, @NonNull User model)
+            protected void onBindViewHolder(@NonNull final FindUsersViewHolder holder, int position, @NonNull User model)
             {
 
-                holder.userName.setText(model.getName());
-                holder.userStatus.setText(model.getStatus());
-                Picasso.get().load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.profileImage);
+                String seekersIDs = getRef(position).getKey();
+
+                Log.d(TAG, "seekersIDs: "+seekersIDs);
+
+
+                seekersRef.child(seekersIDs).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                    {
+                        if(dataSnapshot.hasChild("image"))
+                        {
+                            String _profileImage = dataSnapshot.child("image").getValue().toString();
+                            String _profileName = dataSnapshot.child("name").getValue().toString();
+                            String _profileStatus = dataSnapshot.child("status").getValue().toString();
+
+                            holder.userName.setText(_profileName);
+                            holder.userStatus.setText(_profileStatus);
+                            Picasso.get().load(_profileImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
+
+                        }
+                        else
+                        {
+                            String _profileName = dataSnapshot.child("name").getValue().toString();
+                            String _profileStatus = dataSnapshot.child("status").getValue().toString();
+
+                            holder.userName.setText(_profileName);
+                            holder.userStatus.setText(_profileStatus);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+//                holder.userName.setText(model.getName());
+//                holder.userStatus.setText(model.getStatus());
+//                Picasso.get().load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.profileImage);
+
+
             }
 
             @NonNull

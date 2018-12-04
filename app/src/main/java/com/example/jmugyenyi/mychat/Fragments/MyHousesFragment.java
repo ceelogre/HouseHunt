@@ -16,8 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jmugyenyi.mychat.Activities.PaymentActivity;
-import com.example.jmugyenyi.mychat.Activities.SettingsActivity;
-import com.example.jmugyenyi.mychat.Activities.ViewHouseActivity;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.model.House;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -30,9 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -45,9 +41,8 @@ public class MyHousesFragment extends Fragment {
     private static final String TAG= "MyHousesFragment";
 
     private View myHouses;
-    private DatabaseReference databaseReferenceInterest;
-    private DatabaseReference databaseReferenceUsers;
-    private DatabaseReference databaseReference;
+
+    private DatabaseReference databaseReference, houseRef;
 
     private FirebaseAuth mfirebaseAuth;
     private RecyclerView myRecyclerView;
@@ -66,8 +61,9 @@ public class MyHousesFragment extends Fragment {
         myHouses = inflater.inflate(R.layout.fragment_my_houses, container, false);
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
-        databaseReferenceInterest = FirebaseDatabase.getInstance().getReference().child("interest");
+
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        houseRef  = FirebaseDatabase.getInstance().getReference().child("House");
 
 
         myRecyclerView = myHouses.findViewById(R.id.my_houses_recycler_list);
@@ -76,7 +72,7 @@ public class MyHousesFragment extends Fragment {
 
 
         // Inflate the layout for this fragment
-        return myHouses; //inflater.inflate(R.layout.fragment_my_houses, container, false);
+        return myHouses;
     }
 
     @Override
@@ -87,149 +83,106 @@ public class MyHousesFragment extends Fragment {
 
     }
 
-
-
-
     private void RetrieveUserID() {
 
         databaseReference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-               if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("interest")))
-                {
+               if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("houses")))
+{
 
-                    String retrieveInterestID = dataSnapshot.child("interest").getValue()
-                            .toString().replace("=true","")
-                            .replaceAll("\\{","")
-                            .replaceAll("\\}","");
+                    FirebaseRecyclerOptions<House> options =
+                            new FirebaseRecyclerOptions.Builder<House>()
+                                    .setQuery(FirebaseDatabase.getInstance()
+                                            .getReference().child("Users")
+                                            .child(currentUserID).child("houses")
+                                            ,House.class).build();
 
-                    Log.d(TAG, "onDataChange 1: "+retrieveInterestID);
+                    FirebaseRecyclerAdapter<House,FindMyHousesViewHolder> adapter =
+                            new FirebaseRecyclerAdapter<House, FindMyHousesViewHolder>(options) {
+                                @Override
+                                protected void onBindViewHolder(@NonNull final FindMyHousesViewHolder holder,
+                                                                final int position, @NonNull House model) {
+                                    DatabaseReference myHouseStatusRef = getRef(position);
 
+                                    myHouseStatusRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            //dataSnapshot.child("Request").getValue();
+                                           final String  myHouseStatus = dataSnapshot.child("Request").getValue().toString();
+                                            Log.d(TAG, "myHouseStatus Value: "+myHouseStatus);
 
-
-
-
-
-
-                    //databaseReference.child("Interest").child(retrieveInterestID).addValueEventListener(new ValueEventListener()
-                    databaseReference.child("Interest").addValueEventListener(new ValueEventListener()
-                    {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            //Log.d(TAG, "onDataChange: We made it!");
-                           // if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("houseID")))
-                            {
-
-//                                 retrieveHouseID = dataSnapshot.child("houseID").getValue()
-//                                        .toString().replace("=true","")
-//                                        .replaceAll("\\{","")
-//                                        .replaceAll("\\}","");
-//
-//                                Log.d(TAG, "onDataChange 2: "+retrieveHouseID);
-
-
-                                Log.d(TAG, "onDataChange: "+dataSnapshot.getChildrenCount());
-
-
-
-//                                Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
-//
-//                                List<Object> values = td.values();
-
-                                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-
-                                    Log.d(TAG, "onDataChange: "+postSnapshot.getKey());
-                                    String interestID = postSnapshot.getKey();
-                                    Log.d(TAG, "key: "+interestID);
-                                    retrieveHouseID = dataSnapshot.child(interestID).child("houseID").getValue()
-                                            .toString().replace("=true","")
-                                            .replaceAll("\\{","")
-                                            .replaceAll("\\}","");
-                                    retrieveInterestStatus = dataSnapshot.child(interestID).child("status").getValue()
-                                            .toString().replace("=true","")
-                                            .replaceAll("\\{","")
-                                            .replaceAll("\\}","");
-
-
-                                }
-
-
-                                Log.d(TAG, "retrieveHouseID "+retrieveHouseID);
-
-                                {
-
-                                    FirebaseRecyclerOptions<House> options =
-                                            new FirebaseRecyclerOptions.Builder<House>()
-                                                    .setQuery(FirebaseDatabase.getInstance().getReference().child("House"),House.class).build();
-
-                                    FirebaseRecyclerAdapter<House,FindMyHousesViewHolder> adapter =
-                                            new FirebaseRecyclerAdapter<House, FindMyHousesViewHolder>(options) {
+                                            String houseIDs = getRef(position).getKey();
+                                            houseRef.child(houseIDs).addValueEventListener(new ValueEventListener() {
                                                 @Override
-                                                protected void onBindViewHolder(@NonNull FindMyHousesViewHolder holder, final int position, @NonNull House model) {
-
-
-                                                    Log.d(TAG, "onBindViewHolder: We have got up to here! "+model.getHouseId());
-                                                    if (model.getHouseId().equalsIgnoreCase(retrieveHouseID))
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                                                {
+                                                    if(dataSnapshot.hasChild("image"))
                                                     {
+                                                        String _houseImage = dataSnapshot.child("image").getValue().toString();
+                                                        String _houseName = dataSnapshot.child("houseName").getValue().toString();
+                                                        String _houseStreet = dataSnapshot.child("street").getValue().toString();
 
-                                                        holder.housename.setText(model.getHouseName());
-                                                        holder.street.setText(model.getStreet());
-                                                        holder.status.setText(retrieveInterestStatus);
+                                                        holder.housename.setText(_houseName);
+                                                        holder.street.setText(_houseStreet);
+                                                        holder.status.setText(myHouseStatus);
                                                         holder.status.setTextColor(Color.RED);
-                                                        Picasso.get().load(model.getImage()).placeholder(R.drawable.house4).into(holder.houseImage);
+                                                        Picasso.get().load(_houseImage).placeholder(R.drawable.house4).into(holder.houseImage);
 
-                                                        Log.d(TAG, "onClick: " + model.getImage());
-
-                                                        holder.itemView.setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View v) {
-                                                                String visit_house_id = getRef(position).getKey();
-                                                                String str = getRef(position).getRoot().child("House").child(visit_house_id).toString();
-
-                                                                Intent houseStatusIntent = new Intent(getActivity(), PaymentActivity.class);
-                                                                //houseStatusIntent.putExtra("visit_house_id", visit_house_id);
-                                                                startActivity(houseStatusIntent);
-
-                                                            }
-                                                        });
                                                     }
+                                                    else
+                                                    {
+                                                        String _houseName = dataSnapshot.child("houseName").getValue().toString();
+                                                        String _houseStreet = dataSnapshot.child("street").getValue().toString();
+
+                                                        holder.housename.setText(_houseName);
+                                                        holder.street.setText(_houseStreet);
+                                                    }
+
+                                                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            String visit_house_id = getRef(position).getKey();
+                                                            String str = getRef(position).getRoot().child("House").child(visit_house_id).toString();
+
+                                                            Intent houseStatusIntent = new Intent(getActivity(), PaymentActivity.class);
+                                                            //houseStatusIntent.putExtra("visit_house_id", visit_house_id);
+                                                            startActivity(houseStatusIntent);
+
+                                                        }
+                                                    });
+
                                                 }
 
-                                                @NonNull
+
                                                 @Override
-                                                public FindMyHousesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                                                    View view = LayoutInflater.from(viewGroup.getContext())
-                                                            .inflate(R.layout.house_interest_layout,viewGroup,false);
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                    FindMyHousesViewHolder viewHolder = new FindMyHousesViewHolder(view);
-                                                    return viewHolder;
                                                 }
-                                            };
-                                    myRecyclerView.setAdapter(adapter);
-                                    adapter.startListening();
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
                                 }
 
+                                @NonNull
+                                @Override
+                                public FindMyHousesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                                    View view = LayoutInflater.from(viewGroup.getContext())
+                                            .inflate(R.layout.house_interest_layout,viewGroup,false);
 
-
-                            }
-//                            else
-//                            {
-//                                //Toast.makeText(SettingsActivity.this,"Update Profile",Toast.LENGTH_SHORT).show();
-//                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-
-
-
-
+                                    FindMyHousesViewHolder viewHolder = new FindMyHousesViewHolder(view);
+                                    return viewHolder;
+                                }
+                            };
+                    myRecyclerView.setAdapter(adapter);
+                    adapter.startListening();
 
 
                 }else
