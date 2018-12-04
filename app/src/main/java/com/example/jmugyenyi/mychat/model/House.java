@@ -18,6 +18,8 @@ public class House {
 
     private String houseId;
     private String houseName;
+    private String Image;
+    private String authenticatedUserId;
 
     public String getAuthenticatedUserId() {
         return authenticatedUserId;
@@ -27,7 +29,7 @@ public class House {
         this.authenticatedUserId = authenticatedUserId;
     }
 
-    private String authenticatedUserId;
+
 
     private Map<String, Boolean> houseRoomMap;
 
@@ -145,6 +147,14 @@ public class House {
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String houseImage) {
+        this.Image = houseImage;
     }
 
     @Override

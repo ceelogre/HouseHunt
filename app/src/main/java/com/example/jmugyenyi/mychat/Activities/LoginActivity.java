@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity {
 
 
+    // Instance Variables
     private FirebaseAuth mFirebaseAuth;
 
     private ProgressDialog progressDialog;
@@ -37,7 +38,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+        // Initialize Variables
         initialiseFields();
+        // Link to register new account
         needNewAccountLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // login to login into account
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // Method to allow user to login into application
     private void AllowUserToLogin() {
 
         String email = userEmail.getText().toString();
@@ -85,13 +90,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful())
                 {
                    SendUserToMainActivity();
-
-                   //If status is househead, send to post a house activity
-//                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
-//                    p.createHouseCollection();
-//                    p.addRoomToHouse();
-
-
                     Toast.makeText(LoginActivity.this, "Login Successful ",Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }else

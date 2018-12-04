@@ -56,8 +56,6 @@ public class SettingsActivity extends AppCompatActivity {
     private String myStatusStringArray [] = {"choose status","seeker","house head","house mate"};
 
 
-
-
     private android.support.v7.widget.Toolbar mToolbar;
 
     @Override
@@ -85,7 +83,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         RetrieveUserInfo();
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -98,7 +95,6 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
-
         userProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +126,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
             if (resultCode== RESULT_OK){
+
 
                 loadingBar.setTitle("Set Profile Image");
                 loadingBar.setMessage("Please wait!");
@@ -196,7 +193,7 @@ public class SettingsActivity extends AppCompatActivity {
                     String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
 
                     username.setText(retrieveUsername);
-                    status.setText(retrieveStatus);
+                   // status.setText(retrieveStatus);
                     Picasso.get().load(retrieveProfileImage).into(userProfileImage);
 
                 }else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name")))
@@ -206,7 +203,8 @@ public class SettingsActivity extends AppCompatActivity {
                     String retrieveStatus = dataSnapshot.child("status").getValue().toString();
 
                     username.setText(retrieveUsername);
-                    status.setText(retrieveStatus);
+//                    status.setText(retrieveStatus);
+
 
                 }else
                 {
@@ -230,9 +228,9 @@ public class SettingsActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(setUserName)){
             Toast.makeText(this, "Enter username!",Toast.LENGTH_SHORT).show();
         }
-        if (TextUtils.isEmpty(setStatus)){
-            Toast.makeText(this, "Enter status!",Toast.LENGTH_SHORT).show();
-        }
+//        if (TextUtils.isEmpty(setStatus)){
+//            Toast.makeText(this, "Enter status!",Toast.LENGTH_SHORT).show();
+//        }
         HashMap<String,String> profileMap = new HashMap<>();
             profileMap.put("uid",currentUserID);
             profileMap.put("name",setUserName);

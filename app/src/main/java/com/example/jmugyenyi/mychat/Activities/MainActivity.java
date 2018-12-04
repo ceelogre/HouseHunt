@@ -1,28 +1,21 @@
 package com.example.jmugyenyi.mychat.Activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.jmugyenyi.mychat.R;
-import com.example.jmugyenyi.mychat.TabsAdapters.HouseHeadTabsAdapter;
-import com.example.jmugyenyi.mychat.TabsAdapters.SeekerTabsAdapter;
-import com.example.jmugyenyi.mychat.TabsAdapters.HouseMateTabsAdapter;
+import com.example.jmugyenyi.mychat.model.ParentUser;
 import com.example.jmugyenyi.mychat.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.jmugyenyi.mychat.model.UserStatusFactory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,16 +31,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    // Instance Variables
     private Toolbar mToolbar;
     private ViewPager myViewPager;
     private TabLayout myTabLayout;
-    private HouseMateTabsAdapter myHouseMateTabsAdapter;
     private FirebaseUser currentUser;
     private String currentUserId;
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference databaseReference;
-    private SeekerTabsAdapter seekers;
-    private HouseHeadTabsAdapter head;
+    private ParentUser userStatus;
+
 
     final User myUser = new User();
 
@@ -63,28 +56,18 @@ public class MainActivity extends AppCompatActivity {
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        currentUserId = "1";
+        currentUserId = "1";// Temporary assign 1 to UserID, (temporary fix for a bug, permanent fix to be added later)
 
+        // Assign title to Toolbar
         mToolbar = findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("HouseHunt");
 
-        myViewPager = findViewById(R.id.main_tabs_pager);
+        myViewPager = findViewById(R.id.main_tabs_pager); // Set title for MainActivity toolbar
 
-         String myStatus = "House head";//user.getUserStatus();
-
-        if(myStatus == "seeker")
-        {
-            seekers = new SeekerTabsAdapter(getSupportFragmentManager());
-           // getSupportActionBar().setTitle("Seeker");
-        }
-        else if (myStatus == "House head")
-        {
-            myHouseMateTabsAdapter = new HouseMateTabsAdapter(getSupportFragmentManager());
-            //getSupportActionBar().setTitle("House Head");
-        }
     }
 
+    // Menu fragment methods for logout, settings
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -116,13 +99,14 @@ public class MainActivity extends AppCompatActivity {
 
         if (item.getItemId()== R.id.main_create_group_option)
         {
-            RequestNewGroup();
+            //RequestNewGroup();
         }
 
         return  true;
     }
 
-    private void RequestNewGroup() {
+    // This method to be deleted
+ /**   private void RequestNewGroup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.AlertDialog);
         builder.setTitle("Enter group name: ");
 
@@ -153,9 +137,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
-    }
+    }**/
 
-    private void CreateNewGroup(final String groupName) {
+    // This method to be deleted
+  /**  private void CreateNewGroup(final String groupName) {
 
         databaseReference.child("Groups").child(groupName).setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -165,13 +150,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }**/
 
     @Override
     protected void onStart() {
         super.onStart();
         if (currentUser == null)
         {
+            // Send user to login activity if no account of the user is found
             SendUserToLoginActivity();
         }else
         {
@@ -179,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Method to verify user credential on app start-up. If failed, send user to settings activity
     private void VerifyUser() {
 
          currentUserId = mFirebaseAuth.getCurrentUser().getUid();
@@ -188,10 +175,11 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child("name").exists())
                 {
+                    // Display toast if user profile exists
                     Toast.makeText(MainActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
                 }else
                 {
-                    SendUserToSettingsActivity();
+                    SendUserToSettingsActivity(); // Send user to settings activity if they don't yet have a profile
                 }
             }
 
@@ -206,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "VerifyUser: Status: "+user.getUserStatus());
     }
 
+    //Method to send user to login activity
     private void SendUserToLoginActivity() {
         Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -213,24 +202,18 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    // Method to send user to settings activity
     private void SendUserToSettingsActivity() {
-        String password = getIntent().getExtras().getString("password1");
 
         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-        settingsIntent.putExtra("password2", password);
         settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(settingsIntent);
         finish();
     }
 
-//    private void SendUserToFindMatesActivity() {
-//        Intent findMatesIntent = new Intent(MainActivity.this, FindMatesActivity.class);
-//        startActivity(findMatesIntent);
-//
-//    }
 
+    // Method to retrieve current user profile info from firebase
     private User RetrieveUserInfo( ) {
-
 
         Log.d(TAG, "RetrieveUserInfo: "+ currentUserId);
         databaseReference.child("Users").child(currentUserId).addValueEventListener(new ValueEventListener() {
@@ -240,9 +223,21 @@ public class MainActivity extends AppCompatActivity {
                     String retrieveUsername = dataSnapshot.child("name").getValue().toString();
                     String retrieveStatus = dataSnapshot.child("status").getValue().toString();
                     String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
-                    myUser.setUserName(retrieveUsername);
 
-                    myUser.setUserStatus("my turn");
+
+                    myUser.setUserName(retrieveUsername);
+                    myUser.setUserStatus(retrieveStatus);
+
+                   // Log.d(TAG, "retrieveUser: "+ myUser.getUserStatus());
+
+                    String setUser = myUser.getUserStatus().trim();
+
+                    // Call Factory to create User based of status which was selected
+                    userStatus = new UserStatusFactory().createUser(setUser,getSupportFragmentManager());
+                    getSupportActionBar().setTitle(setUser);
+                    myViewPager.setAdapter(userStatus);
+                    myTabLayout = findViewById(R.id.main_tabs);
+                    myTabLayout.setupWithViewPager(myViewPager);
 
                 } else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))) {
 
@@ -254,31 +249,16 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, "retrieveUser: "+ myUser.getUserStatus());
 
-                    if(myUser.getUserStatus().trim().equalsIgnoreCase("seeker")) {
+                    String setUser = myUser.getUserStatus().trim();
 
-                        seekers = new SeekerTabsAdapter(getSupportFragmentManager());
-                        getSupportActionBar().setTitle("Seeker");
-                        myViewPager.setAdapter(seekers);
-                        myTabLayout = findViewById(R.id.main_tabs);
-                        myTabLayout.setupWithViewPager(myViewPager);
+                    // Call Factory to create User based of status which was selected
+                    userStatus = new UserStatusFactory().createUser(setUser,getSupportFragmentManager());
+                    getSupportActionBar().setTitle(setUser);
+                    myViewPager.setAdapter(userStatus);
+                    myTabLayout = findViewById(R.id.main_tabs);
+                    myTabLayout.setupWithViewPager(myViewPager);
 
-                    }
-                    else if(myUser.getUserStatus().trim().equalsIgnoreCase("house head")){
-                        getSupportActionBar().setTitle("House-Head");
-                        head = new HouseHeadTabsAdapter(getSupportFragmentManager());
-                        myViewPager.setAdapter(head);
-                        myTabLayout = findViewById(R.id.main_tabs);
-                        myTabLayout.setupWithViewPager(myViewPager);
 
-                    }else if(myUser.getUserStatus().trim().equalsIgnoreCase("house mate")){
-
-                        getSupportActionBar().setTitle("House-Mate");
-                        myHouseMateTabsAdapter = new HouseMateTabsAdapter(getSupportFragmentManager());
-                        myViewPager.setAdapter(myHouseMateTabsAdapter);
-                        myTabLayout = findViewById(R.id.main_tabs);
-                        myTabLayout.setupWithViewPager(myViewPager);
-
-                    }
                 } else {
                     Toast.makeText(MainActivity.this, "Update Profile", Toast.LENGTH_SHORT).show();
                 }

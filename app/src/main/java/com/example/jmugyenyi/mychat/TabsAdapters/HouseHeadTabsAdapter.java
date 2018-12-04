@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.jmugyenyi.mychat.Fragments.ChatFragment;
 import com.example.jmugyenyi.mychat.Fragments.PostAHouseFragment;
+import com.example.jmugyenyi.mychat.Fragments.ViewInterestedSeekersFragment;
+import com.example.jmugyenyi.mychat.model.ParentUser;
 
 /**
  * * @author Joel Mugyenyi
@@ -16,7 +18,7 @@ import com.example.jmugyenyi.mychat.Fragments.PostAHouseFragment;
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class HouseHeadTabsAdapter extends FragmentPagerAdapter {
+public class HouseHeadTabsAdapter extends ParentUser {
 
 
 
@@ -34,6 +36,9 @@ public class HouseHeadTabsAdapter extends FragmentPagerAdapter {
             case 1:
                 PostAHouseFragment postedHouse = new PostAHouseFragment();
                 return postedHouse;
+            case 2:
+                ViewInterestedSeekersFragment interestedSeeker = new ViewInterestedSeekersFragment();
+                return interestedSeeker;
 
             default:
                 return null;
@@ -42,7 +47,7 @@ public class HouseHeadTabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Nullable
@@ -56,6 +61,9 @@ public class HouseHeadTabsAdapter extends FragmentPagerAdapter {
             case 1:
 
                 return "Post a house";
+            case 2:
+
+                return "Interested Seekers";
             default:
                 return null;
         }
