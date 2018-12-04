@@ -38,6 +38,5 @@ public class UserStatusFactory extends AppCompatActivity{
         }
         else
             return null;
-
     }
 }
