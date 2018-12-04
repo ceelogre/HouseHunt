@@ -41,22 +41,31 @@ public class RoomCRUD {
 
         roomID = databaseReference.push().getKey();
 
+        //Userid
+        //String authenticatedUserId =    authenticatedUser.getCurrentUser().getUid();
+
+        roomID = databaseReference.push().getKey();
+
     }
 
-    public Room getRoomDetails(final String houseName){
+    public Room getRoomDetails(final String houseid){
 
 
         innerDatabaseReference =FirebaseDatabase.getInstance().getReference("Rooms");
-
-        innerDatabaseReference.orderByChild("name").equalTo(houseName).limitToFirst(1).addValueEventListener(
+        innerDatabaseReference.child(houseid).addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()) {
-                            room = dataSnapshot.getValue(Room.class);
-                            Log.d("been", room.toString());
-                        }
+                        if(dataSnapshot.exists()){
+                            if(dataSnapshot.hasChild("houseID")){
+                                room = dataSnapshot.getValue(Room.class);
+                                Log.d("been", room.toString());
+                            }
+                            else{
+                                Log.d("res", "No ooo");
+                            }
 
+                        }
                         else Log.d("datasnapshot", "Doesn't exist.");
 
                     }
