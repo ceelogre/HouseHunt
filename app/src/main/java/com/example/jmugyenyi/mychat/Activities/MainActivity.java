@@ -258,7 +258,6 @@ public class MainActivity extends AppCompatActivity {
                     myTabLayout = findViewById(R.id.main_tabs);
                     myTabLayout.setupWithViewPager(myViewPager);
 
-
                 } else {
                     Toast.makeText(MainActivity.this, "Update Profile", Toast.LENGTH_SHORT).show();
                 }
