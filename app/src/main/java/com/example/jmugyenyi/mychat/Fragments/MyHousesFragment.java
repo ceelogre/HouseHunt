@@ -73,9 +73,7 @@ public class MyHousesFragment extends Fragment {
         myRecyclerView = myHouses.findViewById(R.id.my_houses_recycler_list);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        Log.d(TAG, "onCreateView: Testing " +currentUserID);
 
-        //RetrieveUserID();
 
         // Inflate the layout for this fragment
         return myHouses; //inflater.inflate(R.layout.fragment_my_houses, container, false);
@@ -85,53 +83,8 @@ public class MyHousesFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-
-
-
         RetrieveUserID();
 
-
-//        FirebaseRecyclerOptions<House> options =
-//                new FirebaseRecyclerOptions.Builder<House>()
-//                        .setQuery(databaseReference,House.class).build();
-//
-//        FirebaseRecyclerAdapter<House,FindMyHousesViewHolder> adapter =
-//                new FirebaseRecyclerAdapter<House, FindMyHousesViewHolder>(options) {
-//                    @Override
-//                    protected void onBindViewHolder(@NonNull FindMyHousesViewHolder holder, final int position, @NonNull House model) {
-//
-//                        holder.housename.setText(model.getHouseName());
-//                        holder.street.setText(model.getStreet());
-//                        Picasso.get().load(model.getImage()).placeholder(R.drawable.house4).into(holder.houseImage);
-//
-//                        Log.d(TAG, "onClick: "+model.getImage());
-//
-//                        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                String visit_house_id= getRef(position).getKey();
-//                                String str= getRef(position).getRoot().child("House").child(visit_house_id).toString();
-//
-//                                Intent houseStatusIntent = new Intent(getActivity(),ViewHouseActivity.class);
-//                                houseStatusIntent.putExtra("visit_house_id",visit_house_id);
-//                                //startActivity(viewHouseIntent);
-//
-//                            }
-//                        });
-//                    }
-//
-//                    @NonNull
-//                    @Override
-//                    public FindMyHousesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-//                        View view = LayoutInflater.from(viewGroup.getContext())
-//                                .inflate(R.layout.house_display_layout,viewGroup,false);
-//
-//                        FindMyHousesViewHolder viewHolder = new FindMyHousesViewHolder(view);
-//                        return viewHolder;
-//                    }
-//                };
-//        myRecyclerView.setAdapter(adapter);
-//        adapter.startListening();
     }
 
 
@@ -260,14 +213,6 @@ public class MyHousesFragment extends Fragment {
 
 
 
-
-
-
-
-
-
-
-
                             }
 //                            else
 //                            {
@@ -299,9 +244,6 @@ public class MyHousesFragment extends Fragment {
             }
         });
     }
-
-
-
 
 
     public static class FindMyHousesViewHolder extends RecyclerView.ViewHolder{

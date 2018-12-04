@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
         User user = RetrieveUserInfo();
 
-        Log.d(TAG, "VerifyUser: Status: "+user.getUserStatus());
+        Log.d(TAG, "VerifyUser: Status: "+user.getStatus());
     }
 
     //Method to send user to login activity
@@ -225,12 +225,12 @@ public class MainActivity extends AppCompatActivity {
                     String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
 
 
-                    myUser.setUserName(retrieveUsername);
-                    myUser.setUserStatus(retrieveStatus);
+                    myUser.setName(retrieveUsername);
+                    myUser.setStatus(retrieveStatus);
 
-                   // Log.d(TAG, "retrieveUser: "+ myUser.getUserStatus());
+                   // Log.d(TAG, "retrieveUser: "+ myUser.getStatus());
 
-                    String setUser = myUser.getUserStatus().trim();
+                    String setUser = myUser.getStatus().trim();
 
                     // Call Factory to create User based of status which was selected
                     userStatus = new UserStatusFactory().createUser(setUser,getSupportFragmentManager());
@@ -244,12 +244,12 @@ public class MainActivity extends AppCompatActivity {
                     String retrieveUsername = dataSnapshot.child("name").getValue().toString();
                     String retrieveStatus = dataSnapshot.child("status").getValue().toString();
 
-                    myUser.setUserName(retrieveUsername);
-                    myUser.setUserStatus(retrieveStatus);
+                    myUser.setName(retrieveUsername);
+                    myUser.setStatus(retrieveStatus);
 
-                    Log.d(TAG, "retrieveUser: "+ myUser.getUserStatus());
+                    Log.d(TAG, "retrieveUser: "+ myUser.getStatus());
 
-                    String setUser = myUser.getUserStatus().trim();
+                    String setUser = myUser.getStatus().trim();
 
                     // Call Factory to create User based of status which was selected
                     userStatus = new UserStatusFactory().createUser(setUser,getSupportFragmentManager());
@@ -257,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
                     myViewPager.setAdapter(userStatus);
                     myTabLayout = findViewById(R.id.main_tabs);
                     myTabLayout.setupWithViewPager(myViewPager);
-
 
                 } else {
                     Toast.makeText(MainActivity.this, "Update Profile", Toast.LENGTH_SHORT).show();
@@ -270,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Log.d(TAG, "myUser: "+myUser.getUserStatus());
+        Log.d(TAG, "myUser: "+myUser.getStatus());
         return myUser;
     }
 

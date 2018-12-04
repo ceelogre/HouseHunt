@@ -12,14 +12,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.jmugyenyi.mychat.Activities.SettingsActivity;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.Activities.ViewHouseActivity;
 import com.example.jmugyenyi.mychat.model.House;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -35,6 +40,8 @@ public class AvailableHouseFragment extends Fragment {
     private View availableHouseFragmentView;
     private DatabaseReference databaseReference;
     private RecyclerView myRecyclerView;
+
+    private String houseOwnerID,visit_house_id;
 
 
     public AvailableHouseFragment() {
@@ -70,22 +77,37 @@ public class AvailableHouseFragment extends Fragment {
 
 
                         {
-                            Log.d(TAG, "onBindViewHolder: "+model.getHouseId());
+                           // Log.d(TAG, "onBindViewHolder: "+model.getHouseId());
                         holder.housename.setText(model.getHouseName());
                         holder.street.setText(model.getStreet());
                         Picasso.get().load(model.getImage()).placeholder(R.drawable.house4).into(holder.houseImage);
 
-                        Log.d(TAG, "onClick: "+model.getImage());
+                       // Log.d(TAG, "onClick: "+model.getImage());
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                String visit_house_id= getRef(position).getKey();
-                                String str= getRef(position).getRoot().child("House").child(visit_house_id).toString();
+                                 visit_house_id= getRef(position).getKey();
+                                String str= getRef(position).getDatabase().getReference().child("House").child(visit_house_id).child("city").getKey();
 
-                                Intent viewHouseIntent = new Intent(getActivity(),ViewHouseActivity.class);
-                                viewHouseIntent.putExtra("visit_house_id",visit_house_id);
-                                startActivity(viewHouseIntent);
+                                databaseReference.child(visit_house_id).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                         houseOwnerID = dataSnapshot.child("authenticatedUserId").getValue().toString();
+                                        Log.d(TAG, "HouseID: "+houseOwnerID);
+
+
+                                        Intent viewHouseIntent = new Intent(getActivity(),ViewHouseActivity.class);
+                                        viewHouseIntent.putExtra("visit_house_id",visit_house_id);
+                                        viewHouseIntent.putExtra("ownerID",houseOwnerID);
+                                        startActivity(viewHouseIntent);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
 
                             }
                         });}
