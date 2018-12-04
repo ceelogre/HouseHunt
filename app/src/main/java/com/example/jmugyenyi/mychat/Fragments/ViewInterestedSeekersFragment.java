@@ -1,6 +1,7 @@
 package com.example.jmugyenyi.mychat.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.jmugyenyi.mychat.Activities.AcceptOrDeclineSeekerActivity;
+import com.example.jmugyenyi.mychat.Activities.PaymentActivity;
 import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.model.Interest;
 import com.example.jmugyenyi.mychat.model.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -38,7 +42,7 @@ public class ViewInterestedSeekersFragment extends Fragment {
     private View viewInterestedSeekersFragment;
     private RecyclerView myRecyclerView;
 
-    private DatabaseReference userRef;
+    private DatabaseReference userRef, seekersRef;
     private FirebaseAuth mfirebaseAuth;
 
     private String currentUserID;
@@ -49,39 +53,17 @@ public class ViewInterestedSeekersFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         viewInterestedSeekersFragment= inflater.inflate(R.layout.fragment_view_interested_seekers, container, false);
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
-
-        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID).child("seekers");
+        seekersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         myRecyclerView = viewInterestedSeekersFragment.findViewById(R.id.view_interested_recycler_list);
-        myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-       // Log.d(TAG, "Log is working: ");
-
-        Query query = FirebaseDatabase.getInstance().getReference().child("Interest").orderByChild("ownerID").equalTo(currentUserID);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists())
-                Log.d(TAG, "onDataChange: "+dataSnapshot.getValue().toString());
-
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
+        myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return viewInterestedSeekersFragment;
     }
 
@@ -99,12 +81,59 @@ public class ViewInterestedSeekersFragment extends Fragment {
 
         FirebaseRecyclerAdapter<User,FindUsersViewHolder> adapter = new FirebaseRecyclerAdapter<User, FindUsersViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull FindUsersViewHolder holder, int position, @NonNull User model)
+            protected void onBindViewHolder(@NonNull final FindUsersViewHolder holder, final int position, @NonNull User model)
             {
 
-                holder.userName.setText(model.getName());
-                holder.userStatus.setText(model.getStatus());
-                Picasso.get().load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.profileImage);
+                String seekersIDs = getRef(position).getKey();
+
+                Log.d(TAG, "seekersIDs: "+seekersIDs);
+
+
+                seekersRef.child(seekersIDs).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                    {
+                        if(dataSnapshot.hasChild("image"))
+                        {
+                            String _profileImage = dataSnapshot.child("image").getValue().toString();
+                            String _profileName = dataSnapshot.child("name").getValue().toString();
+                            String _profileStatus = dataSnapshot.child("status").getValue().toString();
+
+                            holder.userName.setText(_profileName);
+                            holder.userStatus.setText(_profileStatus);
+                            Picasso.get().load(_profileImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
+
+                        }
+                        else
+                        {
+                            String _profileName = dataSnapshot.child("name").getValue().toString();
+                            String _profileStatus = dataSnapshot.child("status").getValue().toString();
+
+                            holder.userName.setText(_profileName);
+                            holder.userStatus.setText(_profileStatus);
+                        }
+
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String seeker_id = getRef(position).getKey();
+                               // String str = getRef(position).getRoot().child("House").child(visit_house_id).toString();
+
+                                Intent acceptOrDeclineIntent = new Intent(getActivity(), AcceptOrDeclineSeekerActivity.class);
+                                acceptOrDeclineIntent.putExtra("Seeker's ID", seeker_id);
+                                startActivity(acceptOrDeclineIntent);
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
             }
 
             @NonNull
