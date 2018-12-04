@@ -104,7 +104,7 @@ public class ViewHouseActivity extends AppCompatActivity {
                     databaseReference.child("Interest").child(interestID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                           // if((dataSnapshot.exists())&&(dataSnapshot.hasChild("interest")))
+                            if((dataSnapshot.exists())&&(dataSnapshot.hasChild("interest")))
                             {
                                 String houseid = dataSnapshot.child("houseID").getValue().toString()
                                         .replace("=true","")

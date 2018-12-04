@@ -68,6 +68,7 @@ public class ViewInterestedSeekersFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                if(dataSnapshot.exists())
                 Log.d(TAG, "onDataChange: "+dataSnapshot.getValue().toString());
 
 
