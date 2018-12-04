@@ -1,6 +1,7 @@
 package com.example.jmugyenyi.mychat.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.jmugyenyi.mychat.Activities.AcceptOrDeclineSeekerActivity;
+import com.example.jmugyenyi.mychat.Activities.PaymentActivity;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.model.Interest;
 import com.example.jmugyenyi.mychat.model.User;
@@ -56,47 +59,11 @@ public class ViewInterestedSeekersFragment extends Fragment {
         viewInterestedSeekersFragment= inflater.inflate(R.layout.fragment_view_interested_seekers, container, false);
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
-
-        //userRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
         userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID).child("seekers");
         seekersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         myRecyclerView = viewInterestedSeekersFragment.findViewById(R.id.view_interested_recycler_list);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-       // Log.d(TAG, "Log is working: ");
-
-//        Query query = FirebaseDatabase.getInstance().getReference().child("Interest").orderByChild("ownerID").equalTo(currentUserID);
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                // dataSnapshot.getChildren();
-//                for (DataSnapshot snap:dataSnapshot.getChildren()) {
-//
-//                    String str1 = snap.getValue().toString().replace("=true","")
-//                            .replaceAll("\\{","")
-//                            .replaceAll("\\}","")
-//                            .replace("houseID=","")
-//                            .replace("seekerID=","")
-//                            .replace("ownerID=","")
-//                            .replace("status=","");
-//                    //Log.d(TAG, "onDataChange: "+str1);
-//                    String str2 []= str1.split(",");
-//                    Interest interest = new Interest(str2[0],str2[1],str2[2],str2[3]);
-//
-//                   // Log.d(TAG, "Interest Test: "+ interest.getSeekerID());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
         return viewInterestedSeekersFragment;
     }
 
@@ -114,7 +81,7 @@ public class ViewInterestedSeekersFragment extends Fragment {
 
         FirebaseRecyclerAdapter<User,FindUsersViewHolder> adapter = new FirebaseRecyclerAdapter<User, FindUsersViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull final FindUsersViewHolder holder, int position, @NonNull User model)
+            protected void onBindViewHolder(@NonNull final FindUsersViewHolder holder, final int position, @NonNull User model)
             {
 
                 String seekersIDs = getRef(position).getKey();
@@ -146,6 +113,19 @@ public class ViewInterestedSeekersFragment extends Fragment {
                             holder.userStatus.setText(_profileStatus);
                         }
 
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String seeker_id = getRef(position).getKey();
+                               // String str = getRef(position).getRoot().child("House").child(visit_house_id).toString();
+
+                                Intent acceptOrDeclineIntent = new Intent(getActivity(), AcceptOrDeclineSeekerActivity.class);
+                                acceptOrDeclineIntent.putExtra("Seeker's ID", seeker_id);
+                                startActivity(acceptOrDeclineIntent);
+
+                            }
+                        });
+
                     }
 
                     @Override
@@ -153,11 +133,6 @@ public class ViewInterestedSeekersFragment extends Fragment {
 
                     }
                 });
-
-//                holder.userName.setText(model.getName());
-//                holder.userStatus.setText(model.getStatus());
-//                Picasso.get().load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.profileImage);
-
 
             }
 

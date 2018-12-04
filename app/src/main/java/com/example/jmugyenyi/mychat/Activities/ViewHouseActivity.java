@@ -50,8 +50,6 @@ public class ViewHouseActivity extends AppCompatActivity {
         ownerhouseID = getIntent().getExtras().get("ownerID").toString();
 
 
-        Toast.makeText(this, ownerhouseID, Toast.LENGTH_SHORT).show();
-
         // Method to retrieve House Details
         RetrieveHouseInfo(joiningHouseID);
 
@@ -107,7 +105,6 @@ public class ViewHouseActivity extends AppCompatActivity {
                             }
                         }
                     }
-    
                 }
             }
 
