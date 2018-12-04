@@ -18,6 +18,11 @@ public class Interest {
     private String houseID;
     private String status;
     private String authenticatedUserId;
+    private String ownerID;
+
+
+
+
 
 
 
@@ -27,12 +32,13 @@ public class Interest {
 
     }
 
-    public Interest(String _seekerID, String _houseID, String _status)
+    public Interest(String _seekerID, String _houseID, String _status, String _ownerID)
     {
 
         this.seekerID = _seekerID;
         this.houseID = _houseID;
         this.status = _status;
+        this.ownerID = _ownerID;
     }
 
     public String getInterestID() {
@@ -61,6 +67,13 @@ public class Interest {
 
     public String getStatus() {
         return status;
+    }
+    public String getOwnerID() {
+        return ownerID;
+    }
+
+    public void setOwnerID(String ownerID) {
+        this.ownerID = ownerID;
     }
 
     public void setStatus(String status) {

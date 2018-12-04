@@ -32,7 +32,7 @@ public class InterestCRUD {
 
     }
 
-    public void createInterestTable(String _seekerID, String _houseID)
+    public void createInterestTable(String _seekerID, String _houseID,String _ownerID)
     {
 
         String _status = "pending";
@@ -46,8 +46,7 @@ public class InterestCRUD {
         //Create a house id
         DatabaseReference newRef = databaseReference.push();
         interestId =newRef.getKey();
-
-        interest = new Interest(_seekerID,_houseID,_status);
+        interest = new Interest(_seekerID,_houseID,_status,_ownerID);
 
         newRef.setValue(interest);
 

@@ -1,5 +1,6 @@
 package com.example.jmugyenyi.mychat.Activities;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.example.jmugyenyi.mychat.utils.InterestCRUD;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,10 +30,10 @@ public class ViewHouseActivity extends AppCompatActivity {
     protected static final String TAG = "ViewHouseActivity";
     private TextView hseName, hseStreet, rentAmount,hseCity,hseCountry, hseMates,hseRooms;
     private CircleImageView hseImage;
-    private Button join;
+    private Button joinHouseButton;
     
-    private String receiverHouseID,currentUserID;
-    private DatabaseReference databaseReference;
+    private String joiningHouseID,currentUserID, current_State, ownerhouseID,interestID;
+    private DatabaseReference databaseReference, userRef;
     private FirebaseAuth mfirebaseAuth;
     
     @Override
@@ -40,26 +43,26 @@ public class ViewHouseActivity extends AppCompatActivity {
         initializeFields();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
-        receiverHouseID = getIntent().getExtras().get("visit_house_id").toString();
+        joiningHouseID = getIntent().getExtras().get("visit_house_id").toString();
+        ownerhouseID = getIntent().getExtras().get("ownerID").toString();
 
 
+        Toast.makeText(this, ownerhouseID, Toast.LENGTH_SHORT).show();
 
-        
-        
+        // Method to retrieve House Details
+        RetrieveHouseInfo(joiningHouseID);
 
+        // Button for seeker to express interest in house
+//        joinHouseButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                joinHouse();
+//            }
+//        });
 
-        RetrieveHouseInfo(receiverHouseID);
-
-        join.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                joinHouse();
-            }
-        });
-
-        //Toast.makeText(this, "House ID: "+ receiverHouseID, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -73,17 +76,65 @@ public class ViewHouseActivity extends AppCompatActivity {
         hseCountry = findViewById(R.id.view_country_name);
         hseRooms = findViewById(R.id.view_room_number);
         hseMates = findViewById(R.id.view_mates_number);
-        join = findViewById(R.id.join_button);
+        joinHouseButton = findViewById(R.id.join_button);
+        current_State = "Request_Not_Sent";
     }
 
     private void joinHouse() {
 
         InterestCRUD interestCRUD = new InterestCRUD(mfirebaseAuth);
-        interestCRUD.createInterestTable(currentUserID,receiverHouseID);
-        //houseCRUD.addRoomToHouse();
+        interestCRUD.createInterestTable(currentUserID,joiningHouseID,ownerhouseID);
+
     }
 
     private void RetrieveHouseInfo(String retrieveInfo) {
+
+        databaseReference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if((dataSnapshot.exists())&&(dataSnapshot.hasChild("interest"))) {
+                     interestID = dataSnapshot.child("interest").getValue().toString()
+                            .replace("=true","")
+                            .replaceAll("\\{","")
+                            .replaceAll("\\}","");
+                    Log.d(TAG, "Interest ID: "+interestID);
+
+
+                    databaseReference.child("Interest").child(interestID).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                           // if((dataSnapshot.exists())&&(dataSnapshot.hasChild("interest")))
+                            {
+                                String houseid = dataSnapshot.child("houseID").getValue().toString()
+                                        .replace("=true","")
+                                        .replaceAll("\\{","")
+                                        .replaceAll("\\}","");
+                                Log.d(TAG, "Getting to the end 1: "+houseid);
+                                Log.d(TAG, "Getting to the end 2: "+joiningHouseID);
+                                if(joiningHouseID.equalsIgnoreCase(houseid))
+                                {
+                                    joinHouseButton.setText("Cancel Join Request");
+                                    current_State ="Request_Sent";
+                                }
+                               
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         Log.d(TAG, "RetrieveHouseInfo: "+retrieveInfo);
         databaseReference.child("House").child(retrieveInfo).addValueEventListener(new ValueEventListener() {
@@ -134,6 +185,8 @@ public class ViewHouseActivity extends AppCompatActivity {
                         hseRooms.setText(retrieveNumberOfRooms);
                     }
 
+                    ManageJoinRequests();
+
                 }else
                 {
                     Toast.makeText(ViewHouseActivity.this,"Update House!",Toast.LENGTH_SHORT).show();
@@ -145,5 +198,60 @@ public class ViewHouseActivity extends AppCompatActivity {
         });
     }
 
+    private void ManageJoinRequests() {
 
+        joinHouseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (current_State.equalsIgnoreCase("Request_Not_Sent"))
+                {
+                    Log.d(TAG, "Join request worked!: ");
+                    joinHouse();
+                    joinHouseButton.setText("Cancel Join Request");
+                }
+                if (current_State.equalsIgnoreCase("Request_Sent"))
+                {
+                    Log.d(TAG, "Cancel request worked: ");
+                    CancelJoinHouseRequest();
+                }
+
+            }
+        });
+
+    }
+
+    private void CancelJoinHouseRequest() {
+
+
+        databaseReference.child("Interest").child(interestID)
+                .removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "Is task successful!: ");
+                if (task.isSuccessful())
+                {
+
+                }
+
+            }
+        });
+
+        Log.d(TAG, "Cancel Request: "+interestID);
+        databaseReference.child("Users").child(currentUserID).child("interest").child(interestID).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        Log.d(TAG, "Finally entered the loop: ");
+                         if(task.isSuccessful())
+                        {
+                            Log.d(TAG, "Total success!!!!: ");
+                            joinHouseButton.setText("Join House");
+                            current_State="Request_Not_Sent";
+                        }
+                    }
+                });
+    }
 }
