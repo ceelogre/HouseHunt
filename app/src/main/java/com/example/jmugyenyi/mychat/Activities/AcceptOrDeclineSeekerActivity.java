@@ -92,6 +92,44 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
         RetrieveSeekerInfo();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        databaseReference.child("Users").child(currentUserID)
+                .child("seekers").child(seekerID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String house_id = dataSnapshot.child("HouseID").getValue().toString();
+
+                databaseReference.child("Users").child(seekerID)
+                        .child("houses").child(house_id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        //Log.d(TAG, "AcceptOrDecline House ID: "+dataSnapshot.child("Request").getValue().toString());
+
+                        if(dataSnapshot.child("Request").getValue().toString().equalsIgnoreCase("Accepted"))
+                        {
+                            declineButton.setVisibility(View.INVISIBLE);
+                            acceptButton.setText("Request Accepted");
+                            acceptButton.setEnabled(false);
+                            acceptButton.getBackground().setColorFilter(new LightingColorFilter(0x8FBC8F, 0x90EE90));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
     private void initializeFields() {
 
         seekerName   = findViewById(R.id.accept_decline_name);
@@ -125,55 +163,44 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
                         Picasso.get().load(retrieveImage).into(seekerImage);
                     }
                 }
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
-
-
-
     private void acceptRequest() {
-
-
-        
-    }
-
-    private void declineRequest() {
-
-
-
-
-
         databaseReference.child("Users").child(currentUserID)
                 .child("seekers").child(seekerID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 final String house_id = dataSnapshot.child("HouseID").getValue().toString();
-
-               // Log.d(TAG, "AcceptOrDecline House ID: "+house_id);
-
+                // Log.d(TAG, "AcceptOrDecline House ID: "+house_id);
                 databaseReference.child("Users").child(seekerID)
-                        .child("houses").child(house_id).child("Request").setValue("Rejected");
-
+                        .child("houses").child(house_id).child("Request").setValue("Accepted");
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            }
+        });
+    }
+    private void declineRequest() {
+        databaseReference.child("Users").child(currentUserID)
+                .child("seekers").child(seekerID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String house_id = dataSnapshot.child("HouseID").getValue().toString();
+               // Log.d(TAG, "AcceptOrDecline House ID: "+house_id);
+                databaseReference.child("Users").child(seekerID)
+                        .child("houses").child(house_id).child("Request").setValue("Rejected");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
 
         databaseReference.child("Users").child(currentUserID)
                 .child("seekers").child(seekerID).removeValue();
 
-
     }
-
-
-
 }
