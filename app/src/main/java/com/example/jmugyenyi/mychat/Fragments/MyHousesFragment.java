@@ -111,7 +111,7 @@ public class MyHousesFragment extends Fragment {
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             //dataSnapshot.child("Request").getValue();
                                            final String  myHouseStatus = dataSnapshot.child("Request").getValue().toString();
-                                            Log.d(TAG, "myHouseStatus Value: "+myHouseStatus);
+                                            //Log.d(TAG, "myHouseStatus Value: "+myHouseStatus);
 
                                             String houseIDs = getRef(position).getKey();
                                             houseRef.child(houseIDs).addValueEventListener(new ValueEventListener() {
@@ -124,10 +124,21 @@ public class MyHousesFragment extends Fragment {
                                                         String _houseName = dataSnapshot.child("houseName").getValue().toString();
                                                         String _houseStreet = dataSnapshot.child("street").getValue().toString();
 
+                                                        Log.d(TAG, "myHouseStatus Value: "+myHouseStatus);
+
                                                         holder.housename.setText(_houseName);
                                                         holder.street.setText(_houseStreet);
                                                         holder.status.setText(myHouseStatus);
-                                                        holder.status.setTextColor(Color.RED);
+                                                        if(myHouseStatus.equalsIgnoreCase("Accepted")){
+                                                            holder.status.setTextColor(getResources().getColor(R.color.colorPrimary));
+                                                        }else if(myHouseStatus.equalsIgnoreCase("Rejected"))
+                                                        {
+                                                            holder.status.setTextColor(Color.RED);
+                                                        }else
+                                                        {
+                                                            holder.status.setTextColor(getResources().getColor(R.color.colorOrange));
+                                                        }
+
                                                         Picasso.get().load(_houseImage).placeholder(R.drawable.house4).into(holder.houseImage);
 
                                                     }
@@ -138,6 +149,16 @@ public class MyHousesFragment extends Fragment {
 
                                                         holder.housename.setText(_houseName);
                                                         holder.street.setText(_houseStreet);
+                                                        holder.status.setText(myHouseStatus);
+                                                        if(myHouseStatus.equalsIgnoreCase("Accepted")){
+                                                            holder.status.setTextColor(getResources().getColor(R.color.colorPrimary));
+                                                        }else if(myHouseStatus.equalsIgnoreCase("Rejected"))
+                                                        {
+                                                            holder.status.setTextColor(Color.RED);
+                                                        }else
+                                                        {
+                                                            holder.status.setTextColor(getResources().getColor(R.color.colorOrange));
+                                                        }
                                                     }
 
                                                     holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -147,15 +168,13 @@ public class MyHousesFragment extends Fragment {
                                                             String str = getRef(position).getRoot().child("House").child(visit_house_id).toString();
 
                                                             Intent houseStatusIntent = new Intent(getActivity(), PaymentActivity.class);
-                                                            //houseStatusIntent.putExtra("visit_house_id", visit_house_id);
+                                                            houseStatusIntent.putExtra("house_id", visit_house_id);
                                                             startActivity(houseStatusIntent);
 
                                                         }
                                                     });
 
                                                 }
-
-
                                                 @Override
                                                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
