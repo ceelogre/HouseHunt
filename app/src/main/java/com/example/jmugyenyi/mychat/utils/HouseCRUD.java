@@ -61,7 +61,6 @@ public class HouseCRUD {
                                       String houseCountry,String houseNumberOfRooms,
                                       String houseNumberOfMates,String houseRent){
 
-
         Double latitude = -1.23463;
         Double longitude = 30.343;
         Double wholeHouseRent = Double.parseDouble(houseRent);
@@ -74,24 +73,25 @@ public class HouseCRUD {
         String country = houseCountry;
         String street = houseStreet;
         String name = givenHouseName;
+        String chat = authenticatedUser.getCurrentUser().getUid()+"-"+givenHouseName;
 
         //setHouseName(name);
 
         //Userid
-        String authenticatedUserId =    authenticatedUser.getCurrentUser().getUid();
+        String authenticatedUserId = authenticatedUser.getCurrentUser().getUid();
 
         //Create a house id
         DatabaseReference newRef = databaseReference.push();
         houseId =newRef.getKey();
 
         house = new House(latitude, longitude, wholeHouseRent, numberOfRooms, numberOfHousemates, housePicLocation, city, country, street
-                , authenticatedUserId, houseId, name);
+                , authenticatedUserId, houseId, name, chat);
 
         newRef.setValue(house);
 
         //Add an association between this house and the user who created it
         databaseReference =FirebaseDatabase.getInstance().getReference("Users");
-        databaseReference.child(authenticatedUserId).child("house").child(houseId).setValue(true);
+        databaseReference.child(authenticatedUserId).child("chat").setValue(chat);
 
     }
 

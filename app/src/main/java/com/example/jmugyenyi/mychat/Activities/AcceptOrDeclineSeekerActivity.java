@@ -1,12 +1,15 @@
 package com.example.jmugyenyi.mychat.Activities;
 
+import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,13 +27,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
 
 
+    protected static final String TAG = "AcceptOrDecline";
     private TextView seekerName, seekerStatus;
     private CircleImageView seekerImage;
+    private Button acceptButton, declineButton;
 
     private FirebaseAuth mfirebaseAuth;
     private DatabaseReference databaseReference;
 
-    private String seekerID;
+    private String seekerID, currentUserID;
 
 
     @Override
@@ -41,6 +46,8 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
 
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        mfirebaseAuth = FirebaseAuth.getInstance();
+        currentUserID = mfirebaseAuth.getCurrentUser().getUid();
 
         initializeFields();
         Toolbar toolbar =  findViewById(R.id.accept_decline_toolbar);
@@ -51,18 +58,85 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
 
         seekerID = getIntent().getExtras().get("Seeker's ID").toString();
 
-        Toast.makeText(this, seekerID, Toast.LENGTH_SHORT).show();
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                acceptRequest();
+                declineButton.setVisibility(View.INVISIBLE);
+                acceptButton.setText("Request Accepted");
+                acceptButton.setEnabled(false);
+                acceptButton.getBackground().setColorFilter(new LightingColorFilter(0x8FBC8F, 0x90EE90));
+
+            }
+        });
+
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                declineRequest();
+                
+                //acceptButton.setVisibility(View.INVISIBLE);
+                acceptButton.setText("Request Declined");
+                acceptButton.setEnabled(false);
+                declineButton.setEnabled(false);
+
+                declineButton.setVisibility(View.INVISIBLE);
+                acceptButton.setText("Request Rejected");
+                acceptButton.setEnabled(false);
+                acceptButton.getBackground().setColorFilter(new LightingColorFilter(0x800000, 0xFF6347));
+
+            }
+        });
 
         RetrieveSeekerInfo();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        databaseReference.child("Users").child(currentUserID)
+                .child("seekers").child(seekerID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String house_id = dataSnapshot.child("HouseID").getValue().toString();
+
+                databaseReference.child("Users").child(seekerID)
+                        .child("houses").child(house_id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        //Log.d(TAG, "AcceptOrDecline House ID: "+dataSnapshot.child("Request").getValue().toString());
+
+                        if(dataSnapshot.child("Request").getValue().toString().equalsIgnoreCase("Accepted"))
+                        {
+                            declineButton.setVisibility(View.INVISIBLE);
+                            acceptButton.setText("Request Accepted");
+                            acceptButton.setEnabled(false);
+                            acceptButton.getBackground().setColorFilter(new LightingColorFilter(0x8FBC8F, 0x90EE90));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
 
     private void initializeFields() {
 
         seekerName   = findViewById(R.id.accept_decline_name);
         seekerStatus = findViewById(R.id.accept_decline_status);
         seekerImage  = findViewById(R.id.accept_decline_image);
-        //toolbar      = findViewById(R.id.accept_decline_toolbar);
+        acceptButton = findViewById(R.id.accept_button);
+        declineButton= findViewById(R.id.decline_button);
     }
 
 
@@ -89,14 +163,44 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
                         Picasso.get().load(retrieveImage).into(seekerImage);
                     }
                 }
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
+    private void acceptRequest() {
+        databaseReference.child("Users").child(currentUserID)
+                .child("seekers").child(seekerID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String house_id = dataSnapshot.child("HouseID").getValue().toString();
+                // Log.d(TAG, "AcceptOrDecline House ID: "+house_id);
+                databaseReference.child("Users").child(seekerID)
+                        .child("houses").child(house_id).child("Request").setValue("Accepted");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+    private void declineRequest() {
+        databaseReference.child("Users").child(currentUserID)
+                .child("seekers").child(seekerID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String house_id = dataSnapshot.child("HouseID").getValue().toString();
+               // Log.d(TAG, "AcceptOrDecline House ID: "+house_id);
+                databaseReference.child("Users").child(seekerID)
+                        .child("houses").child(house_id).child("Request").setValue("Rejected");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
+        databaseReference.child("Users").child(currentUserID)
+                .child("seekers").child(seekerID).removeValue();
+
+    }
 }

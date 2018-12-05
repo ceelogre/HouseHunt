@@ -21,6 +21,8 @@ public class House {
     private String Image;
     private String authenticatedUserId;
 
+    private String houseChat;
+
     public String getAuthenticatedUserId() {
         return authenticatedUserId;
     }
@@ -38,7 +40,7 @@ public class House {
     }
 
     public House(Double latitude, Double longitude, Double wholeHouseRent, int numberOfRooms, int numberOfHousemates, String housePicLocation, String city, String country, String street,
-                 String authenticatedUserId, String houseId, String houseName) {
+                 String authenticatedUserId, String houseId, String houseName, String houseChat) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.wholeHouseRent = wholeHouseRent;
@@ -51,6 +53,7 @@ public class House {
         this.houseId = houseId;
         this.authenticatedUserId = authenticatedUserId;
         this.houseName = houseName;
+        this.houseChat = houseChat;
     }
 
     public Map<String, Boolean> getHouseRoomMap() {
@@ -155,6 +158,14 @@ public class House {
 
     public void setImage(String houseImage) {
         this.Image = houseImage;
+    }
+
+    public String getHouseChat() {
+        return houseChat;
+    }
+
+    public void setHouseChat(String houseChat) {
+        this.houseChat = houseChat;
     }
 
     @Override
