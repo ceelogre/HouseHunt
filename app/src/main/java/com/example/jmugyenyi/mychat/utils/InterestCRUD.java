@@ -48,18 +48,11 @@ public class InterestCRUD {
         //Userid
         String authenticatedUserId =    authenticatedUser.getCurrentUser().getUid();
 
-        //Create a house id
-//        DatabaseReference newRef = databaseReference.push();
-//        interestId =newRef.getKey();
-//        interest = new Interest(_houseID,_seekerID,_ownerID,_status);
-//
-//        newRef.setValue(interest);
-
         //Add an association between this house and the user who created it
         databaseReference =FirebaseDatabase.getInstance().getReference("Users");
 
         databaseReference.child(authenticatedUserId).child("houses").child(_houseID).child("Request").setValue("Pending");
-        databaseReference.child(_ownerID).child("seekers").child(_seekerID).child("Request").setValue("Sent");
+        databaseReference.child(_ownerID).child("seekers").child(_seekerID).child("HouseID").setValue(_houseID);
 
         Log.d(TAG, "createInterestTable: "+_seekerID);
 
