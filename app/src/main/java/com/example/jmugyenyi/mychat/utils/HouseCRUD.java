@@ -93,6 +93,7 @@ public class HouseCRUD {
         //Add an association between this house and the user who created it
         databaseReference =FirebaseDatabase.getInstance().getReference("Users");
         databaseReference.child(authenticatedUserId).child("chat").setValue(chat);
+        databaseReference.child(authenticatedUserId).child("house").child(houseId).setValue(true);
 
     }
 

@@ -102,6 +102,8 @@ public class PostAHouseFragment extends Fragment {
 
          new FireBaseBackgroundTasks().execute();
 
+        Log.d(TAG, "onCreateView: Oncreate Working");
+
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,17 +133,10 @@ public class PostAHouseFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d(TAG, "onActivityResult: Got Here 1");
 
-//
-//        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-//        circleImageView.setImageBitmap(bitmap);
-
-//
         if (requestCode==galleryPicture && resultCode== Activity.RESULT_OK)
-        {
-            Log.d(TAG, "onActivityResult: Got Here 2");
-            Log.d(TAG, "onActivityResult: Code   "+requestCode);
+        {//Log.d(TAG, "onActivityResult: Got Here 2");
+            //Log.d(TAG, "onActivityResult: Code   "+requestCode);
             Uri picUri = data.getData();
 
             Intent intent = CropImage.activity()
@@ -154,15 +149,15 @@ public class PostAHouseFragment extends Fragment {
         }
 
 
-        Log.d(TAG, "onActivityResult: Code2   "+CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+        //Log.d(TAG, "onActivityResult: Code2   "+CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
         {
-            Log.d(TAG, "onActivityResult: Got Here 3");
+            //Log.d(TAG, "onActivityResult: Got Here 3");
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode== Activity.RESULT_OK){
 
-                Log.d(TAG, "onActivityResult: Got Here 4");
+                //Log.d(TAG, "onActivityResult: Got Here 4");
                 loadingBar.setTitle("Set House Image");
                 loadingBar.setMessage("Please wait!");
                 loadingBar.show();
@@ -264,7 +259,7 @@ public class PostAHouseFragment extends Fragment {
 
 
 
-    // AsyncTask to continually get current location in the background
+
     private class FireBaseBackgroundTasks extends AsyncTask<Void, Void, String> {
 
         String houseID ="test";
@@ -272,23 +267,13 @@ public class PostAHouseFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
         @Override
         protected String doInBackground(Void... params) {
-
-
-
-
-
-
-
-
-
             databaseReference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    //semaphore.release();
+                    Log.d(TAG, "onDataChange first one: ");
                     if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))
                             && (dataSnapshot.hasChild("image")) && (dataSnapshot.hasChild("house")))
                     {
@@ -296,27 +281,21 @@ public class PostAHouseFragment extends Fragment {
                                 .toString().replace("=true","")
                                 .replaceAll("\\{","")
                                 .replaceAll("\\}","");
-
-
                          userID.setHouseid(houseID);
+                        Log.d(TAG, "onDataChange: "+houseID);
 
                     }else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))
                             && (dataSnapshot.hasChild("house")))
                     {
-
-                        Log.d(TAG, "Asynchronous: "+dataSnapshot.child("house").getValue()
-                                .toString());
                          houseID = dataSnapshot.child("house").getValue()
                                 .toString().replace("=true","")
                                 .replaceAll("\\{","")
                                 .replaceAll("\\}","");
-
-                        Log.d(TAG, "onDataChange 2: "+houseID.replaceAll("\\{",""));
                         userID.setHouseid(houseID);
-
+                        Log.d(TAG, "onDataChange: "+houseID);
                     }else
                     {
-                        // Toast.makeText(SettingsActivity.this,"Update Profile",Toast.LENGTH_SHORT).show();
+
                     }
                 }
 

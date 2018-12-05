@@ -124,7 +124,7 @@ public class MyHousesFragment extends Fragment {
                                                         String _houseName = dataSnapshot.child("houseName").getValue().toString();
                                                         String _houseStreet = dataSnapshot.child("street").getValue().toString();
 
-                                                        Log.d(TAG, "myHouseStatus Value: "+myHouseStatus);
+                                                       // Log.d(TAG, "myHouseStatus Value: "+myHouseStatus);
 
                                                         holder.housename.setText(_houseName);
                                                         holder.street.setText(_houseStreet);

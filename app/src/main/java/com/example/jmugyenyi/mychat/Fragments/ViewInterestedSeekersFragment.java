@@ -110,7 +110,7 @@ public class ViewInterestedSeekersFragment extends Fragment {
                             String _profileStatus = dataSnapshot.child("status").getValue().toString();
 
                             holder.userName.setText(_profileName);
-                            holder.userStatus.setText(_profileStatus);
+                            holder.userStatus.setText("wants to join your house");
                         }
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
