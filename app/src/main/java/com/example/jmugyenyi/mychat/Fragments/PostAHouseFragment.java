@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.jmugyenyi.mychat.Activities.LocationActivity;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.Continuation;
@@ -69,6 +70,17 @@ public class PostAHouseFragment extends Fragment {
         houseImageRef = FirebaseStorage.getInstance().getReference().child("House Images");
 
         initializeFields();
+
+        getLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // take you to the map activity
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
