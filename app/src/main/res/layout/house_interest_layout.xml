@@ -30,21 +30,14 @@
                     android:id="@+id/house_interest_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:text="House Name"
+                    android:layout_marginLeft="30dp"
                     android:textAlignment="textStart"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     />
-                <TextView
-                    android:id="@+id/house_interest_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/userStatus"
-                    android:layout_marginTop="15dp"
-                    android:textSize="18sp"
-                    android:layout_marginLeft="50dp"
 
-                    />
             </LinearLayout>
 
             <TextView
@@ -53,8 +46,18 @@
                 android:layout_height="wrap_content"
                 android:text="Street"
                 android:textAlignment="textStart"
+                android:layout_marginLeft="30dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/house_interest_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/userStatus"
+                android:textSize="18sp"
+                android:layout_marginLeft="100dp"
+
                 />
         </LinearLayout>
 

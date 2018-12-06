@@ -141,12 +141,6 @@ public class ChatFragment extends Fragment {
         });
 
 
-
-       // houseChatRef= FirebaseDatabase.getInstance().getReference().child("House Chats");
-
-
-        //houseChatRef
-
     }
 
     private void DisplayMessages(DataSnapshot dataSnapshot) {

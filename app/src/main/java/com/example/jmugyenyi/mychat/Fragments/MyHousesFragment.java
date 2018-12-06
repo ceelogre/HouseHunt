@@ -47,7 +47,7 @@ public class MyHousesFragment extends Fragment {
     private FirebaseAuth mfirebaseAuth;
     private RecyclerView myRecyclerView;
 
-    private String currentUserID, retrieveHouseID, retrieveInterestStatus;
+    private String currentUserID;
 
     public MyHousesFragment() {
         // Required empty public constructor

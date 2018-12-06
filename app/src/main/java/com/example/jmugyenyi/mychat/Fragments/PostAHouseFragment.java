@@ -206,16 +206,10 @@ public class PostAHouseFragment extends Fragment {
                         }
                     }
                 });
-
             }
-
-
-
         }
 
     }
-
-
 
     private void initializeFields() {
 
@@ -256,10 +250,6 @@ public class PostAHouseFragment extends Fragment {
             houseCRUD.addRoomToHouse();
         }
     }
-
-
-
-
     private class FireBaseBackgroundTasks extends AsyncTask<Void, Void, String> {
 
         String houseID ="test";
@@ -304,9 +294,6 @@ public class PostAHouseFragment extends Fragment {
 
                 }
             });
-
-
-
             return houseID;
         }
 
