@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/profile_activity"
+    tools:context=".Activities.ViewHouseActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/visit_house_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/house4"/>
+
+    <TextView
+        android:id="@+id/visit_house_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="house name"
+        android:layout_below="@+id/visit_house_image"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/visit_house_street"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="house street"
+        android:layout_below="@+id/visit_house_name"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textStyle="bold"/>
+
+    <ScrollView
+        android:id="@+id/view_house_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/visit_house_street"
+        android:layout_marginBottom="50dp"
+        >
+        <!-- TODO: Update blank fragment layout -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableLayout
+                android:id="@+id/tableLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:background="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+
+                    >
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="House Details"
+                        android:layout_margin="1dp"
+                        android:layout_column="0"
+                        android:background="#E6E6E6"
+                        android:textStyle="bold"
+                        android:gravity="start"
+                        />
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Specific"
+                        android:layout_margin="1dp"
+                        android:layout_column="1"
+                        android:background="#E6E6E6"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:background="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+
+                    >
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="House Rent"
+                        android:layout_margin="1dp"
+                        android:layout_column="0"
+                        android:background="#FFFFFF"
+                        android:textStyle="italic"
+                        android:gravity="start"
+                        />
+
+                    <TextView
+                        android:id="@+id/view_rent_amount"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="Unavailable"
+                        android:layout_margin="1dp"
+                        android:layout_column="1"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="italic"
+                        android:textSize="20sp"
+                        />
+
+
+            </TableRow>
+
+                <TableRow
+                    android:background="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+
+                    >
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Rooms"
+                        android:layout_margin="1dp"
+                        android:layout_column="0"
+                        android:background="#FFFFFF"
+                        android:textStyle="italic"
+                        android:gravity="start"
+                        />
+
+                    <TextView
+                        android:id="@+id/view_room_number"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Unavailable"
+                        android:layout_margin="1dp"
+                        android:layout_column="1"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="italic"
+                        />
+
+
+                </TableRow>
+                <TableRow
+                    android:background="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+
+                    >
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="HouseMates"
+                        android:layout_margin="1dp"
+                        android:layout_column="0"
+                        android:background="#FFFFFF"
+                        android:textStyle="italic"
+                        android:gravity="start"
+                        />
+
+                    <TextView
+                        android:id="@+id/view_mates_number"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Unavailable"
+                        android:layout_margin="1dp"
+                        android:layout_column="1"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="italic"
+                        />
+
+
+                </TableRow>
+                <TableRow
+                    android:background="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+
+                    >
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Street"
+                        android:layout_margin="1dp"
+                        android:layout_column="0"
+                        android:background="#FFFFFF"
+                        android:textStyle="italic"
+                        android:gravity="start"
+                        />
+
+                    <TextView
+                        android:id="@+id/view_street_name"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Unavailable"
+                        android:layout_margin="1dp"
+                        android:layout_column="1"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="italic"
+                        />
+
+
+                </TableRow>
+                <TableRow
+                    android:background="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+
+                    >
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Neighborhood"
+                        android:layout_margin="1dp"
+                        android:layout_column="0"
+                        android:background="#FFFFFF"
+                        android:textStyle="italic"
+                        android:gravity="start"
+                        />
+
+                    <TextView
+                        android:id="@+id/view_hood_name"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Unavailable"
+                        android:layout_margin="1dp"
+                        android:layout_column="1"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="italic"
+                        />
+
+
+                </TableRow>
+                <TableRow
+                    android:background="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+
+                    >
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="City/Town"
+                        android:layout_margin="1dp"
+                        android:layout_column="0"
+                        android:background="#FFFFFF"
+                        android:textStyle="italic"
+                        android:gravity="start"
+                        />
+
+                    <TextView
+                        android:id="@+id/view_city_name"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Unavailable"
+                        android:layout_margin="1dp"
+                        android:layout_column="1"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="italic"
+                        />
+
+
+                </TableRow>
+                <TableRow
+                    android:background="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+
+                    >
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Country"
+                        android:layout_margin="1dp"
+                        android:layout_column="0"
+                        android:background="#FFFFFF"
+                        android:textStyle="italic"
+                        android:gravity="start"
+                        />
+
+                    <TextView
+                        android:id="@+id/view_country_name"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Unavailable"
+                        android:layout_margin="1dp"
+                        android:layout_column="1"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="italic"
+                        />
+                </TableRow>
+
+            </TableLayout>
+
+            <Button
+                android:id="@+id/join_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tableLayout"
+                android:text="JOIN HOUSE"
+                android:textAllCaps="false"
+                android:paddingTop="15dp"
+                android:layout_marginLeft="30dp"
+                />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
