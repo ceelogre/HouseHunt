@@ -23,21 +23,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.telephony.SmsManager;
 
-<<<<<<< HEAD
+
+
 import com.example.jmugyenyi.mychat.Activities.LocationActivity;
-=======
-import com.example.jmugyenyi.mychat.Activities.SettingsActivity;
->>>>>>> 3e75381a59faf222fdb9379de9c48ba06eccfd21
+
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.model.User;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;

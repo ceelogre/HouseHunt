@@ -40,7 +40,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.android.gms:play-services-ads:15.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
-    //com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
     implementation 'com.craftman.cardform:cardform:0.0.2'
 
 
