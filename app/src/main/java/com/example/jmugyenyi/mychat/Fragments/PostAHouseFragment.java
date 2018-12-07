@@ -23,17 +23,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.telephony.SmsManager;
 
-import com.example.jmugyenyi.mychat.Activities.SettingsActivity;
+
+
+import com.example.jmugyenyi.mychat.Activities.LocationActivity;
+
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.model.User;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -100,10 +100,24 @@ public class PostAHouseFragment extends Fragment {
 
         initializeFields();
 
+//what I had
+        getLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // take you to the map activity
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
+//end of what I had
+        //Joel's
          new FireBaseBackgroundTasks().execute();
 
         Log.d(TAG, "onCreateView: Oncreate Working");
 
+//end
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
