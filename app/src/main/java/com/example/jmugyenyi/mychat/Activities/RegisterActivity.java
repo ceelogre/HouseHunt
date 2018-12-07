@@ -76,8 +76,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (task.isSuccessful())
                 {
-                    HouseCRUD p = new HouseCRUD(mFirebaseAuth);
-                    p.getAvailableHouses();
+                   // HouseCRUD p = new HouseCRUD(mFirebaseAuth);
+                    //p.getAvailableHouses();
+
                     String currentUserID = mFirebaseAuth.getCurrentUser().getUid();
                     databaseReference.child("Users").child(currentUserID).setValue("");
                     SendUserToMainActivity();

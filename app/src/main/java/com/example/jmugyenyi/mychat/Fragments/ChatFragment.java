@@ -46,7 +46,7 @@ public class ChatFragment extends Fragment {
     private String currentGroupName,currentUserID, currentUserName, currentDate, currentTime;
 
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference databaseReference, groupNameref, groupMessageKeyRef;
+    private DatabaseReference databaseReference, groupNameref, groupMessageKeyRef, houseChatRef;
 
 
     public ChatFragment() {
@@ -65,7 +65,7 @@ public class ChatFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserID = firebaseAuth.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
-        groupNameref = FirebaseDatabase.getInstance().getReference().child("Groups").child(currentGroupName);
+
 
         InitializeFields();
         GetUserInfo();
@@ -85,32 +85,53 @@ public class ChatFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        groupNameref.addChildEventListener(new ChildEventListener() {
+
+
+        databaseReference.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists())
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String chatName= "My House";
+
+                if ((dataSnapshot.exists())&&(dataSnapshot.hasChild("chat")))
                 {
-                    DisplayMessages(dataSnapshot);
+                    chatName = dataSnapshot.child("chat").getValue().toString();
                 }
-            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                groupNameref = FirebaseDatabase.getInstance().getReference().child("Groups").child(chatName);
+                groupNameref.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        if (dataSnapshot.exists())
+                        {
+                            DisplayMessages(dataSnapshot);
+                        }
+                    }
 
-                if (dataSnapshot.exists())
-                {
-                    DisplayMessages(dataSnapshot);
-                }
-            }
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists())
+                        {
+                            //DisplayMessages(dataSnapshot);
+                        }
+                    }
 
-            }
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
 
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -118,6 +139,8 @@ public class ChatFragment extends Fragment {
 
             }
         });
+
+
     }
 
     private void DisplayMessages(DataSnapshot dataSnapshot) {

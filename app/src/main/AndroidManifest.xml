@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"
@@ -31,11 +35,26 @@
             android:name=".Activities.SettingsActivity"
             android:parentActivityName=".Activities.MainActivity" />
         <activity android:name=".Activities.ViewHouseActivity" />
+
         <activity android:name=".Activities.LocationActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCzi-UnJTAIkOi6oLuUVKMMvVSF5mGFLMQ" />
+
+        <activity
+            android:name=".Activities.PaymentActivity"
+            android:label="@string/title_activity_payment"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Activities.AcceptOrDeclineSeekerActivity"
+            android:label="@string/title_activity_accept_or_decline_seeker"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Activities.ViewHouseMatesActivity"
+            android:label="@string/title_activity_view_house_mates"
+            android:theme="@style/AppTheme"></activity>
+
     </application>
 
 </manifest>

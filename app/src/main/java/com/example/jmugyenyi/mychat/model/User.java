@@ -13,10 +13,32 @@ public  class User {
 
     // fields
     //private int userID;
-    private String userName;
-    private String userStatus;
+    private String name;
+    private String status;
     private String uid;
     private String houseid;
+    private String image;
+    private String bio;
+
+
+
+
+    // constructors
+    public User() {}
+
+    public User( String username, String userstatus) {
+        // this.userID = id;
+        this.name = username;
+        this.status =userstatus;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getUid() {
         return uid;
@@ -34,39 +56,37 @@ public  class User {
         this.houseid = houseid;
     }
 
-    // constructors
-    public User() {}
+    public void setName(String username) {
+        this.name = username;
+    }
+    public String getName() {
+        return this.name;
+    }
+    public void setStatus(String userstatus) {
+        this.status = userstatus;
+    }
+    public String getStatus() {
+        return this.status;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("User{");
-        sb.append("userName='").append(userName).append('\'');
-        sb.append(", userStatus='").append(userStatus).append('\'');
+        sb.append("name='").append(name).append('\'');
+        sb.append(", status='").append(status).append('\'');
         sb.append(", uid='").append(uid).append('\'');
         sb.append(", houseid='").append(houseid).append('\'');
         sb.append('}');
         return sb.toString();
     }
 
-    //    public  static  User getInstance(){
-    //        return  instance;
-    //    }
-    public User( String username, String userstatus) {
-        // this.userID = id;
-        this.userName = username;
-        this.userStatus=userstatus;
-    }
-    public void setUserName(String username) {
-        this.userName = username;
-    }
-    public String getUserName() {
-        return this.userName;
-    }
-    public void setUserStatus(String userstatus) {
-        this.userStatus = userstatus;
-    }
-    public String getUserStatus() {
-        return this.userStatus;
-    }
 
 }

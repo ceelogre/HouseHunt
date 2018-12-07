@@ -6,7 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.jmugyenyi.mychat.Fragments.ChatFragment;
+import com.example.jmugyenyi.mychat.Fragments.HouseMatesFragment;
 import com.example.jmugyenyi.mychat.Fragments.PostAHouseFragment;
+import com.example.jmugyenyi.mychat.Fragments.ViewInterestedSeekersFragment;
 import com.example.jmugyenyi.mychat.model.ParentUser;
 
 /**
@@ -35,6 +37,13 @@ public class HouseHeadTabsAdapter extends ParentUser {
             case 1:
                 PostAHouseFragment postedHouse = new PostAHouseFragment();
                 return postedHouse;
+            case 2:
+                ViewInterestedSeekersFragment interestedSeeker = new ViewInterestedSeekersFragment();
+                return interestedSeeker;
+
+            case 3:
+                HouseMatesFragment houseMatesFragment = new HouseMatesFragment();
+                return houseMatesFragment;
 
             default:
                 return null;
@@ -43,7 +52,7 @@ public class HouseHeadTabsAdapter extends ParentUser {
 
     @Override
     public int getCount() {
-        return 2;
+        return 4;
     }
 
     @Nullable
@@ -57,6 +66,12 @@ public class HouseHeadTabsAdapter extends ParentUser {
             case 1:
 
                 return "Post a house";
+            case 2:
+
+                return "Seekers";
+            case 3:
+
+                return "House Mates";
             default:
                 return null;
         }

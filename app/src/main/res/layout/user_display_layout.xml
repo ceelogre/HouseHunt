@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:orientation="horizontal">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/myUser_profile_image"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:src="@drawable/profile_image"/>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
+               <TextView
+                   android:id="@+id/myUser_name"
+                   android:layout_width="wrap_content"
+                   android:layout_height="match_parent"
+                   android:text="USERNAME"
+                   android:textAlignment="textStart"
+                   android:layout_marginLeft="10dp"
+                   android:textSize="18sp"
+                   android:textStyle="bold"/>
+           </LinearLayout>
+           <TextView
+               android:id="@+id/myUser_status"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="STATUS"
+               android:layout_marginLeft="10dp"
+               android:textAlignment="textStart"
+               android:textSize="16sp"
+               android:textStyle="italic"
+               />
+       </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

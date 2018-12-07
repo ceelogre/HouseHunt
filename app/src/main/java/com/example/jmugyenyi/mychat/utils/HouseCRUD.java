@@ -2,6 +2,7 @@ package com.example.jmugyenyi.mychat.utils;
 
 
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.jmugyenyi.mychat.model.User;
@@ -10,6 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -26,16 +28,29 @@ public class HouseCRUD {
 
     private House house;
     private FirebaseAuth authenticatedUser;
+    private String houseId;
+    private String houseName;
+
+
+
+
 
     public String getHouseId() {
         return houseId;
     }
-
     public void setHouseId(String houseId) {
         this.houseId = houseId;
     }
+    public void setHouseName(String houseName) {
+        this.houseName = houseName;
+    }
 
-    private String houseId;
+    public String getHouseName() {
+
+        return houseName;
+    }
+
+
 
     public HouseCRUD(FirebaseAuth authenticatedUser){
         this.authenticatedUser = authenticatedUser;
@@ -43,46 +58,50 @@ public class HouseCRUD {
         //houseId = databaseReference.child("latitude").toString();
     }
 
-    public void createHouseCollection(String houseName,String houseStreet,String houseCity,
+    public void createHouseCollection(String givenHouseName,String houseStreet,String houseCity,
                                       String houseCountry,String houseNumberOfRooms,
                                       String houseNumberOfMates,String houseRent){
 
+        Double latitude = -1.23463;
+        Double longitude = 30.343;
+        Double wholeHouseRent = Double.parseDouble(houseRent);
 
-         Double latitude = -1.94993;
-         Double longitude = 32.343;
-         Double wholeHouseRent = Double.parseDouble(houseRent) ;
+        int numberOfRooms = Integer.parseInt(houseNumberOfRooms);
+        int numberOfHousemates = Integer.parseInt(houseNumberOfMates);
 
-         int numberOfRooms = Integer.parseInt(houseNumberOfRooms);
-         int numberOfHousemates = Integer.parseInt(houseNumberOfMates);
+        String housePicLocation = "/files/pictures/house11";
+        String city = houseCity;
+        String country = houseCountry;
+        String street = houseStreet;
+        String name = givenHouseName;
+        String chat = authenticatedUser.getCurrentUser().getUid()+"-"+givenHouseName;
 
-         String housePicLocation = "/files/pictures/house44";
-         String city = houseCity;
-         String country = houseCountry;
-         String street = houseStreet;
-         String name = houseName;
+        //setHouseName(name);
 
         //Userid
-        String authenticatedUserId =    authenticatedUser.getCurrentUser().getUid();
+        String authenticatedUserId = authenticatedUser.getCurrentUser().getUid();
 
         //Create a house id
-        houseId = databaseReference.push().getKey();
-        house = new House(latitude, longitude, wholeHouseRent, numberOfRooms, numberOfHousemates, housePicLocation, city, country, street, authenticatedUserId, houseId,name);
+        DatabaseReference newRef = databaseReference.push();
+        houseId =newRef.getKey();
 
-        databaseReference.push().setValue(house);
+        house = new House(latitude, longitude, wholeHouseRent, numberOfRooms, numberOfHousemates, housePicLocation, city, country, street
+                , authenticatedUserId, houseId, name, chat);
+
+        newRef.setValue(house);
 
         //Add an association between this house and the user who created it
         databaseReference =FirebaseDatabase.getInstance().getReference("Users");
+        databaseReference.child(authenticatedUserId).child("chat").setValue(chat);
         databaseReference.child(authenticatedUserId).child("house").child(houseId).setValue(true);
+        databaseReference.child(authenticatedUserId).child("My House").setValue(houseId);
+        FirebaseDatabase.getInstance().getReference("House").child(houseId).child("HouseMates").child(authenticatedUserId).child("Mates").setValue("Yes");
 
-
-        Log.d("Next cursor id", houseId);
     }
 
 
+    public House getSpecificHouse(String houseid){
 
-
-
-    public House getSpecificHouse(String houseToFind){
         return null;
     }
 
@@ -96,39 +115,9 @@ public class HouseCRUD {
         innerDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 User user = dataSnapshot.getValue(User.class);
-
-                //check if the user IS A HOUSE HEAD, otherwise it will crash
-                //Get the userId and use it to get the users they've posted
-
                 Log.d("This user", user.toString());
-                String userId = innerDatabaseReference.child(user.getUid()).getKey();
-
-                //Get the house posted by this user
-                innerDatabaseReference =FirebaseDatabase.getInstance().getReference("House").child(userId);
-                ValueEventListener postListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        House house = dataSnapshot.getValue(House.class);
-                        Log.d("Houses", house.toString());
-                        availableHouses.add(house);
-                        // ...
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Getting Post failed, log a message
-                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                        // ...
-                    }
-                };
-                innerDatabaseReference.addValueEventListener(postListener);
-
-
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -140,18 +129,24 @@ public class HouseCRUD {
 
     public void addRoomToHouse(){
 
-        Double Price = 83000.0;
+        Double Price = 134000.0;
         String RoomID;
         String HouseID = getHouseId();
-        String Description = "This room is sooooo.........";
+        String Description = "Alert! you may not wake up in this room...";
         String PicFileLocation = "/pic/file/here";
 
         databaseReference =FirebaseDatabase.getInstance().getReference().child("Rooms");
 
-        RoomID = databaseReference.push().getKey();
+        DatabaseReference newRef = databaseReference.push();
+        RoomID = newRef.getKey();
         Room room = new Room(Price, RoomID, houseId, Description, PicFileLocation);
 
-        databaseReference.push().setValue(room);
+        //Add a room to database
+        newRef.setValue(room);
+
+        //Add a ref in the house collection
+        databaseReference =FirebaseDatabase.getInstance().getReference("House");
+        databaseReference.child(getHouseId()).child("rooms").child(RoomID).setValue(true);
 
     }
 

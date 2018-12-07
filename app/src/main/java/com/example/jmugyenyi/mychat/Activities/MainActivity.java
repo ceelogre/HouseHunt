@@ -81,14 +81,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
          super.onOptionsItemSelected(item);
-
-         if (item.getItemId()== R.id.main_housemates_option)
-         {
-            // SendUserToFindMatesActivity();
-         }
         if (item.getItemId()== R.id.main_settings_option)
         {
-
             SendUserToSettingsActivity();
         }
         if (item.getItemId()== R.id.main_logout_option)
@@ -96,61 +90,8 @@ public class MainActivity extends AppCompatActivity {
             mFirebaseAuth.signOut();
             SendUserToLoginActivity();
         }
-
-        if (item.getItemId()== R.id.main_create_group_option)
-        {
-            //RequestNewGroup();
-        }
-
         return  true;
     }
-
-    // This method to be deleted
- /**   private void RequestNewGroup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.AlertDialog);
-        builder.setTitle("Enter group name: ");
-
-        final EditText groupnameField = new EditText(MainActivity.this);
-        builder.setView(groupnameField);
-
-        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String groupName = groupnameField.getText().toString();
-
-                if (TextUtils.isEmpty(groupName))
-                {
-                    Toast.makeText(MainActivity.this,"Write group name!",Toast.LENGTH_SHORT).show();
-                }else
-                {
-                    CreateNewGroup(groupName);
-                }
-            }
-        });
-
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              dialog.cancel();
-
-            }
-        });
-        builder.show();
-    }**/
-
-    // This method to be deleted
-  /**  private void CreateNewGroup(final String groupName) {
-
-        databaseReference.child("Groups").child(groupName).setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, groupName+" group is created successfully.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }**/
 
     @Override
     protected void onStart() {
@@ -191,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         User user = RetrieveUserInfo();
 
-        Log.d(TAG, "VerifyUser: Status: "+user.getUserStatus());
+        Log.d(TAG, "VerifyUser: Status: "+user.getStatus());
     }
 
     //Method to send user to login activity
@@ -206,9 +147,7 @@ public class MainActivity extends AppCompatActivity {
     private void SendUserToSettingsActivity() {
 
         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(settingsIntent);
-        finish();
     }
 
 
@@ -223,21 +162,14 @@ public class MainActivity extends AppCompatActivity {
                     String retrieveUsername = dataSnapshot.child("name").getValue().toString();
                     String retrieveStatus = dataSnapshot.child("status").getValue().toString();
                     String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
-                    myUser.setUserName(retrieveUsername);
 
-                    myUser.setUserStatus("my turn");
 
-                } else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))) {
+                    myUser.setName(retrieveUsername);
+                    myUser.setStatus(retrieveStatus);
 
-                    String retrieveUsername = dataSnapshot.child("name").getValue().toString();
-                    String retrieveStatus = dataSnapshot.child("status").getValue().toString();
+                   // Log.d(TAG, "retrieveUser: "+ myUser.getStatus());
 
-                    myUser.setUserName(retrieveUsername);
-                    myUser.setUserStatus(retrieveStatus);
-
-                    Log.d(TAG, "retrieveUser: "+ myUser.getUserStatus());
-
-                    String setUser = myUser.getUserStatus().trim();
+                    String setUser = myUser.getStatus().trim();
 
                     // Call Factory to create User based of status which was selected
                     userStatus = new UserStatusFactory().createUser(setUser,getSupportFragmentManager());
@@ -246,6 +178,24 @@ public class MainActivity extends AppCompatActivity {
                     myTabLayout = findViewById(R.id.main_tabs);
                     myTabLayout.setupWithViewPager(myViewPager);
 
+                } else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))) {
+
+                    String retrieveUsername = dataSnapshot.child("name").getValue().toString();
+                    String retrieveStatus = dataSnapshot.child("status").getValue().toString();
+
+                    myUser.setName(retrieveUsername);
+                    myUser.setStatus(retrieveStatus);
+
+                    Log.d(TAG, "retrieveUser: "+ myUser.getStatus());
+
+                    String setUser = myUser.getStatus().trim();
+
+                    // Call Factory to create User based of status which was selected
+                    userStatus = new UserStatusFactory().createUser(setUser,getSupportFragmentManager());
+                    getSupportActionBar().setTitle(setUser);
+                    myViewPager.setAdapter(userStatus);
+                    myTabLayout = findViewById(R.id.main_tabs);
+                    myTabLayout.setupWithViewPager(myViewPager);
 
                 } else {
                     Toast.makeText(MainActivity.this, "Update Profile", Toast.LENGTH_SHORT).show();
@@ -258,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Log.d(TAG, "myUser: "+myUser.getUserStatus());
+        Log.d(TAG, "myUser: "+myUser.getStatus());
         return myUser;
     }
 

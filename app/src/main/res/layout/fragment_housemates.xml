@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.MyHousesFragment">
+    tools:context=".Fragments.HouseMatesFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_houses_recycler_list"
+        android:id="@+id/house_mates_recycler_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
