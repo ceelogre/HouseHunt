@@ -88,6 +88,8 @@ public class PaymentActivity extends AppCompatActivity {
                                 //Log.d(TAG, "Accepted loop: "+houseID);
                                 databaseReference.child("Users").child(currentUserID).child("status").setValue("house mate");
                                 databaseReference.child("Users").child(currentUserID).child("chat").setValue(groupChat);
+                                databaseReference.child("Users").child(currentUserID).child("My House").setValue(houseID);
+                                databaseReference.child("House").child(houseID).child("HouseMates").child(currentUserID).child("Mates").setValue("Yes");
 
 
                                 databaseReference.child("House").child(houseID).addValueEventListener(new ValueEventListener() {

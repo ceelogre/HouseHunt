@@ -40,7 +40,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SettingsActivity extends AppCompatActivity {
 
     private Button updateSettings;
-    private EditText username, status;
+    private EditText username, userStatus;
     private Spinner spinner;
     private CircleImageView userProfileImage;
     private String currentUserID;
@@ -53,6 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private String setUserName;
     private String setStatus;
+    private String setBio;
     private String myStatusStringArray [] = {"choose status","seeker","house head","house mate"};
 
 
@@ -182,17 +183,21 @@ public class SettingsActivity extends AppCompatActivity {
                 if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name")) && (dataSnapshot.hasChild("image")))
                 {
                     String retrieveUsername = dataSnapshot.child("name").getValue().toString();
+                    String retrieveBio = dataSnapshot.child("bio").getValue().toString();
                     String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
 
                     username.setText(retrieveUsername);
+                    userStatus.setText(retrieveBio);
                     Picasso.get().load(retrieveProfileImage).into(userProfileImage);
 
                 }else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name")))
                 {
 
                     String retrieveUsername = dataSnapshot.child("name").getValue().toString();
+                    String retrieveBio = dataSnapshot.child("bio").getValue().toString();
 
                     username.setText(retrieveUsername);
+                    userStatus.setText(retrieveBio);
                 }else
                 {
                     Toast.makeText(SettingsActivity.this,"Update Profile",Toast.LENGTH_SHORT).show();
@@ -228,17 +233,23 @@ public class SettingsActivity extends AppCompatActivity {
     private void UpdateSettings() {
 
          setUserName = username.getText().toString();
+        setBio= userStatus.getText().toString();
+
 
         if (TextUtils.isEmpty(setUserName)){
             Toast.makeText(this, "Enter username!",Toast.LENGTH_SHORT).show();
+        }else if(TextUtils.isEmpty(setBio)){
+            Toast.makeText(this, "Enter a Bio!",Toast.LENGTH_SHORT).show();
         }else if(setStatus.equalsIgnoreCase("choose status")){
             Toast.makeText(this, "Choose a status!",Toast.LENGTH_SHORT).show();
         }
+
         else {
             HashMap<String, Object> profileMap = new HashMap<>();
             profileMap.put("uid", currentUserID);
             profileMap.put("name", setUserName);
             profileMap.put("status", setStatus);
+            profileMap.put("bio", setBio);
             databaseReference.child("Users").child(currentUserID).updateChildren(profileMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -257,6 +268,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void initialiseFields() {
         updateSettings = findViewById(R.id.update_settings_button);
         username = findViewById(R.id.set_user_name);
+        userStatus = findViewById(R.id.set_Bio);
         userProfileImage = findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
         mToolbar = findViewById(R.id.settings_toolbar);

@@ -154,7 +154,7 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
                     }
                     if(dataSnapshot.hasChild("status")){
 
-                        String retrieveHousename = dataSnapshot.child("status").getValue().toString();
+                        String retrieveHousename = dataSnapshot.child("bio").getValue().toString();
                         seekerStatus.setText(retrieveHousename);
                     }
                     if(dataSnapshot.hasChild("image"))
