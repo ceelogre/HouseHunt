@@ -1,6 +1,7 @@
 package com.example.jmugyenyi.mychat.Activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
 
+import com.example.jmugyenyi.mychat.Fragments.PostAHouseFragment;
 import com.example.jmugyenyi.mychat.Fragments.mapfragment;
 import com.example.jmugyenyi.mychat.R;
 
@@ -20,6 +22,8 @@ public class LocationActivity extends AppCompatActivity {
     FrameLayout mapLayout;
     double latitude;
     double longitude;
+    double house_latitude;
+    double house_longitude;
     LocationManager lm;
     private static final int MY_PERMISSIONS_REQUEST_READ_LOCATION = 1 ;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 111;
@@ -35,6 +39,38 @@ public class LocationActivity extends AppCompatActivity {
         transaction.replace(R.id.mapLayout,mapF );
         transaction.addToBackStack(null);
         transaction.commit();
+
+        //getting the house location
+       // gethouseLocation();
+        //sending the house location
+        //sendHouseLocation();
+
+    }
+
+    public void gethouseLocation()
+    {
+        //getting the data  from the map fragemnt
+        Intent intent = this.getIntent();
+
+        /* Obtain String from Intent  */
+        if(intent !=null)
+        {
+            house_latitude = (double)( Integer.valueOf(intent.getExtras().getString("latitude")));
+            house_longitude = (double) (Integer.valueOf(intent.getExtras().getString("longitude")));
+
+            Log.d("location", house_latitude + " " + house_longitude);
+
+        }
+    }
+    public void sendHouseLocation()
+    {
+        //sending this data to the post house fragment
+        Bundle bundle = new Bundle();
+        bundle.putDouble("latitude", house_latitude);
+        bundle.putDouble("longitude", house_longitude);
+        // set Fragmentclass Arguments
+        PostAHouseFragment postAHouseFragment = new PostAHouseFragment();
+        postAHouseFragment.setArguments(bundle);
     }
 
     public void getLocation (){

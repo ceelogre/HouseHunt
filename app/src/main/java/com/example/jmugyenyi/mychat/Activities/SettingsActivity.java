@@ -53,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private String setUserName;
     private String setStatus;
-    private String myStatusStringArray [] = {"choose status","seeker","house head","house mate"};
+    private String myStatusStringArray [] = {"choose status","seeker","house head","house mate","driver"};
 
 
     private android.support.v7.widget.Toolbar mToolbar;
@@ -266,7 +266,6 @@ public class SettingsActivity extends AppCompatActivity {
     private void SendUserToMainActivity() {
 
         Intent mainIntent = new Intent(SettingsActivity.this, MainActivity.class);mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        mainIntent.putExtra("status", status.getText().toString());
         startActivity(mainIntent);
         finish();
     }

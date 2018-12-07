@@ -78,6 +78,10 @@ public class HouseCRUD {
         Log.d("Next cursor id", houseId);
     }
 
+
+
+
+
     public House getSpecificHouse(String houseToFind){
         return null;
     }
