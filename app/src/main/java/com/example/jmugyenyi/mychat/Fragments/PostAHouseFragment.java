@@ -106,6 +106,7 @@ public class PostAHouseFragment extends Fragment {
             public void onClick(View v) {
                 // take you to the map activity
                 Intent intent = new Intent(getContext(), LocationActivity.class);
+                intent.putExtra("house_ID",userID.getHouseid());
                 startActivity(intent);
 
 

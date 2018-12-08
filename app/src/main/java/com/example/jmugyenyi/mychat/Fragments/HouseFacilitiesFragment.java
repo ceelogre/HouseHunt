@@ -31,6 +31,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.model.House;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -54,21 +57,21 @@ public class HouseFacilitiesFragment extends Fragment {
     protected static final String TAG = "HouseFacilitiesFragment";
 
     private View houseFacilitiesFragmentView;
-//    private ListView listView;
-//    private ArrayAdapter<String> arrayAdapter;
-//    private ArrayList<String> listOfGroups = new ArrayList<>();
-//    private DatabaseReference databaseReference;
+
     private TextView date,time;
-    private Button dateButton,timeButton,smsButton,callButton;
+    private Button dateButton,timeButton,smsButton,callButton, transportButton;
 
     private static final int SMS_PERMISSION_REQUEST_CODE = 1;
 
-    private  static  String message ;
+    private  static  String message,pick_up_id,currentUserID ;
 
     Calendar calendar;
 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
+
+    private DatabaseReference databaseReference, houseRef, userRef,locationRef;
+    private FirebaseAuth mfirebaseAuth;
 
 
     public HouseFacilitiesFragment() {
@@ -79,6 +82,13 @@ public class HouseFacilitiesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        mfirebaseAuth = FirebaseAuth.getInstance();
+        currentUserID = mfirebaseAuth.getCurrentUser().getUid();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Pick-Ups");
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        houseRef =FirebaseDatabase.getInstance().getReference().child("House");
 
         houseFacilitiesFragmentView = inflater.inflate(R.layout.fragment_house_facilities, container, false);
 
@@ -99,9 +109,121 @@ public class HouseFacilitiesFragment extends Fragment {
 
         sendSMS();
 
+        transportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if(transportButton.getText().toString().equalsIgnoreCase("MAKE REQUEST"))
+                {
+                    DatabaseReference newRef = databaseReference.push();
+                    pick_up_id = newRef.getKey();
+                    userRef.child(currentUserID).child("My Pick-Up").setValue(pick_up_id);
+
+                    userRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            String houseID = dataSnapshot.child("My House").getValue().toString();
+
+                            //Log.d(TAG, "onDataChange: "+houseID);
+
+                            houseRef.child(houseID).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String latitude = dataSnapshot.child("latitude").getValue().toString();
+                                    String longitude = dataSnapshot.child("longitude").getValue().toString();
+
+
+
+                                    HashMap<String, Object> pickupRequestKey = new HashMap<>();
+                                    databaseReference.updateChildren(pickupRequestKey);
+                                    locationRef = databaseReference.child(pick_up_id);
+
+
+                                    HashMap<String, Object> locationInfoMap = new HashMap<>();
+                                    locationInfoMap.put("latitude", latitude);
+                                    locationInfoMap.put("longitude", longitude);
+
+
+                                    locationRef.updateChildren(locationInfoMap);
+                                    transportButton.setText("CANCEL REQUEST");
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+
+
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }else if(transportButton.getText().toString().equalsIgnoreCase("CANCEL REQUEST"))
+                {
+
+                    transportButton.setText("MAKE REQUEST");
+                    userRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                           // if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("My Pick-Up"))) {
+                               // String myPickUpId = dataSnapshot.child("My Pick-Up").getValue().toString();
+
+                                databaseReference.child(dataSnapshot.child("My Pick-Up").getValue().toString()).removeValue();
+
+
+
+                            }
+                       // }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+                //userRef.child(currentUserID).child("My Pick-Up").removeValue();
+
+            }
+        });
+
+
         return  houseFacilitiesFragmentView;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        userRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("My Pick-Up")))
+                {
+                    transportButton.setText("CANCEL REQUEST");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
     private void IntializeFields() {
 
@@ -111,6 +233,7 @@ public class HouseFacilitiesFragment extends Fragment {
         timeButton = houseFacilitiesFragmentView.findViewById(R.id.time_button);
         smsButton = houseFacilitiesFragmentView.findViewById(R.id.message_button);
         callButton = houseFacilitiesFragmentView.findViewById(R.id.call_button);
+        transportButton = houseFacilitiesFragmentView.findViewById(R.id.transport_request_button);
     }
 
     private void sendSMS() {
