@@ -40,6 +40,8 @@ public class LocationActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
 
+
+
         //getting the house location
        // gethouseLocation();
         //sending the house location

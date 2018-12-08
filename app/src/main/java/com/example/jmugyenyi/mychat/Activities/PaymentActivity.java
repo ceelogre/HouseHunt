@@ -133,19 +133,6 @@ public class PaymentActivity extends AppCompatActivity {
         });
 
 
-//        databaseReference.child("House").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String houseOwnerID = dataSnapshot.child("authenticatedUserId").getValue().toString();
-//                databaseReference.child("Users").child(houseOwnerID).child("seekers").child(currentUserID).removeValue();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
         Toolbar toolbar =  findViewById(R.id.payments_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

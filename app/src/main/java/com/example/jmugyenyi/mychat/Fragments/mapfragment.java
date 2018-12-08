@@ -1,7 +1,5 @@
 package com.example.jmugyenyi.mychat.Fragments;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,9 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.jmugyenyi.mychat.Activities.LocationActivity;
 import com.example.jmugyenyi.mychat.R;
-import com.example.jmugyenyi.mychat.utils.HouseCRUD;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -24,29 +21,24 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link mapfragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link mapfragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
+
+
+    protected static final String TAG = "mapfragment";
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     public double latitude;
@@ -56,8 +48,8 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
     GoogleMap mgoogleMap;
     MapView mapView;
     View view;
-    private FirebaseAuth mfirebaseAuth;
-    private String HouseID;
+
+    private String houseID;
     private DatabaseReference databaseReference;
 
     private OnFragmentInteractionListener mListener;
@@ -66,23 +58,6 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment mapfragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static mapfragment newInstance(String param1, String param2) {
-        mapfragment fragment = new mapfragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +65,7 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            Log.d(TAG, "onCreate: ");
         }
 
     }
@@ -97,10 +73,11 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-      //  mfirebaseAuth = FirebaseAuth.getInstance();
-       // currentUserID = mfirebaseAuth.getCurrentUser().getUid();
+
+        houseID = getActivity().getIntent().getExtras().get("house_ID").toString();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         view =  inflater.inflate(R.layout.fragment_mapfragment, container, false);
+
         return view;
     }
 
@@ -108,8 +85,8 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mapView = (MapView)view.findViewById(R.id.map);
-//        mapView.getMapAsync(this);
-
+        Log.d(TAG, "onViewCreated: ");
+        
         if(mapView !=null)
         {
             mapView.onCreate(null);
@@ -118,12 +95,9 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
         }
     }
 
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
-//        Bundle address = getActivity().getIntent().getExtras();
         latitude = -1.935114;
         longitude = 30.082111;
         mgoogleMap = googleMap;
@@ -136,6 +110,7 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
             @Override
             public void onMarkerDragStart(Marker marker) {
                 Log.d("System out", "onMarkerDragEnd..."+marker.getPosition().latitude+"..."+marker.getPosition().longitude);
+                //Log.d(TAG, "onMarkerDragStart: "+marker.getPosition().latitude);
             }
 
             @Override
@@ -148,22 +123,11 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
                 Log.d("System out", "onMarkerDragEnd..."+marker.getPosition().latitude+"..."+marker.getPosition().longitude);
                 houseLatitude = marker.getPosition().latitude;
                 houseLongitude = marker.getPosition().longitude;
+                //Log.d(TAG, "onMarkerDragEnd: "+houseLatitude);
             }
         });
-
-
-       googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-           @Override
-           public boolean onMarkerClick(Marker marker) {
-
-               getActivity().finish();
-               return false;
-           }
-       });
-
+        googleMap.setOnMarkerClickListener(this);
     }
-
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -171,17 +135,6 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
             mListener.onFragmentInteraction(uri);
         }
     }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
 
     @Override
     public void onDetach() {
@@ -194,21 +147,12 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
         HashMap<String , Object> location = new HashMap<>();
         location.put("latitude",houseLatitude);
         location.put("longitude",houseLongitude);
-        databaseReference.child("house").child(HouseID).updateChildren(location);
+        Log.d(TAG, "onMarkerClick: "+houseLongitude);
+        databaseReference.child("House").child(houseID).updateChildren(location);
         getActivity().finish();
         return false;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
