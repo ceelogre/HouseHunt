@@ -31,10 +31,6 @@ public class HouseCRUD {
     private String houseId;
     private String houseName;
 
-
-
-
-
     public String getHouseId() {
         return houseId;
     }
@@ -147,5 +143,7 @@ public class HouseCRUD {
         databaseReference.child(getHouseId()).child("rooms").child(RoomID).setValue(true);
 
     }
+
+
 
 }

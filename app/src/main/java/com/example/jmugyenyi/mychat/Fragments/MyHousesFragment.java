@@ -227,11 +227,6 @@ public class MyHousesFragment extends Fragment {
                     });
 
 
-
-
-
-
-
                 }else
                 {
                     //Toast.makeText(SettingsActivity.this,"Update Profile",Toast.LENGTH_SHORT).show();
