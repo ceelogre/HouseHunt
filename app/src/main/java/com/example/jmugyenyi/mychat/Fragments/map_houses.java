@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +40,14 @@ import java.util.Iterator;
  * create an instance of this fragment.
  */
 public class map_houses extends Fragment implements OnMapReadyCallback {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+
+
+    protected static final String TAG = "map_houses";
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private DatabaseReference databaseReference;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -75,6 +85,8 @@ public class map_houses extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Pick-Ups");
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -124,25 +136,80 @@ public class map_houses extends Fragment implements OnMapReadyCallback {
     }
 
 
-    public void onMapReady(GoogleMap googleMap ) {
+    public void onMapReady(final GoogleMap googleMap ) {
         MapsInitializer.initialize(getContext());
-//        Bundle address = getActivity().getIntent().getExtras();
-        HashMap<String,Object> houses = new HashMap<>();
-        ArrayList<Double> location = new ArrayList<Double>();
-        houses = getAllHouses ();
-       double latitude = -1.935114;
-      double  longitude = 30.082111;
-        mgoogleMap = googleMap;
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        Iterator it = houses.entrySet().iterator();
-        while (it.hasNext()) {
-            HashMap.Entry pair = (HashMap.Entry)it.next();
-            location = (ArrayList<Double> )pair.getValue();
-            String house_name = (String)pair.getKey();
-            Marker place =  googleMap.addMarker(new MarkerOptions().position( new LatLng(location.get(0),location.get(1))).draggable(false));
-           CameraPosition kacyiru = CameraPosition.builder().target( new LatLng(location.get(0),location.get(1))).zoom(8).bearing(0).tilt(45).build();
-           googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(kacyiru));
-        }
+
+
+
+
+
+
+
+
+
+        FirebaseDatabase.getInstance().getReference().child("Pick-Ups")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        HashMap<String,Object> houses = new HashMap<>();
+                        ArrayList<Double> location = new ArrayList<Double>();
+                        int counter =1;
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                            String latitude = snapshot.child("latitude").getValue().toString();
+                            String longitude = snapshot.child("longitude").getValue().toString();
+
+                            Log.d(TAG, "latitude: "+latitude);
+                            Log.d(TAG, "longitude: "+longitude);
+
+                            location.add(Double.parseDouble(latitude));
+                            location.add(Double.parseDouble(longitude));
+
+                           // ArrayList<Double> location = new ArrayList<>();
+                            //location.add(-1.935114);
+                            //location.add(30.082111);
+                            houses.put ("house"+counter,location);
+                        }
+                        counter=0;
+
+
+
+
+
+                       // houses = getAllHouses ();
+                        double latitude = -1.935114;
+                        double  longitude = 30.082111;
+                        mgoogleMap = googleMap;
+                        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                        Iterator it = houses.entrySet().iterator();
+                        while (it.hasNext()) {
+                            HashMap.Entry pair = (HashMap.Entry)it.next();
+                            location = (ArrayList<Double> )pair.getValue();
+                            String house_name = (String)pair.getKey();
+                            Marker place =  googleMap.addMarker(new MarkerOptions().position( new LatLng(location.get(0),location.get(1))).draggable(false));
+                            CameraPosition kacyiru = CameraPosition.builder().target( new LatLng(location.get(0),location.get(1))).zoom(8).bearing(0).tilt(45).build();
+                            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(kacyiru));
+                        }
+
+
+
+
+
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -155,33 +222,12 @@ public class map_houses extends Fragment implements OnMapReadyCallback {
         }
     }
 
-   // @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
