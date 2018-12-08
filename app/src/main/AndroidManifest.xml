@@ -41,6 +41,10 @@
         <activity
             android:name=".Activities.AcceptOrDeclineSeekerActivity"
             android:label="@string/title_activity_accept_or_decline_seeker"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Activities.AddRoomActivity"
+            android:label="@string/title_activity_add_room"
             android:theme="@style/AppTheme"></activity>
     </application>
 

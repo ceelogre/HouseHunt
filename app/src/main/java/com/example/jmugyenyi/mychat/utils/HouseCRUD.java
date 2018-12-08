@@ -126,27 +126,4 @@ public class HouseCRUD {
         return availableHouses;
     }
 
-    public void addRoomToHouse(){
-
-        Double Price = 134000.0;
-        String RoomID;
-        String HouseID = getHouseId();
-        String Description = "Alert! you may not wake up in this room...";
-        String PicFileLocation = "/pic/file/here";
-
-        databaseReference =FirebaseDatabase.getInstance().getReference().child("Rooms");
-
-        DatabaseReference newRef = databaseReference.push();
-        RoomID = newRef.getKey();
-        Room room = new Room(Price, RoomID, houseId, Description, PicFileLocation);
-
-        //Add a room to database
-        newRef.setValue(room);
-
-        //Add a ref in the house collection
-        databaseReference =FirebaseDatabase.getInstance().getReference("House");
-        databaseReference.child(getHouseId()).child("rooms").child(RoomID).setValue(true);
-
-    }
-
 }

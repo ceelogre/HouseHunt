@@ -40,7 +40,7 @@ public class Room {
     private String Description;
     private String PicFileLocation;
 
-    public Room(Double price, String roomID, String houseID, String description, String picFileLocation) {
+    public Room(String roomID, String houseID, String description, String picFileLocation, Double price) {
         Price = price;
         RoomID = roomID;
         HouseID = houseID;

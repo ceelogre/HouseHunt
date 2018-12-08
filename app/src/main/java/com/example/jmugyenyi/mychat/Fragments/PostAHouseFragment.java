@@ -1,21 +1,14 @@
 package com.example.jmugyenyi.mychat.Fragments;
 
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,17 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.telephony.SmsManager;
 
-import com.example.jmugyenyi.mychat.Activities.SettingsActivity;
+import com.example.jmugyenyi.mychat.Activities.AddRoomActivity;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.model.User;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -44,12 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -64,7 +50,7 @@ public class PostAHouseFragment extends Fragment {
     private FirebaseAuth mfirebaseAuth;
 
     private View postHouse;
-    private Button uploadPicButton,  getLocationButton, saveButton;
+    private Button uploadPicButton,  getLocationButton, saveButton, addRoomButton;
     private EditText housename, houseStreet, houseCity, houseCountry, houseNumberOrooms, houseNumberOmates, houseRent;
     private CircleImageView circleImageView;
     private String saveHousename, saveHouseStreet, saveHouseCity, saveHouseCountry,
@@ -79,6 +65,9 @@ public class PostAHouseFragment extends Fragment {
     private DatabaseReference databaseReference;
 
     private ProgressDialog loadingBar;
+    private String addedHouseId;
+
+    private boolean isSavingHouseSuccessful;
 
     private User userID = new User();
 
@@ -108,8 +97,21 @@ public class PostAHouseFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveHouseInfo();
+                isSavingHouseSuccessful = saveHouseInfo();
+
                 Toast.makeText(getActivity(), "Info saved!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        addRoomButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(isSavingHouseSuccessful){
+                    Intent addRoomIntent = new Intent(getActivity(), AddRoomActivity.class);
+
+                    addRoomIntent.putExtra("addedHouseId", addedHouseId);
+
+                    startActivity(addRoomIntent);
+                }
             }
         });
 
@@ -190,7 +192,7 @@ public class PostAHouseFragment extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Toast.makeText(getActivity(), "Image saved in Database!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "Image successfuly uploaded!", Toast.LENGTH_SHORT).show();
                                         loadingBar.dismiss();
                                     }else{
                                         String message = task.getException().toString();
@@ -229,12 +231,13 @@ public class PostAHouseFragment extends Fragment {
         houseCity = postHouse.findViewById(R.id.post_house_city);
         houseCountry = postHouse.findViewById(R.id.post_house_country);
         houseNumberOrooms = postHouse.findViewById(R.id.post_house_rooms);
-        houseNumberOmates = postHouse.findViewById(R.id.post_house_housemates);
-        houseRent = postHouse.findViewById(R.id.post_house_rent);
+        houseNumberOmates = postHouse.findViewById(R.id.post_desc);
+        houseRent = postHouse.findViewById(R.id.post_room_rent);
+        addRoomButton = postHouse.findViewById(R.id.add_room);
         loadingBar = new ProgressDialog(getActivity());
     }
 
-    private void saveHouseInfo() {
+    private boolean saveHouseInfo() {
 
         saveHousename = housename.getText().toString();
         saveHouseStreet = houseStreet.getText().toString();
@@ -250,11 +253,16 @@ public class PostAHouseFragment extends Fragment {
             Toast.makeText(getActivity(), "Enter Missing Input!",Toast.LENGTH_SHORT).show();
         }else
         {
-//            HouseCRUD houseCRUD = new HouseCRUD(mfirebaseAuth);
-//            houseCRUD.createHouseCollection(saveHousename,saveHouseStreet,saveHouseCity,
-//                    saveHouseCountry,saveHouseNumberOrooms,saveHouseNumberOmates,saveHouseRent);
-//            houseCRUD.addRoomToHouse();
+            HouseCRUD houseCRUD = new HouseCRUD(mfirebaseAuth);
+            houseCRUD.createHouseCollection(saveHousename,saveHouseStreet,saveHouseCity,
+                    saveHouseCountry,saveHouseNumberOrooms,saveHouseNumberOmates,saveHouseRent);
+            addedHouseId = houseCRUD.getHouseId();
+
+            return true;
+
+            //houseCRUD.addRoomToHouse();
         }
+        return false;
     }
 
 

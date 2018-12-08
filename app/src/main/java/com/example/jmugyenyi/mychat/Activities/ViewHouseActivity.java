@@ -1,6 +1,9 @@
 
 package com.example.jmugyenyi.mychat.Activities;
 
+
+
+
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -60,7 +63,7 @@ public class ViewHouseActivity extends AppCompatActivity {
     private void initializeFields() {
 
         hseName   = findViewById(R.id.visit_house_name);
-        hseStreet = findViewById(R.id.visit_house_street);
+        hseStreet = findViewById(R.id.view_street_name);
         hseImage  = findViewById(R.id.visit_house_image);
         rentAmount = findViewById(R.id.view_rent_amount);
         hseCity = findViewById(R.id.view_city_name);

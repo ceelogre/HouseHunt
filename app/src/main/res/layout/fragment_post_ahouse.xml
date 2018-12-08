@@ -151,7 +151,7 @@
            android:layout_marginTop="10dp"
            />
        <EditText
-           android:id="@+id/post_house_housemates"
+           android:id="@+id/post_desc"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:inputType="number"
@@ -168,12 +168,12 @@
            android:layout_marginTop="10dp"
            />
        <EditText
-           android:id="@+id/post_house_rent"
+           android:id="@+id/post_room_rent"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:inputType="number"
            android:hint="House Rent"
-           android:layout_below="@id/post_house_housemates"
+           android:layout_below="@id/post_desc"
            android:textAlignment="center"
            android:drawableStart="@drawable/edit_rent"
            android:textColor="@color/colorPrimaryDark"
@@ -189,7 +189,7 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:orientation="horizontal"
-           android:layout_below="@id/post_house_rent">
+           android:layout_below="@id/post_room_rent">
 
            <TextView
                android:layout_width="wrap_content"
@@ -238,6 +238,16 @@
            android:textColor="@android:color/background_light"
            android:textSize="20sp"
            android:textStyle="bold" />
+
+       <Button
+           android:id="@+id/add_room"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/scroll_linearview"
+           android:layout_marginStart="-15dp"
+           android:layout_toEndOf="@+id/post_house_saveButton"
+           android:text="Add a room" />
+
        <!-- android:layout_below="@id/set_profile_image"-->
 
    </RelativeLayout>

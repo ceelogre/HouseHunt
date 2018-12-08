@@ -31,20 +31,20 @@ public class RoomCRUD {
 
     }
 
-    public void createRoomCollection(){
+    public void createRoomCollection(String houseId, String description, Double price){
 
-        Double price = 38000.0;
-
-        String houseID;
-        String description = "Room with 2 beds";
         String picFileLocation = "/Pic/File/here/";
+        DatabaseReference newDbReference = databaseReference.push();
+        roomID = newDbReference.getKey();
 
-        roomID = databaseReference.push().getKey();
 
-        //Userid
-        //String authenticatedUserId =    authenticatedUser.getCurrentUser().getUid();
+        Room room = new Room(roomID, houseId, description, picFileLocation, price);
+        newDbReference.setValue(room);
 
-        roomID = databaseReference.push().getKey();
+        //Add a ref in the house collection
+        databaseReference =FirebaseDatabase.getInstance().getReference("House");
+        databaseReference.child(houseId).child("rooms").child(roomID).setValue(true);
+
 
     }
 
