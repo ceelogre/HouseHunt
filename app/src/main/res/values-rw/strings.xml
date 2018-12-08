@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Chat</string>
+    <string name="NeedNewAccount">ukeneye Konti</string>
+    <string name="phoneLoginText">telefoni</string>
+    <string name="phoneButtonLogin">Injira</string>
+    <string name="createAccount">funguza konti</string>
+    <string name="AlreadyHaveAccount">Mfite konti</string>
+    <string name="username">Amazina</string>
+    <string name="userStatus">Urwego rwawe</string>
+    <string name="updateButton">Hindura</string>
+    <string name="writeMessage">telefoni</string>
+    <string name="enterPhoneNumber">telefoni</string>
+    <string name="enterVerificationCode">umubare wibanga</string>
+    <string name="sendVerCode">ohereza code</string>
+    <string name="verify">emeza</string>
+    <string name="myHouses">Inzu nifuza</string>
+    <string name="availableHouses">Inzu zihari</string>
+    <string name="hello_blank_fragment">ubusa</string>
+    <string name="title_activity_payment">kwishyura</string>
+</resources>

@@ -18,4 +18,11 @@
     <string name="updateButton">mettre à jour</string>
     <string name="writeMessage">écrire un message</string>
     <string name="enterPhoneNumber">Entrer votre numero de telephone</string>
+    <string name="enterVerificationCode">code de verification</string>
+    <string name="sendVerCode">"envoyer le code "</string>
+    <string name="verify">verifier</string>
+    <string name="myHouses">Mes logements</string>
+    <string name="availableHouses">Logement libres</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_payment">Paiement</string>
 </resources>
