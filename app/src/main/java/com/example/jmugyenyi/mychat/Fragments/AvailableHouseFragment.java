@@ -133,7 +133,8 @@ public class AvailableHouseFragment extends Fragment {
                                 });
 
                             }
-                        });}
+                        });
+                        }
                     }
 
                     @NonNull

@@ -30,6 +30,7 @@
                    android:layout_height="match_parent"
                    android:text="USERNAME"
                    android:textAlignment="textStart"
+                   android:layout_marginLeft="10dp"
                    android:textSize="18sp"
                    android:textStyle="bold"/>
            </LinearLayout>
@@ -38,6 +39,7 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:text="STATUS"
+               android:layout_marginLeft="10dp"
                android:textAlignment="textStart"
                android:textSize="16sp"
                android:textStyle="italic"

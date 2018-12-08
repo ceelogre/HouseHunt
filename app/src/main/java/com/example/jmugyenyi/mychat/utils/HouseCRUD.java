@@ -93,10 +93,14 @@ public class HouseCRUD {
         databaseReference =FirebaseDatabase.getInstance().getReference("Users");
         databaseReference.child(authenticatedUserId).child("chat").setValue(chat);
         databaseReference.child(authenticatedUserId).child("house").child(houseId).setValue(true);
+        databaseReference.child(authenticatedUserId).child("My House").setValue(houseId);
+        FirebaseDatabase.getInstance().getReference("House").child(houseId).child("HouseMates").child(authenticatedUserId).child("Mates").setValue("Yes");
 
     }
 
+
     public House getSpecificHouse(String houseid){
+
         return null;
     }
 
@@ -110,13 +114,9 @@ public class HouseCRUD {
         innerDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 User user = dataSnapshot.getValue(User.class);
-
                 Log.d("This user", user.toString());
-
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value

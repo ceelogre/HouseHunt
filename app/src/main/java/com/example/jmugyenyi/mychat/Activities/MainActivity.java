@@ -81,14 +81,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
          super.onOptionsItemSelected(item);
-
-         if (item.getItemId()== R.id.main_housemates_option)
-         {
-            // SendUserToFindMatesActivity();
-         }
         if (item.getItemId()== R.id.main_settings_option)
         {
-
             SendUserToSettingsActivity();
         }
         if (item.getItemId()== R.id.main_logout_option)
@@ -96,61 +90,8 @@ public class MainActivity extends AppCompatActivity {
             mFirebaseAuth.signOut();
             SendUserToLoginActivity();
         }
-
-        if (item.getItemId()== R.id.main_create_group_option)
-        {
-            //RequestNewGroup();
-        }
-
         return  true;
     }
-
-    // This method to be deleted
- /**   private void RequestNewGroup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.AlertDialog);
-        builder.setTitle("Enter group name: ");
-
-        final EditText groupnameField = new EditText(MainActivity.this);
-        builder.setView(groupnameField);
-
-        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String groupName = groupnameField.getText().toString();
-
-                if (TextUtils.isEmpty(groupName))
-                {
-                    Toast.makeText(MainActivity.this,"Write group name!",Toast.LENGTH_SHORT).show();
-                }else
-                {
-                    CreateNewGroup(groupName);
-                }
-            }
-        });
-
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              dialog.cancel();
-
-            }
-        });
-        builder.show();
-    }**/
-
-    // This method to be deleted
-  /**  private void CreateNewGroup(final String groupName) {
-
-        databaseReference.child("Groups").child(groupName).setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, groupName+" group is created successfully.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }**/
 
     @Override
     protected void onStart() {
@@ -206,9 +147,7 @@ public class MainActivity extends AppCompatActivity {
     private void SendUserToSettingsActivity() {
 
         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(settingsIntent);
-        finish();
     }
 
 

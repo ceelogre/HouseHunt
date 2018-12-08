@@ -19,6 +19,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.jmugyenyi.mychat.Activities.AddRoomActivity;
+
+
+import com.example.jmugyenyi.mychat.Activities.LocationActivity;
+
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.model.User;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
@@ -89,10 +93,25 @@ public class PostAHouseFragment extends Fragment {
 
         initializeFields();
 
+//what I had
+        getLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // take you to the map activity
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                intent.putExtra("house_ID",userID.getHouseid());
+                startActivity(intent);
+
+
+            }
+        });
+//end of what I had
+        //Joel's
          new FireBaseBackgroundTasks().execute();
 
         Log.d(TAG, "onCreateView: Oncreate Working");
 
+//end
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,16 +227,10 @@ public class PostAHouseFragment extends Fragment {
                         }
                     }
                 });
-
             }
-
-
-
         }
 
     }
-
-
 
     private void initializeFields() {
 
@@ -264,10 +277,6 @@ public class PostAHouseFragment extends Fragment {
         }
         return false;
     }
-
-
-
-
     private class FireBaseBackgroundTasks extends AsyncTask<Void, Void, String> {
 
         String houseID ="test";
@@ -312,9 +321,6 @@ public class PostAHouseFragment extends Fragment {
 
                 }
             });
-
-
-
             return houseID;
         }
 

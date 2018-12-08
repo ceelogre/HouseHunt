@@ -88,6 +88,8 @@ public class PaymentActivity extends AppCompatActivity {
                                 //Log.d(TAG, "Accepted loop: "+houseID);
                                 databaseReference.child("Users").child(currentUserID).child("status").setValue("house mate");
                                 databaseReference.child("Users").child(currentUserID).child("chat").setValue(groupChat);
+                                databaseReference.child("Users").child(currentUserID).child("My House").setValue(houseID);
+                                databaseReference.child("House").child(houseID).child("HouseMates").child(currentUserID).child("Mates").setValue("Yes");
 
 
                                 databaseReference.child("House").child(houseID).addValueEventListener(new ValueEventListener() {
@@ -130,19 +132,6 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
 
-
-//        databaseReference.child("House").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String houseOwnerID = dataSnapshot.child("authenticatedUserId").getValue().toString();
-//                databaseReference.child("Users").child(houseOwnerID).child("seekers").child(currentUserID).removeValue();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
 
         Toolbar toolbar =  findViewById(R.id.payments_toolbar);
         setSupportActionBar(toolbar);
