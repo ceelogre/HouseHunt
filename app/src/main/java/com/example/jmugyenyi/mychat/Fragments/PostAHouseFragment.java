@@ -26,6 +26,8 @@ import com.example.jmugyenyi.mychat.Activities.LocationActivity;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.model.User;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
+import com.example.jmugyenyi.mychat.utils.HouseMaker;
+import com.example.jmugyenyi.mychat.utils.ProxyHouseCRUD;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -59,8 +61,7 @@ public class PostAHouseFragment extends Fragment {
     private CircleImageView circleImageView;
     private String saveHousename, saveHouseStreet, saveHouseCity, saveHouseCountry,
             saveHouseNumberOrooms, saveHouseNumberOmates, saveHouseRent;
-
-
+    
 
     private  static  final int galleryPicture = 1;
 
@@ -93,7 +94,6 @@ public class PostAHouseFragment extends Fragment {
 
         initializeFields();
 
-//what I had
         getLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,13 +105,7 @@ public class PostAHouseFragment extends Fragment {
 
             }
         });
-//end of what I had
-        //Joel's
          new FireBaseBackgroundTasks().execute();
-
-        Log.d(TAG, "onCreateView: Oncreate Working");
-
-//end
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,9 +137,6 @@ public class PostAHouseFragment extends Fragment {
                 startActivityForResult(galleryIntent,galleryPicture);
             }
         });
-
-
-
         return  postHouse;
     }
 
@@ -156,29 +147,22 @@ public class PostAHouseFragment extends Fragment {
 
 
         if (requestCode==galleryPicture && resultCode== Activity.RESULT_OK)
-        {//Log.d(TAG, "onActivityResult: Got Here 2");
-            //Log.d(TAG, "onActivityResult: Code   "+requestCode);
+        {
             Uri picUri = data.getData();
-
             Intent intent = CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1,1)
                     .getIntent(getContext());
 
             startActivityForResult(intent,CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-                   // .start(getActivity());
         }
 
-
-        //Log.d(TAG, "onActivityResult: Code2   "+CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
         {
-            //Log.d(TAG, "onActivityResult: Got Here 3");
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode== Activity.RESULT_OK){
 
-                //Log.d(TAG, "onActivityResult: Got Here 4");
                 loadingBar.setTitle("Set House Image");
                 loadingBar.setMessage("Please wait!");
                 loadingBar.show();
@@ -236,7 +220,6 @@ public class PostAHouseFragment extends Fragment {
 
         circleImageView = postHouse.findViewById(R.id.post_house_image);
         uploadPicButton = postHouse.findViewById(R.id.post_house_uploadButton);
-        //cameraButton = postHouse.findViewById(R.id.post_house_cameraButton);
         getLocationButton = postHouse.findViewById(R.id.post_house_locationButton);
         saveButton =  postHouse.findViewById(R.id.post_house_saveButton);
         housename = postHouse.findViewById(R.id.post_house_name);
@@ -266,14 +249,18 @@ public class PostAHouseFragment extends Fragment {
             Toast.makeText(getActivity(), "Enter Missing Input!",Toast.LENGTH_SHORT).show();
         }else
         {
-            HouseCRUD houseCRUD = new HouseCRUD(mfirebaseAuth);
-            houseCRUD.createHouseCollection(saveHousename,saveHouseStreet,saveHouseCity,
+
+            HouseMaker maker  = new ProxyHouseCRUD(mfirebaseAuth);
+            maker.createHouseCollection(saveHousename,saveHouseStreet,saveHouseCity,
                     saveHouseCountry,saveHouseNumberOrooms,saveHouseNumberOmates,saveHouseRent);
             addedHouseId = houseCRUD.getHouseId();
 
+            maker.addRoomToHouse();
             return true;
 
             //houseCRUD.addRoomToHouse();
+
+
         }
         return false;
     }
@@ -290,7 +277,6 @@ public class PostAHouseFragment extends Fragment {
             databaseReference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "onDataChange first one: ");
                     if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))
                             && (dataSnapshot.hasChild("image")) && (dataSnapshot.hasChild("house")))
                     {
@@ -299,7 +285,6 @@ public class PostAHouseFragment extends Fragment {
                                 .replaceAll("\\{","")
                                 .replaceAll("\\}","");
                          userID.setHouseid(houseID);
-                        Log.d(TAG, "onDataChange: "+houseID);
 
                     }else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))
                             && (dataSnapshot.hasChild("house")))
@@ -309,10 +294,9 @@ public class PostAHouseFragment extends Fragment {
                                 .replaceAll("\\{","")
                                 .replaceAll("\\}","");
                         userID.setHouseid(houseID);
-                        Log.d(TAG, "onDataChange: "+houseID);
                     }else
                     {
-
+                        Toast.makeText(getContext(), "Unknown Selection", Toast.LENGTH_SHORT).show();
                     }
                 }
 
