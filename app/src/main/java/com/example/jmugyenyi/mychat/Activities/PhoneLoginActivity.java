@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PhoneLoginActivity extends AppCompatActivity {
 
-    // Instance Variables
+    // Login in using phone number 
     private Button sendVerCodeButton, verifyButton;
     private EditText inputPhoneNumber, inputVerCode;
 

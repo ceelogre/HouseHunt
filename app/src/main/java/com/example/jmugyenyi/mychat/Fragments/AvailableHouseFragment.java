@@ -31,6 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class AvailableHouseFragment extends Fragment {
+    // this fragments is going to help the user see all the available houses
 
     private static final String TAG= "AvailableHouseFragment";
 

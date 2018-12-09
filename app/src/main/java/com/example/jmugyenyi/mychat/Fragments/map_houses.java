@@ -40,7 +40,7 @@ import java.util.Iterator;
  * create an instance of this fragment.
  */
 public class map_houses extends Fragment implements OnMapReadyCallback {
-
+    // these fragment enables the driver to see all the houses of people who requested for transport
 
 
     protected static final String TAG = "map_houses";
@@ -119,6 +119,7 @@ public class map_houses extends Fragment implements OnMapReadyCallback {
 
     public HashMap<String , Object> getAllHouses ()
     {
+        // testing with a hashmap
         HashMap<String, Object> houses = new HashMap<>();
         ArrayList<Double> location = new ArrayList<>();
         location.add(-1.935114);

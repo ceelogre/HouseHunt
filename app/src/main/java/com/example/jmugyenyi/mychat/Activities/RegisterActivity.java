@@ -23,6 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    // this activity permits a new user to create an account
+
     private Button createAccountButton;
     private EditText userEmail, userPassword;
     private TextView alreadyHaveAccountLink;

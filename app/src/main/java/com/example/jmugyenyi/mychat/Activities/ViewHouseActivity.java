@@ -31,6 +31,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewHouseActivity extends AppCompatActivity {
 
+    // this activity permits the user to view the house details and express their interest In the house
+
     protected static final String TAG = "ViewHouseActivity";
     private TextView hseName, hseStreet, rentAmount,hseCity,hseCountry, hseMates,hseRooms;
     private CircleImageView hseImage;

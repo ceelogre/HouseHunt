@@ -39,6 +39,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    // on this activity  the user gets directed to their home page according to the type of user they are
+
     private Button updateSettings;
     private EditText username, userStatus;
     private Spinner spinner;
