@@ -25,6 +25,7 @@ import com.stripe.android.TokenCallback;
 import com.stripe.android.Stripe;
 import com.stripe.android.model.Token;
 
+//This Activity manages of rent payments
 public class PaymentActivity extends AppCompatActivity implements Response {
 
     protected static final String TAG = "PaymentActivity";
@@ -33,31 +34,26 @@ public class PaymentActivity extends AppCompatActivity implements Response {
     private TextView payText;
     private CardForm cardForm;
 
-    private String groupChat="";
+    private String groupChat = "";
     private FirebaseAuth mfirebaseAuth;
     private DatabaseReference databaseReference;
 
     private String houseID, currentUserID;
-   private Response cont = this;
+    private Response cont = this;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-
+        //Getting the database reference and the identity of the current user
         databaseReference = FirebaseDatabase.getInstance().getReference();
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
 
-        cardForm = findViewById(R.id.payment);
-        payText = findViewById(R.id.payment_amount);
-        payButton = findViewById(R.id.btn_pay);
-
         houseID = getIntent().getExtras().get("house_id").toString();
-       // Log.d(TAG, "onCreate HouseID: "+houseID);
-
-        //Toast.makeText(PaymentActivity.this, houseID, Toast.LENGTH_SHORT).show();
+        //Getting the card details
         CardForm cardForm = findViewById(R.id.payment);
         final TextView payText = findViewById(R.id.payment_amount);
         final TextView payYear = findViewById(R.id.card_preview_expiry);
@@ -70,14 +66,15 @@ public class PaymentActivity extends AppCompatActivity implements Response {
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(payYear.getText().toString().equals("")||payCard.getText().toString().equals("")||payCVC.getText().toString().equals("")){
+
+                //Checking if the user filled all fields needed for the payment processes
+                if (payYear.getText().toString().equals("") || payCard.getText().toString().equals("") || payCVC.getText().toString().equals("")) {
                     Toast.makeText(PaymentActivity.this, "Please fill all the required fields", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
 
                     final String remove_Request = "dont_remove";
 
-
+                    //Checking if the user has been accepted into the house
                     databaseReference.child("House").child(houseID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -99,7 +96,7 @@ public class PaymentActivity extends AppCompatActivity implements Response {
                                         Toast.makeText(PaymentActivity.this, "Your Request was Rejected!", Toast.LENGTH_SHORT).show();
                                     } else if (requestStatus.equalsIgnoreCase("Accepted")) {
 
-
+                                        //Validating card information
                                         String dates[] = payYear.getText().toString().split("/");
 
                                         com.stripe.android.model.Card card = new com.stripe.android.model.Card(
@@ -143,7 +140,7 @@ public class PaymentActivity extends AppCompatActivity implements Response {
         });
 
 
-        Toolbar toolbar =  findViewById(R.id.payments_toolbar);
+        Toolbar toolbar = findViewById(R.id.payments_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -151,7 +148,14 @@ public class PaymentActivity extends AppCompatActivity implements Response {
 
 
     }
-    public void getToken(com.stripe.android.model.Card card, final Context context){
+
+    /**
+     * This method requests the token from Stripe for payments
+     *
+     * @param card:    The user's card
+     * @param context: The main activity context
+     */
+    public void getToken(com.stripe.android.model.Card card, final Context context) {
 
         Stripe stripe = new Stripe(this, "pk_test_Hci7W3NpdHYpOFUDldaYwyt9");
         stripe.createToken(
@@ -161,9 +165,9 @@ public class PaymentActivity extends AppCompatActivity implements Response {
 
                         // Send token to the server
 
-                        Charges charges = new Charges(token+"");
+                        Charges charges = new Charges(token + "");
                         charges.delegate = cont;
-                        charges.execute(token+"");
+                        charges.execute(token + "");
 
 
                         Toast.makeText(getApplicationContext(),
@@ -171,6 +175,7 @@ public class PaymentActivity extends AppCompatActivity implements Response {
                                 Toast.LENGTH_LONG
                         ).show();
                     }
+
                     public void onError(Exception error) {
                         Toast.makeText(getApplicationContext(),
                                 "Wrong inputs",
@@ -181,10 +186,12 @@ public class PaymentActivity extends AppCompatActivity implements Response {
         );
     }
 
+    /**
+     * This function receives feedback once the payments finished processing and changes the status of the seeker to housemate
+     */
     @Override
     public void processFinish(String output) {
 
-        //Log.d(TAG, "Accepted loop: "+houseID);
         databaseReference.child("Users").child(currentUserID).child("status").setValue("house mate");
         databaseReference.child("Users").child(currentUserID).child("chat").setValue(groupChat);
         databaseReference.child("Users").child(currentUserID).child("My House").setValue(houseID);
@@ -194,9 +201,8 @@ public class PaymentActivity extends AppCompatActivity implements Response {
         databaseReference.child("House").child(houseID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Log.d(TAG, "Remove Seeker: ");
                 String houseOwnerID = dataSnapshot.child("authenticatedUserId").getValue().toString();
-                //Log.d(TAG, "Remove Seeker123: "+houseOwnerID);
+
                 databaseReference.child("Users").child(houseOwnerID).child("seekers").child(currentUserID).removeValue();
             }
 
