@@ -7,6 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activities.AddRoomActivity"
     tools:showIn="@layout/activity_add_room">
+
     <LinearLayout
 
         android:layout_width="match_parent"
@@ -40,13 +41,13 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
     <ScrollView
         android:id="@+id/post_house_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
-        android:layout_marginBottom="20dp"
-        >
+        android:layout_marginBottom="20dp">
         <!-- TODO: Update blank fragment layout -->
         <RelativeLayout
             android:layout_width="match_parent"
@@ -85,12 +86,13 @@
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
+
             <LinearLayout
                 android:id="@+id/scroll_linearview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@id/post_room_rent">
+                android:layout_below="@id/post_room_rent"
+                android:orientation="horizontal">
 
             </LinearLayout>
 
@@ -119,4 +121,16 @@
         </RelativeLayout>
 
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/mImageView"
+        android:layout_width="485dp"
+        android:layout_height="129dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="349dp"
+        android:layout_marginEnd="259dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/common_google_signin_btn_text_dark_disabled" />
 </android.support.constraint.ConstraintLayout>

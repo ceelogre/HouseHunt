@@ -1,17 +1,27 @@
 package com.example.jmugyenyi.mychat.utils;
 
+import android.app.ProgressDialog;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.jmugyenyi.mychat.model.User;
 import com.example.jmugyenyi.mychat.model.House;
 import com.example.jmugyenyi.mychat.model.Room;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
@@ -24,6 +34,8 @@ public class RoomCRUD {
     private Room room;
 
     private String roomID;
+    private Uri uri;
+    private ProgressDialog loadingBar;
 
     public RoomCRUD(){
         //this.authenticatedUser = authenticatedUser;
@@ -31,7 +43,7 @@ public class RoomCRUD {
 
     }
 
-    public void createRoomCollection(String houseId, String description, Double price){
+    public String createRoomCollection(String houseId, String description, Double price, String filePath){
 
         String picFileLocation = "/Pic/File/here/";
         DatabaseReference newDbReference = databaseReference.push();
@@ -45,8 +57,13 @@ public class RoomCRUD {
         databaseReference =FirebaseDatabase.getInstance().getReference("House");
         databaseReference.child(houseId).child("rooms").child(roomID).setValue(true);
 
-
+        return roomID;
     }
+
+    public void receivePhotoUri(Uri uri){
+        this.uri = uri;
+    }
+
 
     public Room getRoomDetails(final String houseid){
 
