@@ -32,6 +32,8 @@ import android.widget.Toast;
 
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.model.House;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -190,8 +192,9 @@ public class HouseFacilitiesFragment extends Fragment {
 
                         }
                     });
+
                 }
-                //userRef.child(currentUserID).child("My Pick-Up").removeValue();
+
 
             }
         });

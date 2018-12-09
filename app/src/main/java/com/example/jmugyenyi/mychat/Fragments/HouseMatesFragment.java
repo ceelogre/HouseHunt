@@ -83,86 +83,92 @@ public class HouseMatesFragment extends Fragment {
         databaseReference.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String houseID = dataSnapshot.child("My House").getValue().toString();
+                if (dataSnapshot.exists()) {
+                    Log.d("Exist", "true");
+                    if (dataSnapshot.hasChild("My House")) {
+                        Log.d("got in", "true");
+                        String houseID = dataSnapshot.child("My House").getValue().toString();
 
-                Log.d(TAG, "HouseId: "+houseID);
-                FirebaseRecyclerOptions<User> options =
-                        new FirebaseRecyclerOptions.Builder<User>()
-                                .setQuery(houseMatesRef.child(houseID).child("HouseMates"),User.class)
-                                .build();
-
-
-                FirebaseRecyclerAdapter<User,FindMyMatesViewHolder> adapter = new FirebaseRecyclerAdapter<User
-                        , FindMyMatesViewHolder>(options) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull final FindMyMatesViewHolder holder, final int position, @NonNull User model)
-                    {
-
-                        final String houseMateIDs = getRef(position).getKey();
+                        Log.d(TAG, "HouseId: " + houseID);
+                        FirebaseRecyclerOptions<User> options =
+                                new FirebaseRecyclerOptions.Builder<User>()
+                                        .setQuery(houseMatesRef.child(houseID).child("HouseMates"), User.class)
+                                        .build();
 
 
-                        databaseReference.child(houseMateIDs).addValueEventListener(new ValueEventListener() {
+                        FirebaseRecyclerAdapter<User, FindMyMatesViewHolder> adapter = new FirebaseRecyclerAdapter<User
+                                , FindMyMatesViewHolder>(options) {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-                            {
-                                if(dataSnapshot.hasChild("image"))
-                                {
-                                    String _profileImage = dataSnapshot.child("image").getValue().toString();
-                                    String _profileName = dataSnapshot.child("name").getValue().toString();
-                                    String _profileStatus = dataSnapshot.child("status").getValue().toString();
+                            protected void onBindViewHolder(@NonNull final FindMyMatesViewHolder holder, final int position, @NonNull User model) {
 
-                                    holder.userName.setText(_profileName);
-                                    holder.userStatus.setText(_profileStatus);
-                                    Picasso.get().load(_profileImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
-
-                                }
-                                else
-                                {
-
-                                    String _profileName = dataSnapshot.child("name").getValue().toString();
-                                    String _profileStatus = dataSnapshot.child("status").getValue().toString();
+                                final String houseMateIDs = getRef(position).getKey();
 
 
-
-                                    holder.userName.setText(_profileName);
-                                    holder.userStatus.setText(_profileStatus);
-                                }
-
-                                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                databaseReference.child(houseMateIDs).addValueEventListener(new ValueEventListener() {
                                     @Override
-                                    public void onClick(View v) {
-                                        String seeker_id = getRef(position).getKey();
-                                        // String str = getRef(position).getRoot().child("House").child(visit_house_id).toString();
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.hasChild("image")) {
+                                            String _profileImage = dataSnapshot.child("image").getValue().toString();
+                                            String _profileName = dataSnapshot.child("name").getValue().toString();
+                                            String _profileStatus = dataSnapshot.child("status").getValue().toString();
 
-                                        Intent acceptOrDeclineIntent = new Intent(getActivity(), ViewHouseMatesActivity.class);
-                                        acceptOrDeclineIntent.putExtra("House Mate ID", seeker_id);
-                                        startActivity(acceptOrDeclineIntent);
+                                            holder.userName.setText(_profileName);
+                                            holder.userStatus.setText(_profileStatus);
+                                            Picasso.get().load(_profileImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
+
+                                        } else {
+
+                                            String _profileName = dataSnapshot.child("name").getValue().toString();
+                                            String _profileStatus = dataSnapshot.child("status").getValue().toString();
+
+
+                                            holder.userName.setText(_profileName);
+                                            holder.userStatus.setText(_profileStatus);
+                                        }
+
+                                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                String seeker_id = getRef(position).getKey();
+                                                // String str = getRef(position).getRoot().child("House").child(visit_house_id).toString();
+
+                                                Intent acceptOrDeclineIntent = new Intent(getActivity(), ViewHouseMatesActivity.class);
+                                                acceptOrDeclineIntent.putExtra("House Mate ID", seeker_id);
+                                                startActivity(acceptOrDeclineIntent);
+
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                     }
                                 });
 
                             }
 
+                            @NonNull
                             @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            public FindMyMatesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                                View view = LayoutInflater.from(viewGroup.getContext()).
+                                        inflate(R.layout.user_display_layout, viewGroup, false);
 
+                                FindMyMatesViewHolder viewHolder = new FindMyMatesViewHolder(view);
+                                return viewHolder;
                             }
-                        });
+                        };
 
+                        myRecyclerView.setAdapter(adapter);
+                        adapter.startListening();
                     }
-                    @NonNull
-                    @Override
-                    public FindMyMatesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                        View  view = LayoutInflater.from(viewGroup.getContext()).
-                                inflate(R.layout.user_display_layout,viewGroup,false);
+                }
+                else {
 
-                        FindMyMatesViewHolder viewHolder = new FindMyMatesViewHolder(view);
-                        return  viewHolder;
-                    }
-                };
+                    Log.d("Error", "Reference");
 
-                myRecyclerView.setAdapter(adapter);
-                adapter.startListening();
+                }
             }
 
             @Override

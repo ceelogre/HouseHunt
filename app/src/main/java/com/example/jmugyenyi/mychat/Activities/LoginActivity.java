@@ -17,6 +17,7 @@ import android.content.res.Configuration;
 import java.util.Locale;
 
 import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -80,8 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "Please enter email...",Toast.LENGTH_SHORT).show();
         }
-        if (TextUtils.isEmpty(password))
-        {
+        if (TextUtils.isEmpty(password)){
             Toast.makeText(this, "Please enter password...",Toast.LENGTH_SHORT).show();
         }
 
