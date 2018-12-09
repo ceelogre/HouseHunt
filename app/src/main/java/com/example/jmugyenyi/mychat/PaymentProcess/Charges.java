@@ -35,11 +35,12 @@ public class Charges extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
+        Log.d("status", "getting here");
 
         new Thread() {
             @Override
             public void run() {
-                postData(token);
+                postData("house",token,""+120);
             }
         }.start();
         return "Done";
@@ -49,14 +50,14 @@ public class Charges extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         delegate.processFinish(s);
+        Log.e("Result",s);
     }
 
-    public void postData(String token) {
+    public void postData(String description, String token,String amount) {
 
-        URL url = null;
         try {
-            url = new URL("http://172.29.52.204/phpserver/charge.php");
-            String data  = URLEncoder.encode(token, "UTF-8");
+            URL   url = new URL("http://172.29.52.204/phpserver/charge.php");
+            String data  = URLEncoder.encode("username", "UTF-8");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
@@ -69,7 +70,6 @@ public class Charges extends AsyncTask<String, Void, String> {
 
 
     }
-
 
 }
 
