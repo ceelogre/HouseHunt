@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".Activities.RegisterActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -73,7 +73,7 @@
                 android:textSize="24sp"
                 android:textAllCaps="false"
                 android:textColor="@android:color/background_light"
-                android:background="@drawable/buttons"/>
+                android:background="@drawable/button_green"/>
             <TextView
                 android:id="@+id/already_have_account_link"
                 android:layout_width="match_parent"

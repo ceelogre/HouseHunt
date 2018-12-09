@@ -5,7 +5,7 @@
     <string name="chats">Chats Fragment</string>
     <string name="email">Email...</string>
     <string name="password">Password...</string>
-    <string name="loginButton">login</string>
+    <string name="loginButton">Sign in</string>
     <string name="forgetPassword">Forgot Password?</string>
     <string name="NeedNewAccount">Need new account?</string>
     <string name="phoneLoginText">Login using phone</string>
@@ -25,4 +25,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_payment">PaymentActivity</string>
+    <string name="title_activity_accept_or_decline_seeker">AcceptOrDeclineSeekerActivity</string>
 </resources>

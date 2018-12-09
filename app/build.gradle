@@ -35,5 +35,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-database:4.1.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.craftman.cardform:cardform:0.0.2'
+
 
 }

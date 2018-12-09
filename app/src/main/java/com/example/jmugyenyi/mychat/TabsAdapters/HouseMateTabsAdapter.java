@@ -1,9 +1,14 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.TabsAdapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.jmugyenyi.mychat.Fragments.ChatFragment;
+import com.example.jmugyenyi.mychat.Fragments.HouseFacilitiesFragment;
+import com.example.jmugyenyi.mychat.Fragments.HouseMatesFragment;
+import com.example.jmugyenyi.mychat.model.ParentUser;
 
 /**
  * * @author Joel Mugyenyi
@@ -13,10 +18,10 @@ import android.support.v4.app.FragmentPagerAdapter;
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class TabsAccessorAdapter extends FragmentPagerAdapter {
+public class HouseMateTabsAdapter extends ParentUser {
 
 
-    public TabsAccessorAdapter(FragmentManager fm) {
+    public HouseMateTabsAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -29,7 +34,7 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
                 ChatFragment chatFragment = new ChatFragment();
                 return chatFragment;
             case 1:
-                HouseFragment houseFragment = new HouseFragment();
+                HouseFacilitiesFragment houseFragment = new HouseFacilitiesFragment();
                 return houseFragment;
             case 2:
                 HouseMatesFragment houseMatesFragment = new HouseMatesFragment();
@@ -56,11 +61,10 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
                 return "Chat";
             case 1:
 
-                return "House";
+                return "House Facilities";
             case 2:
 
-                return "HouseMates";
-
+                return "House Mates";
             default:
                 return null;
         }

@@ -1,4 +1,4 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jmugyenyi.mychat.R;
+import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,7 +27,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText userEmail, userPassword;
     private TextView alreadyHaveAccountLink;
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference databaseReference;
     private ProgressDialog loadingBar;
 
@@ -75,6 +76,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (task.isSuccessful())
                 {
+                   // HouseCRUD p = new HouseCRUD(mFirebaseAuth);
+                    //p.getAvailableHouses();
+
                     String currentUserID = mFirebaseAuth.getCurrentUser().getUid();
                     databaseReference.child("Users").child(currentUserID).setValue("");
                     SendUserToMainActivity();
@@ -103,7 +107,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
     private void SendUserToLoginActivity() {
-
         Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(loginIntent);
     }

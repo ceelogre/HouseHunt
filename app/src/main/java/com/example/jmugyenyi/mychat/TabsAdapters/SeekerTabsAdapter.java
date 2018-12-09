@@ -1,9 +1,13 @@
-package com.example.jmugyenyi.mychat;
+package com.example.jmugyenyi.mychat.TabsAdapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.jmugyenyi.mychat.Fragments.AvailableHouseFragment;
+import com.example.jmugyenyi.mychat.Fragments.MyHousesFragment;
+import com.example.jmugyenyi.mychat.model.ParentUser;
 
 /**
  * * @author Joel Mugyenyi
@@ -13,7 +17,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class SeekerTabsAdapter extends FragmentPagerAdapter {
+public class SeekerTabsAdapter extends ParentUser {
 
 
     public SeekerTabsAdapter(FragmentManager fm) {
@@ -30,6 +34,7 @@ public class SeekerTabsAdapter extends FragmentPagerAdapter {
             case 1:
                 AvailableHouseFragment availHouseFragment = new AvailableHouseFragment();
                 return availHouseFragment;
+
             default:
                 return null;
         }
