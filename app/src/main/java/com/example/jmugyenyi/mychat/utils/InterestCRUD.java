@@ -1,5 +1,7 @@
 package com.example.jmugyenyi.mychat.utils;
 
+import android.util.Log;
+
 import com.example.jmugyenyi.mychat.model.House;
 import com.example.jmugyenyi.mychat.model.Interest;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,7 +18,9 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class InterestCRUD {
 
-    private DatabaseReference databaseReference;
+    protected static final String TAG = "InterestCRUD";
+
+    private DatabaseReference databaseReference,userRef;
 
     private Interest interest;
     private FirebaseAuth authenticatedUser;
@@ -29,6 +33,7 @@ public class InterestCRUD {
 
         this.authenticatedUser = authenticatedUser;
         databaseReference =FirebaseDatabase.getInstance().getReference("Interest");
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
     }
 
@@ -44,15 +49,20 @@ public class InterestCRUD {
         String authenticatedUserId =    authenticatedUser.getCurrentUser().getUid();
 
         //Create a house id
-        DatabaseReference newRef = databaseReference.push();
-        interestId =newRef.getKey();
-        interest = new Interest(_seekerID,_houseID,_status,_ownerID);
-
-        newRef.setValue(interest);
+//        DatabaseReference newRef = databaseReference.push();
+//        interestId =newRef.getKey();
+//        interest = new Interest(_houseID,_seekerID,_ownerID,_status);
+//
+//        newRef.setValue(interest);
 
         //Add an association between this house and the user who created it
         databaseReference =FirebaseDatabase.getInstance().getReference("Users");
-        databaseReference.child(authenticatedUserId).child("interest").child(interestId).setValue(true);
+
+        databaseReference.child(authenticatedUserId).child("houses").child(_houseID).child("Request").setValue("Pending");
+        databaseReference.child(_ownerID).child("seekers").child(_seekerID).child("Request").setValue("Sent");
+
+        Log.d(TAG, "createInterestTable: "+_seekerID);
+
     }
 
 
