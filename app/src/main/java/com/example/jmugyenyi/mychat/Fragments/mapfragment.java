@@ -29,7 +29,7 @@ import java.util.HashMap;
 
 
 public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
-
+     // this fragment helps the user to drag the marker and show where their houses are
 
     protected static final String TAG = "mapfragment";
 

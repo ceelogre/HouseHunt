@@ -19,6 +19,8 @@ import com.example.jmugyenyi.mychat.R;
 
 public class LocationActivity extends AppCompatActivity {
 
+    // this activity contains the map fragment that the users are going to use when they are dreagging the marker
+    // to get the coordinates  of their  places to post when they are posting them
     FrameLayout mapLayout;
     double latitude;
     double longitude;

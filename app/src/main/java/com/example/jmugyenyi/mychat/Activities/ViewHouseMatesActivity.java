@@ -24,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewHouseMatesActivity extends AppCompatActivity {
 
-
+   // this activity permits the user to view  their housemates
     protected static final String TAG = "ViewHouseMatesActivity";
     private TextView houseMateName, houseMateStatus;
     private CircleImageView houseMateImage;
@@ -62,7 +62,7 @@ public class ViewHouseMatesActivity extends AppCompatActivity {
         RetrieveHouseMateInfo();
     }
 
-
+    // retreiving the housemates
     private void RetrieveHouseMateInfo() {
         databaseReference.child("Users").child(houseMateID).addValueEventListener(new ValueEventListener() {
             @Override
