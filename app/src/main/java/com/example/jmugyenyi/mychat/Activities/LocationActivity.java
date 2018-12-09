@@ -41,12 +41,6 @@ public class LocationActivity extends AppCompatActivity {
         transaction.commit();
 
 
-
-        //getting the house location
-       // gethouseLocation();
-        //sending the house location
-        //sendHouseLocation();
-
     }
 
     public void gethouseLocation()
