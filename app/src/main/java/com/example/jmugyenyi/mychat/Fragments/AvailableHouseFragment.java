@@ -12,9 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.jmugyenyi.mychat.Activities.SettingsActivity;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.Activities.ViewHouseActivity;
 import com.example.jmugyenyi.mychat.model.House;

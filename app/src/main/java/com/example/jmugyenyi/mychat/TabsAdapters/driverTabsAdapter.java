@@ -1,3 +1,5 @@
+
+
 package com.example.jmugyenyi.mychat.TabsAdapters;
 
 import android.support.annotation.Nullable;
