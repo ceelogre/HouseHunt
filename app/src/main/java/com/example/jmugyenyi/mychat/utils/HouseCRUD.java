@@ -31,10 +31,6 @@ public class HouseCRUD {
     private String houseId;
     private String houseName;
 
-
-
-
-
     public String getHouseId() {
         return houseId;
     }

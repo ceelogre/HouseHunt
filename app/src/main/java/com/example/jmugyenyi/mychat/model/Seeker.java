@@ -2,7 +2,7 @@ package com.example.jmugyenyi.mychat.model;
 
 import com.example.jmugyenyi.mychat.utils.ContextInterface;
 
-public class Seeker implements ContextInterface {
+public class Seeker{
 
     private String name;
 
