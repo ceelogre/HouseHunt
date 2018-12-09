@@ -1,7 +1,6 @@
 package com.example.jmugyenyi.mychat.utils;
 
 
-
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -25,9 +24,11 @@ import static com.google.firebase.storage.FirebaseStorage.getInstance;
 
 /*
 This class represents all the CRUD operations you can perform on a house
+it also tests methods used for the database CRUD operations
  */
-public class HouseCRUD  implements HouseMaker{
 
+public class HouseCRUD implements HouseMaker {
+    //Database reference
     private DatabaseReference databaseReference, innerDatabaseReference;
 
     private House house;
@@ -38,9 +39,11 @@ public class HouseCRUD  implements HouseMaker{
     public String getHouseId() {
         return houseId;
     }
+
     public void setHouseId(String houseId) {
         this.houseId = houseId;
     }
+
     public void setHouseName(String houseName) {
         this.houseName = houseName;
     }
@@ -51,15 +54,25 @@ public class HouseCRUD  implements HouseMaker{
     }
 
 
-    public HouseCRUD(FirebaseAuth authenticatedUser){
+    public HouseCRUD(FirebaseAuth authenticatedUser) {
         this.authenticatedUser = authenticatedUser;
-        databaseReference =FirebaseDatabase.getInstance().getReference("House");
-        //houseId = databaseReference.child("latitude").toString();
+        databaseReference = FirebaseDatabase.getInstance().getReference("House");
     }
 
-    public void createHouseCollection(String givenHouseName,String houseStreet,String houseCity,
-                                      String houseCountry,String houseNumberOfRooms,
-                                      String houseNumberOfMates,String houseRent){
+    /**
+     * This function creates a database collection given the parameters below
+     *
+     * @param givenHouseName
+     * @param houseStreet
+     * @param houseCity
+     * @param houseCountry
+     * @param houseNumberOfRooms
+     * @param houseNumberOfMates
+     * @param houseRent
+     */
+    public void createHouseCollection(String givenHouseName, String houseStreet, String houseCity,
+                                      String houseCountry, String houseNumberOfRooms,
+                                      String houseNumberOfMates, String houseRent) {
 
         Double latitude = -1.23463;
         Double longitude = 30.343;
@@ -73,24 +86,19 @@ public class HouseCRUD  implements HouseMaker{
         String country = houseCountry;
         String street = houseStreet;
         String name = givenHouseName;
-        String chat = authenticatedUser.getCurrentUser().getUid()+"-"+givenHouseName;
+        String chat = authenticatedUser.getCurrentUser().getUid() + "-" + givenHouseName;
 
-        //setHouseName(name);
-
-        //Userid
         String authenticatedUserId = authenticatedUser.getCurrentUser().getUid();
 
-        //Create a house id
         DatabaseReference newRef = databaseReference.push();
-        houseId =newRef.getKey();
+        houseId = newRef.getKey();
 
         house = new House(latitude, longitude, wholeHouseRent, numberOfRooms, numberOfHousemates, housePicLocation, city, country, street
                 , authenticatedUserId, houseId, name, chat);
 
         newRef.setValue(house);
 
-        //Add an association between this house and the user who created it
-        databaseReference =FirebaseDatabase.getInstance().getReference("Users");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         databaseReference.child(authenticatedUserId).child("chat").setValue(chat);
         databaseReference.child(authenticatedUserId).child("house").child(houseId).setValue(true);
         databaseReference.child(authenticatedUserId).child("My House").setValue(houseId);
@@ -99,14 +107,17 @@ public class HouseCRUD  implements HouseMaker{
     }
 
 
-    public House getSpecificHouse(String houseid){
+    public House getSpecificHouse(String houseid) {
 
         return null;
     }
 
-    public ArrayList<House> getAvailableHouses(){
+    /**
+     * This function returns a list of all available houses
+     */
+    public ArrayList<House> getAvailableHouses() {
         // Read from the database
-        innerDatabaseReference =FirebaseDatabase.getInstance().getReference("Users");
+        innerDatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         ArrayList<User> users = new ArrayList<User>();
         final ArrayList<House> availableHouses = new ArrayList<House>();
@@ -117,6 +128,7 @@ public class HouseCRUD  implements HouseMaker{
                 User user = dataSnapshot.getValue(User.class);
                 Log.d("This user", user.toString());
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -125,7 +137,11 @@ public class HouseCRUD  implements HouseMaker{
         });
         return availableHouses;
     }
-    public void addRoomToHouse(){
+
+    /**
+     * This function is used to add a room corresponding to a just added house
+     */
+    public void addRoomToHouse() {
 
         Double Price = 134000.0;
         String RoomID;
@@ -133,17 +149,17 @@ public class HouseCRUD  implements HouseMaker{
         String Description = "Alert! you may not wake up in this room...";
         String PicFileLocation = "/pic/file/here";
 
-        databaseReference =FirebaseDatabase.getInstance().getReference().child("Rooms");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Rooms");
 
         DatabaseReference newRef = databaseReference.push();
         RoomID = newRef.getKey();
-        Room room = new Room(Price, "fx", RoomID, houseId, Description,PicFileLocation);
+        Room room = new Room(Price, "fx", RoomID, houseId, Description, PicFileLocation);
 
-//Add a room to database
+        //Add a room to database
         newRef.setValue(room);
 
-//Add a ref in the house collection
-        databaseReference =FirebaseDatabase.getInstance().getReference("House");
+        //Add a ref in the house collection
+        databaseReference = FirebaseDatabase.getInstance().getReference("House");
         databaseReference.child(getHouseId()).child("rooms").child(RoomID).setValue(true);
 
     }
