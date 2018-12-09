@@ -41,8 +41,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+// This is a class used to add a room to the application
 public class AddRoomActivity extends AppCompatActivity {
 
+    // Instance variables
     private Button postPicRoom, saveRoom;
     private EditText roomDescriptionTextField, roomPriceTextField;
     private boolean allFieldsFilled = false;
@@ -92,19 +94,15 @@ public class AddRoomActivity extends AppCompatActivity {
                 }
         );
 
-
         postPicRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 photoUri = dispatchTakePictureIntent();
-
             }
         });
 
-
     }
-
     private void uploadRoomImage(){
 
         final boolean isTaskSuccessful = false;
@@ -159,6 +157,7 @@ public class AddRoomActivity extends AppCompatActivity {
     }
 
 
+    // Method to save room details to database
     private boolean saveRoomDetails() {
         roomDescriptionTextField = findViewById(R.id.post_desc);
         roomPriceTextField = findViewById(R.id.post_room_rent);

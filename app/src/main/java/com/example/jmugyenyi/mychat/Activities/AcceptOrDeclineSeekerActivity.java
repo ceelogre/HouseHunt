@@ -27,6 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
 
 
+    // Instance Variables
     protected static final String TAG = "AcceptOrDecline";
     private TextView seekerName, seekerStatus;
     private CircleImageView seekerImage;
@@ -44,7 +45,7 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_accept_or_decline_seeker);
 
 
-
+        // Instances of firebase authentication and database
         databaseReference = FirebaseDatabase.getInstance().getReference();
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mfirebaseAuth.getCurrentUser().getUid();
@@ -56,6 +57,7 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Review Seeker");
 
+        // Seeker ID got using intent
         seekerID = getIntent().getExtras().get("Seeker's ID").toString();
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +109,6 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        //Log.d(TAG, "AcceptOrDecline House ID: "+dataSnapshot.child("Request").getValue().toString());
 
                         if(dataSnapshot.child("Request").getValue().toString().equalsIgnoreCase("Accepted"))
                         {
@@ -130,6 +131,7 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
         });
     }
 
+    // Method to initialize fields from xml file
     private void initializeFields() {
 
         seekerName   = findViewById(R.id.accept_decline_name);
@@ -140,6 +142,7 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
     }
 
 
+    // Method to retrieve seeker information from database
     private void RetrieveSeekerInfo() {
         databaseReference.child("Users").child(seekerID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -169,6 +172,7 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
             }
         });
     }
+    // Method to accept a join house request from seeker
     private void acceptRequest() {
         databaseReference.child("Users").child(currentUserID)
                 .child("seekers").child(seekerID).addValueEventListener(new ValueEventListener() {
@@ -184,6 +188,7 @@ public class AcceptOrDeclineSeekerActivity extends AppCompatActivity {
             }
         });
     }
+    // Method to decline a join house request from seeker
     private void declineRequest() {
         databaseReference.child("Users").child(currentUserID)
                 .child("seekers").child(seekerID).addValueEventListener(new ValueEventListener() {
