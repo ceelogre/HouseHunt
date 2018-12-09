@@ -10,6 +10,9 @@ import com.example.jmugyenyi.mychat.Fragments.HouseMatesFragment;
 import com.example.jmugyenyi.mychat.Fragments.PostAHouseFragment;
 import com.example.jmugyenyi.mychat.Fragments.ViewInterestedSeekersFragment;
 import com.example.jmugyenyi.mychat.model.ParentUser;
+import com.example.jmugyenyi.mychat.utils.ContextInterface;
+import com.example.jmugyenyi.mychat.utils.HouseCRUD;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * * @author Joel Mugyenyi
@@ -19,7 +22,7 @@ import com.example.jmugyenyi.mychat.model.ParentUser;
  * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
  * received unauthorized assistance on this work.!
  */
-public class HouseHeadTabsAdapter extends ParentUser {
+public class HouseHeadTabsAdapter extends ParentUser implements ContextInterface {
 
 
 
@@ -75,5 +78,11 @@ public class HouseHeadTabsAdapter extends ParentUser {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public void getAssociatedHouses(FirebaseAuth authenticatedUser) {
+        HouseCRUD houseCRUD = new HouseCRUD(authenticatedUser);
+        houseCRUD.getAvailableHouses();
     }
 }

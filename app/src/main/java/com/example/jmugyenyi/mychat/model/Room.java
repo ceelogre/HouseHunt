@@ -4,12 +4,43 @@ public class Room {
 
     private Double Price;
 
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public Room(Double price, String roomName, String roomID, String houseID, String description, String picFileLocation) {
+        Price = price;
+        this.roomName = roomName;
+        RoomID = roomID;
+        HouseID = houseID;
+        Description = description;
+        PicFileLocation = picFileLocation;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Room{");
+        sb.append("Price=").append(Price);
+        sb.append(", roomName='").append(roomName).append('\'');
+        sb.append(", RoomID='").append(RoomID).append('\'');
+        sb.append(", HouseID='").append(HouseID).append('\'');
+        sb.append(", Description='").append(Description).append('\'');
+        sb.append(", PicFileLocation='").append(PicFileLocation).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
+    private String roomName;
     private String RoomID;
     private String HouseID;
     private String Description;
     private String PicFileLocation;
 
-    public Room(Double price, String roomID, String houseID, String description, String picFileLocation) {
+    public Room(String roomID, String houseID, String description, String picFileLocation, Double price) {
         Price = price;
         RoomID = roomID;
         HouseID = houseID;
@@ -55,18 +86,6 @@ public class Room {
 
     public void setPicFileLocation(String picFileLocation) {
         PicFileLocation = picFileLocation;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("Room{");
-        sb.append("Price=").append(Price);
-        sb.append(", RoomID='").append(RoomID).append('\'');
-        sb.append(", HouseID='").append(HouseID).append('\'');
-        sb.append(", Description='").append(Description).append('\'');
-        sb.append(", PicFileLocation='").append(PicFileLocation).append('\'');
-        sb.append('}');
-        return sb.toString();
     }
 
 

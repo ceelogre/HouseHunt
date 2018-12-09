@@ -75,14 +75,11 @@ public class AvailableHouseFragment extends Fragment {
                     @Override
                     protected void onBindViewHolder(@NonNull FindAvailableHousesViewHolder holder, final int position, @NonNull House model) {
 
-
                         {
-                           // Log.d(TAG, "onBindViewHolder: "+model.getHouseId());
+
                         holder.housename.setText(model.getHouseName());
                         holder.street.setText(model.getStreet());
                         Picasso.get().load(model.getImage()).placeholder(R.drawable.house4).into(holder.houseImage);
-
-                       // Log.d(TAG, "onClick: "+model.getImage());
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -106,11 +103,35 @@ public class AvailableHouseFragment extends Fragment {
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                                final String houseRecordId= getRef(position).getKey();
+
+                                databaseReference.child(houseRecordId).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.hasChild("houseId")){
+                                             String houseId = dataSnapshot.child("houseId").getValue().toString();
+                                            Intent viewHouseIntent = new Intent(getActivity(),ViewHouseActivity.class);
+                                            viewHouseIntent.putExtra("visit_house_id",houseRecordId);
+                                            startActivity(viewHouseIntent);
+
+                                        }else{
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
                                     }
                                 });
 
                             }
-                        });}
+                        });
+                        }
                     }
 
                     @NonNull

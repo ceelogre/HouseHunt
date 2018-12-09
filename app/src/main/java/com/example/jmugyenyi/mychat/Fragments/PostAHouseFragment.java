@@ -1,21 +1,14 @@
 package com.example.jmugyenyi.mychat.Fragments;
 
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,17 +16,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.telephony.SmsManager;
 
-import com.example.jmugyenyi.mychat.Activities.SettingsActivity;
+import com.example.jmugyenyi.mychat.Activities.AddRoomActivity;
+
+
+import com.example.jmugyenyi.mychat.Activities.LocationActivity;
+
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.model.User;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
+import com.example.jmugyenyi.mychat.utils.HouseMaker;
+import com.example.jmugyenyi.mychat.utils.ProxyHouseCRUD;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -44,12 +40,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -64,13 +56,11 @@ public class PostAHouseFragment extends Fragment {
     private FirebaseAuth mfirebaseAuth;
 
     private View postHouse;
-    private Button uploadPicButton,  getLocationButton, saveButton;
+    private Button uploadPicButton,  getLocationButton, saveButton, addRoomButton;
     private EditText housename, houseStreet, houseCity, houseCountry, houseNumberOrooms, houseNumberOmates, houseRent;
     private CircleImageView circleImageView;
     private String saveHousename, saveHouseStreet, saveHouseCity, saveHouseCountry,
             saveHouseNumberOrooms, saveHouseNumberOmates, saveHouseRent;
-
-
 
     private  static  final int galleryPicture = 1;
 
@@ -79,6 +69,9 @@ public class PostAHouseFragment extends Fragment {
     private DatabaseReference databaseReference;
 
     private ProgressDialog loadingBar;
+    private String addedHouseId;
+
+    private boolean isSavingHouseSuccessful;
 
     private User userID = new User();
 
@@ -100,16 +93,37 @@ public class PostAHouseFragment extends Fragment {
 
         initializeFields();
 
+        getLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // take you to the map activity
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                intent.putExtra("house_ID",userID.getHouseid());
+                startActivity(intent);
+
+
+            }
+        });
          new FireBaseBackgroundTasks().execute();
-
-        Log.d(TAG, "onCreateView: Oncreate Working");
-
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveHouseInfo();
+                isSavingHouseSuccessful = saveHouseInfo();
+
                 Toast.makeText(getActivity(), "Info saved!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        addRoomButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(isSavingHouseSuccessful){
+                    Intent addRoomIntent = new Intent(getActivity(), AddRoomActivity.class);
+
+                    addRoomIntent.putExtra("addedHouseId", addedHouseId);
+
+                    startActivity(addRoomIntent);
+                }
             }
         });
 
@@ -122,9 +136,6 @@ public class PostAHouseFragment extends Fragment {
                 startActivityForResult(galleryIntent,galleryPicture);
             }
         });
-
-
-
         return  postHouse;
     }
 
@@ -135,29 +146,22 @@ public class PostAHouseFragment extends Fragment {
 
 
         if (requestCode==galleryPicture && resultCode== Activity.RESULT_OK)
-        {//Log.d(TAG, "onActivityResult: Got Here 2");
-            //Log.d(TAG, "onActivityResult: Code   "+requestCode);
+        {
             Uri picUri = data.getData();
-
             Intent intent = CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1,1)
                     .getIntent(getContext());
 
             startActivityForResult(intent,CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-                   // .start(getActivity());
         }
 
-
-        //Log.d(TAG, "onActivityResult: Code2   "+CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
         {
-            //Log.d(TAG, "onActivityResult: Got Here 3");
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode== Activity.RESULT_OK){
 
-                //Log.d(TAG, "onActivityResult: Got Here 4");
                 loadingBar.setTitle("Set House Image");
                 loadingBar.setMessage("Please wait!");
                 loadingBar.show();
@@ -190,7 +194,7 @@ public class PostAHouseFragment extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Toast.makeText(getActivity(), "Image saved in Database!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "Image successfuly uploaded!", Toast.LENGTH_SHORT).show();
                                         loadingBar.dismiss();
                                     }else{
                                         String message = task.getException().toString();
@@ -208,14 +212,12 @@ public class PostAHouseFragment extends Fragment {
                 });
             }
         }
-
     }
 
     private void initializeFields() {
 
         circleImageView = postHouse.findViewById(R.id.post_house_image);
         uploadPicButton = postHouse.findViewById(R.id.post_house_uploadButton);
-        //cameraButton = postHouse.findViewById(R.id.post_house_cameraButton);
         getLocationButton = postHouse.findViewById(R.id.post_house_locationButton);
         saveButton =  postHouse.findViewById(R.id.post_house_saveButton);
         housename = postHouse.findViewById(R.id.post_house_name);
@@ -223,12 +225,13 @@ public class PostAHouseFragment extends Fragment {
         houseCity = postHouse.findViewById(R.id.post_house_city);
         houseCountry = postHouse.findViewById(R.id.post_house_country);
         houseNumberOrooms = postHouse.findViewById(R.id.post_house_rooms);
-        houseNumberOmates = postHouse.findViewById(R.id.post_house_housemates);
-        houseRent = postHouse.findViewById(R.id.post_house_rent);
+        houseNumberOmates = postHouse.findViewById(R.id.post_desc);
+        houseRent = postHouse.findViewById(R.id.post_room_rent);
+        addRoomButton = postHouse.findViewById(R.id.add_room);
         loadingBar = new ProgressDialog(getActivity());
     }
 
-    private void saveHouseInfo() {
+    private boolean saveHouseInfo() {
 
         saveHousename = housename.getText().toString();
         saveHouseStreet = houseStreet.getText().toString();
@@ -244,11 +247,19 @@ public class PostAHouseFragment extends Fragment {
             Toast.makeText(getActivity(), "Enter Missing Input!",Toast.LENGTH_SHORT).show();
         }else
         {
-            HouseCRUD houseCRUD = new HouseCRUD(mfirebaseAuth);
-            houseCRUD.createHouseCollection(saveHousename,saveHouseStreet,saveHouseCity,
+
+            HouseMaker maker  = new ProxyHouseCRUD(mfirebaseAuth);
+            maker.createHouseCollection(saveHousename,saveHouseStreet,saveHouseCity,
                     saveHouseCountry,saveHouseNumberOrooms,saveHouseNumberOmates,saveHouseRent);
-            houseCRUD.addRoomToHouse();
+
+            maker.addRoomToHouse();
+            return true;
+
+            //houseCRUD.addRoomToHouse();
+
+
         }
+        return false;
     }
     private class FireBaseBackgroundTasks extends AsyncTask<Void, Void, String> {
 
@@ -263,7 +274,6 @@ public class PostAHouseFragment extends Fragment {
             databaseReference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "onDataChange first one: ");
                     if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))
                             && (dataSnapshot.hasChild("image")) && (dataSnapshot.hasChild("house")))
                     {
@@ -272,7 +282,6 @@ public class PostAHouseFragment extends Fragment {
                                 .replaceAll("\\{","")
                                 .replaceAll("\\}","");
                          userID.setHouseid(houseID);
-                        Log.d(TAG, "onDataChange: "+houseID);
 
                     }else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))
                             && (dataSnapshot.hasChild("house")))
@@ -282,16 +291,13 @@ public class PostAHouseFragment extends Fragment {
                                 .replaceAll("\\{","")
                                 .replaceAll("\\}","");
                         userID.setHouseid(houseID);
-                        Log.d(TAG, "onDataChange: "+houseID);
                     }else
                     {
-
+                        Toast.makeText(getContext(), "Unknown Selection", Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
             return houseID;
@@ -303,6 +309,4 @@ public class PostAHouseFragment extends Fragment {
 
         }
     }
-
-
 }

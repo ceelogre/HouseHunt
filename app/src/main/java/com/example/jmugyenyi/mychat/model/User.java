@@ -18,6 +18,7 @@ public  class User {
     private String uid;
     private String houseid;
     private String image;
+    private String bio;
 
 
 
@@ -68,7 +69,13 @@ public  class User {
         return this.status;
     }
 
+    public String getBio() {
+        return bio;
+    }
 
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 
     @Override
     public String toString() {

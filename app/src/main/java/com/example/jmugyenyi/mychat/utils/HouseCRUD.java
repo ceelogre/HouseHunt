@@ -22,7 +22,7 @@ import com.example.jmugyenyi.mychat.model.Room;
 import static android.support.constraint.Constraints.TAG;
 import static com.google.firebase.storage.FirebaseStorage.getInstance;
 
-public class HouseCRUD {
+public class HouseCRUD  implements HouseMaker{
 
     private DatabaseReference databaseReference, innerDatabaseReference;
 
@@ -30,10 +30,6 @@ public class HouseCRUD {
     private FirebaseAuth authenticatedUser;
     private String houseId;
     private String houseName;
-
-
-
-
 
     public String getHouseId() {
         return houseId;
@@ -49,7 +45,6 @@ public class HouseCRUD {
 
         return houseName;
     }
-
 
 
     public HouseCRUD(FirebaseAuth authenticatedUser){
@@ -94,10 +89,14 @@ public class HouseCRUD {
         databaseReference =FirebaseDatabase.getInstance().getReference("Users");
         databaseReference.child(authenticatedUserId).child("chat").setValue(chat);
         databaseReference.child(authenticatedUserId).child("house").child(houseId).setValue(true);
+        databaseReference.child(authenticatedUserId).child("My House").setValue(houseId);
+        FirebaseDatabase.getInstance().getReference("House").child(houseId).child("HouseMates").child(authenticatedUserId).child("Mates").setValue("Yes");
 
     }
 
+
     public House getSpecificHouse(String houseid){
+
         return null;
     }
 
@@ -111,13 +110,9 @@ public class HouseCRUD {
         innerDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 User user = dataSnapshot.getValue(User.class);
-
                 Log.d("This user", user.toString());
-
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -126,7 +121,6 @@ public class HouseCRUD {
         });
         return availableHouses;
     }
-
     public void addRoomToHouse(){
 
         Double Price = 134000.0;
@@ -139,12 +133,12 @@ public class HouseCRUD {
 
         DatabaseReference newRef = databaseReference.push();
         RoomID = newRef.getKey();
-        Room room = new Room(Price, RoomID, houseId, Description, PicFileLocation);
+        Room room = new Room(Price, "fx", RoomID, houseId, Description,PicFileLocation);
 
-        //Add a room to database
+//Add a room to database
         newRef.setValue(room);
 
-        //Add a ref in the house collection
+//Add a ref in the house collection
         databaseReference =FirebaseDatabase.getInstance().getReference("House");
         databaseReference.child(getHouseId()).child("rooms").child(RoomID).setValue(true);
 

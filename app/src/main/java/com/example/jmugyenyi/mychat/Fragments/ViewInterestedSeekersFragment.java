@@ -100,7 +100,7 @@ public class ViewInterestedSeekersFragment extends Fragment {
                             String _profileStatus = dataSnapshot.child("status").getValue().toString();
 
                             holder.userName.setText(_profileName);
-                            holder.userStatus.setText(_profileStatus);
+                            holder.userStatus.setText("wants to join your house");
                             Picasso.get().load(_profileImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
 
                         }

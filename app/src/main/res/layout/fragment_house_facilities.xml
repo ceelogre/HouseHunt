@@ -36,16 +36,14 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimary"
                     />
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/transport_toggleButton"
+
+                <Button
+                    android:id="@+id/transport_request_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:switchMinWidth="56dp"
-                    android:text="Request"
-                    android:checked="false"
-                    android:textOff="OFF"
-                    android:textOn="ON"
-                    android:theme="@style/SCBSwitch"/>
+                    android:text="Make ReQUEST"
+                    android:paddingTop="15dp"
+                    />
             </LinearLayout>
 
 
