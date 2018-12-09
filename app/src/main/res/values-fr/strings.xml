@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Chat</string>
+    <string name="contacts">Contacts</string>
+    <string name="groups">Groupes</string>
+    <string name="chats">Discussions</string>
+    <string name="email">email</string>
+    <string name="password">Mot de passe</string>
+    <string name="loginButton">S\' identifier</string>
+    <string name="forgetPassword">Mot de passe oublié?</string>
+    <string name="NeedNewAccount">Nouvelle compte</string>
+    <string name="phoneLoginText">téléphone</string>
+    <string name="phoneButtonLogin">S\' identifier</string>
+    <string name="createAccount">Créer une compte</string>
+    <string name="AlreadyHaveAccount">Acceder mon compte</string>
+    <string name="username">Nom d\' utilisateur</string>
+    <string name="userStatus">votre statut</string>
+    <string name="updateButton">mettre à jour</string>
+    <string name="writeMessage">écrire un message</string>
+    <string name="enterPhoneNumber">Entrer votre numero de telephone</string>
+    <string name="enterVerificationCode">code de verification</string>
+    <string name="sendVerCode">"envoyer le code "</string>
+    <string name="verify">verifier</string>
+    <string name="myHouses">Mes logements</string>
+    <string name="availableHouses">Logement libres</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_payment">Paiement</string>
+</resources>

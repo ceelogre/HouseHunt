@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.content.res.Configuration;
+import java.util.Locale;
+
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.utils.HouseCRUD;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,12 +36,13 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Locale locale = new Locale("fr");
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mFirebaseAuth = FirebaseAuth.getInstance();
-
-
-
 
         // Initialize Variables
         initialiseFields();
