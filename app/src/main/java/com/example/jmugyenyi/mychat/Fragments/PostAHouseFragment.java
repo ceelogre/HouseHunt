@@ -251,7 +251,6 @@ public class PostAHouseFragment extends Fragment {
             HouseMaker maker  = new ProxyHouseCRUD(mfirebaseAuth);
             maker.createHouseCollection(saveHousename,saveHouseStreet,saveHouseCity,
                     saveHouseCountry,saveHouseNumberOrooms,saveHouseNumberOmates,saveHouseRent);
-            addedHouseId = houseCRUD.getHouseId();
 
             maker.addRoomToHouse();
             return true;
