@@ -61,7 +61,6 @@ public class PostAHouseFragment extends Fragment {
     private CircleImageView circleImageView;
     private String saveHousename, saveHouseStreet, saveHouseCity, saveHouseCountry,
             saveHouseNumberOrooms, saveHouseNumberOmates, saveHouseRent;
-    
 
     private  static  final int galleryPicture = 1;
 
@@ -213,7 +212,6 @@ public class PostAHouseFragment extends Fragment {
                 });
             }
         }
-
     }
 
     private void initializeFields() {
@@ -299,10 +297,8 @@ public class PostAHouseFragment extends Fragment {
                         Toast.makeText(getContext(), "Unknown Selection", Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
             return houseID;
@@ -314,6 +310,4 @@ public class PostAHouseFragment extends Fragment {
 
         }
     }
-
-
 }

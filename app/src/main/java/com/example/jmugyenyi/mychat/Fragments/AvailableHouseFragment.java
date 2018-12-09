@@ -75,14 +75,11 @@ public class AvailableHouseFragment extends Fragment {
                     @Override
                     protected void onBindViewHolder(@NonNull FindAvailableHousesViewHolder holder, final int position, @NonNull House model) {
 
-
                         {
-                           // Log.d(TAG, "onBindViewHolder: "+model.getHouseId());
+
                         holder.housename.setText(model.getHouseName());
                         holder.street.setText(model.getStreet());
                         Picasso.get().load(model.getImage()).placeholder(R.drawable.house4).into(holder.houseImage);
-
-                       // Log.d(TAG, "onClick: "+model.getImage());
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override

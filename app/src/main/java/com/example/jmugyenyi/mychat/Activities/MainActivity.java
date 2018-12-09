@@ -161,13 +161,9 @@ public class MainActivity extends AppCompatActivity {
                 if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name")) && (dataSnapshot.hasChild("image"))) {
                     String retrieveUsername = dataSnapshot.child("name").getValue().toString();
                     String retrieveStatus = dataSnapshot.child("status").getValue().toString();
-                    String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
-
 
                     myUser.setName(retrieveUsername);
                     myUser.setStatus(retrieveStatus);
-
-                   // Log.d(TAG, "retrieveUser: "+ myUser.getStatus());
 
                     String setUser = myUser.getStatus().trim();
 
