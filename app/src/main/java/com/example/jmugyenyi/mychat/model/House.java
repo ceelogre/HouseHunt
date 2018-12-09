@@ -2,6 +2,9 @@ package com.example.jmugyenyi.mychat.model;
 
 import java.util.Map;
 
+/*
+This class represents the house object and the properties that it can have
+ */
 public class House {
 
     private Double latitude;

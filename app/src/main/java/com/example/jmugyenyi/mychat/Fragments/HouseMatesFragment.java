@@ -41,6 +41,7 @@ public class HouseMatesFragment extends Fragment {
 
     private View housematesFragment;
 
+    //Database refererences for the house and users in Firebase db
     private DatabaseReference databaseReference, houseMatesRef;
 
     private FirebaseAuth mfirebaseAuth;
@@ -68,6 +69,7 @@ public class HouseMatesFragment extends Fragment {
         houseMatesRef  = FirebaseDatabase.getInstance().getReference().child("House");
 
 
+        //Recyclerview for the housemates items from Firebase DB
         myRecyclerView = housematesFragment.findViewById(R.id.house_mates_recycler_list);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -80,6 +82,7 @@ public class HouseMatesFragment extends Fragment {
 
         Log.d(TAG, "onStart: "+currentUserID);
 
+        //Retrieve results from Firebase DB for the currently logged in user
         databaseReference.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -179,6 +182,7 @@ public class HouseMatesFragment extends Fragment {
 
     }
 
+    //Method to find people whom you share a room   
     public  static class FindMyMatesViewHolder extends RecyclerView.ViewHolder
     {
 

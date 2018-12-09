@@ -4,14 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * * @author Joel Mugyenyi
- * <p>
- * Andrew ID: jmugyeny
- * <p>
- * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
- * received unauthorized assistance on this work.!
- */
+
 public class Interest {
    // private String interestID;
     private String houseID;

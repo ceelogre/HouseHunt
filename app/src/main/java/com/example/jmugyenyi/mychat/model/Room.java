@@ -1,5 +1,8 @@
 package com.example.jmugyenyi.mychat.model;
 
+/*
+This class represents the room object and all the properties it has
+ */
 public class Room {
 
     private Double Price;

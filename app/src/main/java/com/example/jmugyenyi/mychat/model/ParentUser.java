@@ -4,14 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-/**
- * * @author Joel Mugyenyi
- * <p>
- * Andrew ID: jmugyeny
- * <p>
- * On my honor, as a Carnegie-Mellon Africa student, I have neither given nor
- * received unauthorized assistance on this work.!
- */
 // Parent class for all user types
 public class ParentUser extends FragmentPagerAdapter {
 

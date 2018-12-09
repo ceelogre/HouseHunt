@@ -128,8 +128,6 @@ public class HouseFacilitiesFragment extends Fragment {
 
                             String houseID = dataSnapshot.child("My House").getValue().toString();
 
-                            //Log.d(TAG, "onDataChange: "+houseID);
-
                             houseRef.child(houseID).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -177,16 +175,11 @@ public class HouseFacilitiesFragment extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
-                           // if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("My Pick-Up"))) {
-                               // String myPickUpId = dataSnapshot.child("My Pick-Up").getValue().toString();
-
-                                databaseReference.child(dataSnapshot.child("My Pick-Up").getValue().toString()).removeValue();
+                         databaseReference.child(dataSnapshot.child("My Pick-Up").getValue().toString()).removeValue();
 
 
 
                             }
-                       // }
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -240,9 +233,6 @@ public class HouseFacilitiesFragment extends Fragment {
     }
 
     private void sendSMS() {
-
-        //textButton.setEnabled(false);
-
         if (checkPermission(Manifest.permission.SEND_SMS)) {
             smsButton.setEnabled(true);
         } else {
@@ -296,8 +286,6 @@ public class HouseFacilitiesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String phoneNumber = "+250739832241";
-                //String phoneNumber = "+250788231926";
-
                 if (phoneNumber == null || phoneNumber.length() == 0 || message== null || message.length() == 0)
                 {
                     return;

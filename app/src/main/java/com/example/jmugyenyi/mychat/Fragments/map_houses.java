@@ -64,15 +64,7 @@ public class map_houses extends Fragment implements OnMapReadyCallback {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment map_houses.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static map_houses newInstance(String param1, String param2) {
         map_houses fragment = new map_houses();
         Bundle args = new Bundle();
@@ -107,7 +99,6 @@ public class map_houses extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mapView = (MapView)view.findViewById(R.id.map);
-//        mapView.getMapAsync(this);
 
         if(mapView !=null)
         {
@@ -124,7 +115,6 @@ public class map_houses extends Fragment implements OnMapReadyCallback {
         location.add(-1.935114);
         location.add(30.082111);
         houses.put ("house1",location);
-        //location.clear();
         location = new ArrayList<>();
 
         location.add(-1.5035);
@@ -138,14 +128,6 @@ public class map_houses extends Fragment implements OnMapReadyCallback {
 
     public void onMapReady(final GoogleMap googleMap ) {
         MapsInitializer.initialize(getContext());
-
-
-
-
-
-
-
-
 
         FirebaseDatabase.getInstance().getReference().child("Pick-Ups")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -164,19 +146,10 @@ public class map_houses extends Fragment implements OnMapReadyCallback {
 
                             location.add(Double.parseDouble(latitude));
                             location.add(Double.parseDouble(longitude));
-
-                           // ArrayList<Double> location = new ArrayList<>();
-                            //location.add(-1.935114);
-                            //location.add(30.082111);
                             houses.put ("house"+counter,location);
                         }
                         counter=0;
 
-
-
-
-
-                       // houses = getAllHouses ();
                         double latitude = -1.935114;
                         double  longitude = 30.082111;
                         mgoogleMap = googleMap;

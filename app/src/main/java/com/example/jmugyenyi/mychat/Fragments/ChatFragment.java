@@ -87,6 +87,7 @@ public class ChatFragment extends Fragment {
         super.onStart();
 
 
+        //Create a new node based on the user id
         databaseReference.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -98,7 +99,11 @@ public class ChatFragment extends Fragment {
                     chatName = dataSnapshot.child("chat").getValue().toString();
                 }
 
+
+                //References of the group node in Firebase database
                 groupNameref = FirebaseDatabase.getInstance().getReference().child("Groups").child(chatName);
+
+                //Set up a listener for adding new data to the node
                 groupNameref.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -113,7 +118,7 @@ public class ChatFragment extends Fragment {
 
                         if (dataSnapshot.exists())
                         {
-                            //DisplayMessages(dataSnapshot);
+                            //Use the data here
                         }
                     }
 

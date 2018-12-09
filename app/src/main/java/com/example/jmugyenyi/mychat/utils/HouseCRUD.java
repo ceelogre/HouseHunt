@@ -22,6 +22,10 @@ import com.example.jmugyenyi.mychat.model.Room;
 import static android.support.constraint.Constraints.TAG;
 import static com.google.firebase.storage.FirebaseStorage.getInstance;
 
+
+/*
+This class represents all the CRUD operations you can perform on a house
+ */
 public class HouseCRUD  implements HouseMaker{
 
     private DatabaseReference databaseReference, innerDatabaseReference;

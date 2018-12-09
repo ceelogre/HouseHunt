@@ -255,8 +255,6 @@ public class PostAHouseFragment extends Fragment {
             maker.addRoomToHouse();
             return true;
 
-            //houseCRUD.addRoomToHouse();
-
 
         }
         return false;

@@ -109,9 +109,9 @@ public class MyHousesFragment extends Fragment {
                                     myHouseStatusRef.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            //dataSnapshot.child("Request").getValue();
+
                                            final String  myHouseStatus = dataSnapshot.child("Request").getValue().toString();
-                                            //Log.d(TAG, "myHouseStatus Value: "+myHouseStatus);
+
 
                                             String houseIDs = getRef(position).getKey();
                                             houseRef.child(houseIDs).addValueEventListener(new ValueEventListener() {
@@ -123,8 +123,6 @@ public class MyHousesFragment extends Fragment {
                                                         String _houseImage = dataSnapshot.child("image").getValue().toString();
                                                         String _houseName = dataSnapshot.child("houseName").getValue().toString();
                                                         String _houseStreet = dataSnapshot.child("street").getValue().toString();
-
-                                                       // Log.d(TAG, "myHouseStatus Value: "+myHouseStatus);
 
                                                         holder.housename.setText(_houseName);
                                                         holder.street.setText(_houseStreet);
@@ -204,9 +202,7 @@ public class MyHousesFragment extends Fragment {
                     adapter.startListening();
 
 
-                }else
-                {
-                    //Toast.makeText(SettingsActivity.this,"Update Profile",Toast.LENGTH_SHORT).show();
+                }else{
                 }
             }
 

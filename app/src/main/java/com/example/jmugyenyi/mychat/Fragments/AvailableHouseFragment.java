@@ -12,9 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.jmugyenyi.mychat.Activities.SettingsActivity;
 import com.example.jmugyenyi.mychat.R;
 import com.example.jmugyenyi.mychat.Activities.ViewHouseActivity;
 import com.example.jmugyenyi.mychat.model.House;
@@ -55,8 +52,10 @@ public class AvailableHouseFragment extends Fragment {
         // Inflate the layout for this fragment
         availableHouseFragmentView=  inflater.inflate(R.layout.fragment_available_house, container, false);
 
+        //Reference for the House node in Firebase database
         databaseReference = FirebaseDatabase.getInstance().getReference().child("House");
 
+        //Recyclerviewer holder for the house items to be retrieved from Firebase db
         myRecyclerView = availableHouseFragmentView.findViewById(R.id.available_houses_recycler_list);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

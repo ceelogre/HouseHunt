@@ -34,7 +34,6 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
     protected static final String TAG = "mapfragment";
 
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -110,7 +109,6 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
             @Override
             public void onMarkerDragStart(Marker marker) {
                 Log.d("System out", "onMarkerDragEnd..."+marker.getPosition().latitude+"..."+marker.getPosition().longitude);
-                //Log.d(TAG, "onMarkerDragStart: "+marker.getPosition().latitude);
             }
 
             @Override
@@ -123,7 +121,7 @@ public class mapfragment extends Fragment implements OnMapReadyCallback,GoogleMa
                 Log.d("System out", "onMarkerDragEnd..."+marker.getPosition().latitude+"..."+marker.getPosition().longitude);
                 houseLatitude = marker.getPosition().latitude;
                 houseLongitude = marker.getPosition().longitude;
-                //Log.d(TAG, "onMarkerDragEnd: "+houseLatitude);
+
             }
         });
         googleMap.setOnMarkerClickListener(this);
